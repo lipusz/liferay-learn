@@ -1,5 +1,7 @@
 # Cross-Cluster Index Replication
 
+> **LES Subscribers**
+
 In a classic Liferay DXP/search engine installation, one Liferay DXP cluster talks to one Elasticsearch cluster, sending all of its read (e.g., execute a search query) and write (e.g., create a document) requests through one connection to the search engine cluster. All search engine servers were located in the same data center (though they could be in a different data center from the Liferay DXP servers).
 
 <!--DIAGRAM?-->
@@ -9,6 +11,7 @@ Responding to concerns about data locality and disaster recovery, Elasticsearch 
 
 Liferay DXP has long supported the idea of a distributed cluster, with nodes in disparate locations, via Wide Area Network (WAN) protocols. Liferay DXP's flexibility and Elasticsearch's support for Cross-Cluster Replication can support different system designs.
 
+<!-- We'll do this in a follow-up effort
 _Two Data Centers: one designed as a disaster recovery data center_
 A Production data center can hold the leader and some DXP nodes, with secondary data center (perhaps primarily used for disaster recovery) holding the follower and some additional DXP nodes.
 
@@ -28,16 +31,18 @@ Each data center holds a leader index and a follower index. All writes happen to
 _Many Clusters: Replicate many smaller indexes into a centralized reporting cluster_
 <!-- DIAGRAM 4 --> 
 Lots of clusters with independent indexes replicating them to a centralized cluster where all the data can be consumed for analysis and reporting; DXP could be running locally or remotely at each disparate data center, which is more likely?) <!-- TODO-->
+-->
 
 No matter what setup you decide on, you must:
 
-<!-- - Elasticsearch 6 Only: Enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. Read [here](LINK TO SEPARATE ARTICLE?) to learn more about this. -->
 - Install the CCR Module on Liferay DXP
 - Decide what indexes to replicate from the leader cluster
 - Configure the Elasticsearch Clusters
 - Configure the Liferay DXP Cluster
 - Define the Leader and Follower
 - Replicate the Leader Indexes
+
+> **Elasticsearch 6 Only:** Enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. Read [here](./enabling-soft-deletes.md) to learn more about this.
 
 Read this article for an overview, then see the next article, [a step-by-step tutorial](./configuring-cross-cluster-replication-step-by-step.md), to get a local example up and running.
 
@@ -51,11 +56,16 @@ Any Liferay DXP node that will read and write from the same cluster does not nee
 
 ##  Liferay DXP: Decide Which Indexes to Replicate from the Remote Cluster
 
-If you know you need to replicate all the indexes in the cluster that holds your leader indexes, you don't have to do anything. Liferay's CCR support will handle the automatic replication of all indexes with no configuration needed. By default, all indexes present in the Elasticsearch cluster will be replicated. In most cases, this is the desirable situation. 
+<!-- If you know you need to replicate all the indexes in the cluster that holds your leader indexes, you don't have to do anything. Liferay's CCR support will handle the automatic replication of all indexes with no configuration needed. By default, all indexes present in the Elasticsearch cluster will be replicated. In most cases, this is the desirable situation. 
 
 If you need to exclude some indexes from being replicated, you must blacklist the indexes to exclude before enabling Cross-Cluster Replication. For example, if you have another system indexing data into the same Elasticsearch cluster you're setting up for Liferay DXP, and you do not wish for those indexes to be replicated to the cluster holding follower indexes, blacklist them before you enable Cross-Cluster Replication.
 
-You'll discover that the default Liferay DXP indexes in your installation  approximate the list below (subject to change):
+```note::
+   Liferay DXP contains APIs for creating and using (writing to and reading from) Elasticsearch indexes that remain completely under your control. See the Developer Guide for information on these APIs. These types of custom indexes (and any other indexes that might be in your Elasticsearch cluster) are replicated from your leader cluster by default, unless you blacklist them (see the blacklisting instructions contained in this guide).
+```
+-->
+
+The default Liferay DXP indexes in your installation approximate the list below (subject to change):
 <!-- This table is probably good info to include somewhere more central, not just in CCR docs -->
 
 | Index ID                                      | Index Type    | Index Purpose |
@@ -72,9 +82,7 @@ You'll discover that the default Liferay DXP indexes in your installation  appro
 | workflow-metrics-tokens                       | App Index     | Store data about Workflow Tokens for the Workflow Metrics application |
 | your-custom-index-[companyId]                 | Dev Index     | Your own storage and searching needs |
 
-```note::
-   Liferay DXP contains APIs for creating and using (writing to and reading from) Elasticsearch indexes that remain completely under your control. See the Developer Guide for information on these APIs. These types of custom indexes (and any other indexes that might be in your Elasticsearch cluster) are replicated from your leader cluster by default, unless you blacklist them (see the blacklisting instructions contained in this guide).
-```
+Unless your setup reveals a very compelling reason not to, you should replicate all of the Liferay DXP indexes and all of your custom Dev Indexes into the follower Elasticsearch cluster. 
 
 ## Configure the Elasticsearch Clusters
 
@@ -82,7 +90,7 @@ Set up the Elasticsearch clusters, using versions supported with Liferay DXP. Se
 
 Make sure you Install the Elasticsearch [plugins Liferay DXP needs](https://help.liferay.com/hc/en-us/articles/360028711132-Installing-Elasticsearch#step-three-install-elasticsearch-plugins), and provide cluster names to differentiate your follower and leader cluster.
 
-CCR requires an Elasticsearch Platinum level license, but LES customers already have this. If you're testing locally, you'll need to install a [trial license](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/start-trial.html) on each cluster.
+CCR requires an Elasticsearch Platinum level license, but [LES customers](./introduction-to-les.md)) already have this. If you're testing locally, you'll need to install a [trial license](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/start-trial.html) on each cluster.
 
 ## Configure the Liferay DXP Cluster 
 
@@ -90,24 +98,11 @@ Configure the Liferay Clustering behavior first. In the example provided in the 
 
 ### Configure the Nodes that Reside with the Leader Indexes
 
-Configure the DXP nodes located in the same data center with the remote Elasticsearch cluster containing the leader indexes. Provide the proper Elasticsearch Configuration values, then start the DXP nodes that will write to the leader indexes, to make sure they're reading and writing properly.
+Configure the DXP nodes located in the same data center with the remote Elasticsearch cluster containing the leader indexes. Provide the proper Elasticsearch Configuration values (via a `.config` file), then start the DXP nodes that will write to the leader indexes, to make sure they're reading and writing properly.
 
 ### Configure the Nodes that Reside with the Follower Indexes
 
-Any DXP nodes that are going to read from local follower Elasticsearch indexes and write to remote leader indexes must have the CCR module deployed and configured. Configuration differs slightly depending on whether you're using Liferay DXP 7.2 or 7.3.
-
-#### Liferay DXP 7.2
-
-For Liferay DXP 7.2, configure the REMOTE mode Elasticsearch connection for the remote/leader cluster as you normally would, giving it the name of your remote cluster. 
-
-Configure the CCR module to The only configuration in the Elasticsearch [Version] configuration to make sure you enter is ??? anything in the es config?
-
-#### Liferay DXP 7.3
-
-<!-- How was it different? -->
-For Liferay DXP 7.3, configure the CCR module.
-
-Before starting the DXP nodes in the same data center as the follower Elasticsearch, provide the CCR module configuration. This way, once you install the LPKG from Elasticsearch, your configuration will be read and immediately take effect.
+Any DXP nodes that are going to read from local follower Elasticsearch indexes and write to remote leader indexes must have the CCR module deployed and configured (use a `.config` file).
 
 Start the nodes and install the LES app.
 
