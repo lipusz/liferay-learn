@@ -1,8 +1,13 @@
 # Configuring Cross-Cluster Replication, Step-By-Step
 
-SAME DIAGRAM USED IN INTRO ARTICLE
+<!-- SAME DIAGRAM USED IN INTRO ARTICLE
 
 ALSO, ADD A BEFORE AND AFTER LOOK AT THE CONNECTIONS TAB
+-->
+
+## Prerequisite for Elasticsearch 6: Enable Soft Deletes
+
+[Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for all existing indexes. This is not done by default on Elasticsearch 6. Before proceeding, read [here](./enabling-soft-deletes.md) to configure soft deletes on your Elasticsearch 6 indexes, then come back here and continue setting up CCR.
 
 ## Install the Cross-Cluster Replication Module
 
@@ -16,18 +21,7 @@ ALSO, ADD A BEFORE AND AFTER LOOK AT THE CONNECTIONS TAB
 
 This example uses two Elasticsearch clusters, each with a copy of the same indexes.
 
-A vanilla Liferay DXP 7.2 installation contains the following indexes:
-
-liferay-0
-liferay-20101
-liferay-search-tuning-rankings
-liferay-search-tuning-synonyms-liferay-20101
-workflow-metrics-instances
-workflow-metrics-nodes
-workflow-metrics-processes
-workflow-metrics-sla-instance-results
-workflow-metrics-sla-task-results
-workflow-metrics-tokens
+A vanilla Liferay DXP 7.2 installation contains the indexes presented in the [Cross Cluster Replication](./cross-cluster-replication.md#liferay-dxp-decide-whichindexes-to-replicate-from-the-remote-cluster) article.
 
 All the Elasticsearch clusters being used by Liferay DXP (2 clusters in this example) need these indexes.
 
@@ -39,8 +33,8 @@ Configure its `elasticsearch.yml` by specifiying a sensible cluster name:
 
 ```json
 cluster.name: LiferayElasticsearchCluster_aES
-ALTERNATIVE cluster.name: LiferayElasticsearchCluster_REMOTE
 ```
+<!--ALTERNATIVE, making it more reader-friendly?  cluster.name: LiferayElasticsearchCluster_REMOTE-->
 
 Start the server. If you're in the root of the server directory, execute
 
@@ -173,16 +167,16 @@ Messages indicating that the shard has started and that the leader is being trac
 
 Repeat the above curl command for all the indexes you see listed at Control Panel &rarr; Configuration &rarr; Search &rarr; Field Mappings. For example, these indexes are present in most systems:
 
-liferay-0
-liferay-20101
-liferay-search-tuning-rankings
-liferay-search-tuning-synonyms-liferay-20101
-workflow-metrics-instances
-workflow-metrics-nodes
-workflow-metrics-processes
-workflow-metrics-sla-instance-results
-workflow-metrics-sla-task-results
-workflow-metrics-tokens
+- liferay-0
+- liferay-20101
+- liferay-search-tuning-rankings
+- liferay-search-tuning-synonyms-liferay-20101
+- workflow-metrics-instances
+- workflow-metrics-nodes
+- workflow-metrics-processes
+- workflow-metrics-sla-instance-results
+- workflow-metrics-sla-task-results
+- workflow-metrics-tokens
 
 Now the second Elasticsearch cluster knows how to replicate from the remote leader cluster. The last step is to wire up the final Liferay DXP node so it can read from this second Elasticsearch server's indexes, and write to the first (remote/leader) Elasticsearch cluster.
 
@@ -224,8 +218,3 @@ ccrEnabled="true"
 clusterName="LiferayElasticsearchCluster_bES"
 transportAddresses="localhost:9500"
 ```
-
-
-<!-- END INSTRUCTIONS -->
-
-

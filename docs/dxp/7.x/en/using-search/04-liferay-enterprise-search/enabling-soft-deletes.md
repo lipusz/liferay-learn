@@ -1,6 +1,8 @@
 # Enabling Soft Deletes
 
-Elasticsearch 6 Only: Enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes before you configure Cross-Cluster Replication.
+> Elasticsearch 6 Only
+
+Enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes before you configure Cross-Cluster Replication.
 
 ## Enabling Soft Deletes on the System and Company Indexes
 
@@ -14,9 +16,9 @@ index.soft_deletes.enabled: true
 
 The app and dev indexes are those not controlled directly by Liferay's Search Framework. They include Liferay DXP app indexes prefixed with `liferay-search-tuning-*` and `workflow-metrics-*`, and your own custom dev indexes.
 
-To enable soft delete manually, call the Elasticsearch 
+To enable soft delete manually,
 
-1. Create a temporary (empty, at first) index containing the current mapping\
+1. Create a temporary (empty, at first) index containing the current mapping.
 
    You can get the mappings with the [`mappings` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-get-mapping.html) 
 <!-- https://github.com/liferay/liferay-portal/blob/master/modules/dxp/apps/portal-search-tuning/portal-search-tuning-rankings-web/src/main/resources/META-INF/search/liferay-search-tuning-rankings-index.json -->
