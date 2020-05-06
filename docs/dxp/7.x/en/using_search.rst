@@ -9,6 +9,7 @@ Using Search
    using-search/installing_and_upgrading_a_search_engine.rst
    using-search/search_administration_and_tuning.rst
    using-search/developer_guide.rst
+   using-search/liferay_enterprise_search.rst
 
 .. raw:: html
    :file: landingpage_template.html
