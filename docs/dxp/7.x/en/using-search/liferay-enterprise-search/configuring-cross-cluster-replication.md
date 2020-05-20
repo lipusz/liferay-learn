@@ -17,7 +17,7 @@ The commands that involve calling Elasticsearch APIs are provided in a format th
 
 ## Install the Cross-Cluster Replication Module
 
-1. Download the Liferay DXP Cross-Cluster Replication for Elasticsearch LPKG from the LES downloads page.
+1. Download the Liferay DXP Cross-Cluster Replication for Elasticsearch LPKG from the [LES downloads page](https://customer.liferay.com/downloads).
 
 1. [Install the LPKG](../../system-administration/installing-and-managing-apps/installing-apps/installing-apps.md) into the local Liferay DXP instance.
 
