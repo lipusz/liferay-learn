@@ -48,13 +48,13 @@ The default Liferay DXP indexes in your installation approximate the list below 
 | workflow-metrics-sla-instance-results-20101   | App Index     | Primary storage for SLA results per Workflow Instance for the Workflow Metrics application |
 | workflow-metrics-sla-task-results-20101       | App Index     | Primary storage for SLA results per Workflow Task for the Workflow Metrics application |
 | workflow-metrics-tokens-20101                 | App Index     | Store data about Workflow Tokens for the Workflow Metrics application |
-| your-custom-index-[companyId]                 | Dev Index     | Your own storage and searching needs |
+| your-custom-index-[companyId]                 | Custom Index     | Your own storage and searching needs |
 
 ```note::
    Liferay DXP provides APIs for creating and using (writing to and reading from) Elasticsearch indexes that remain completely under your control. See the [Developer Guide](../developer_guide.rst) for information on using these APIs.
 ```
 
-Unless your setup reveals a very compelling reason not to, you should replicate all of the Liferay DXP indexes and all of your custom Dev Indexes into the follower Elasticsearch cluster. 
+Unless your setup reveals a very compelling reason not to, you should replicate all of the Liferay DXP indexes and all of your custom indexes into the follower Elasticsearch cluster. 
 
 ## Configure the Elasticsearch Clusters
 
