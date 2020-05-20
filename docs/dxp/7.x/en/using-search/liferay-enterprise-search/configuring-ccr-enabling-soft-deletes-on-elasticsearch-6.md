@@ -12,9 +12,13 @@ The system (`liferay-0`) and company (`liferay-[companyId]`) indexes can be soft
 index.soft_deletes.enabled: true
 ```
 
-## Enabling Soft Deletes on App and Dev Indexes
+```note::
+   Requires to perform a full reindex from the Server Admin in the Control Panel.
+```
 
-The app and dev indexes are those not controlled directly by Liferay's Search Framework. They include Liferay DXP app indexes prefixed with `liferay-search-tuning-*` and `workflow-metrics-*`, and your own custom dev indexes.
+## Enabling Soft Deletes on App and Custom Indexes
+
+The app and custom indexes are those not controlled directly by Liferay's Search Framework. They include Liferay DXP app indexes prefixed with `liferay-search-tuning-*` and `workflow-metrics-*`, and your own custom indexes.
 
 To enable soft delete manually,
 
