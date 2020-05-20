@@ -6,7 +6,7 @@
 
 ALSO, ADD A BEFORE AND AFTER LOOK AT THE CONNECTIONS TAB
 -->
-The commands that involve calling Elasticsearch APIs are provided in a format that allows you to  copy and paste them directly into [Kibana's Dev Tools](./monitoring-elasticsearch.md) console.
+The commands that involve calling Elasticsearch APIs are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console which can be also accessed through the [X-Pack Monitoring widget](./monitoring-elasticsearch.md).
 
 <!-- From Tibor: Highlight that the guide is super-simplified and deals with setting up a 1-1 node ES clusters (leader and follower) running on localhost. A prod-ready environment needs different settings.-->
 <!-- From Russ: We should just adapt to those settings instead of saying "this guide shows steps that you can't follow for a real setup." I think we need to elevate our docs game for CCR. -->
@@ -44,7 +44,7 @@ Start the server. If you're in the root of the server directory, execute
 ./bin/elasticssearch
 ```
 
-If you're just trying this out and don't yet have the proper license, start an [Elasticsearch trial](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/start-trial.html):
+If you're just trying this out and don't yet have the proper license, start an [Elasticsearch trial license](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/start-trial.html):
 
 ```json
 POST /_license/start_trial?acknowledge=true
