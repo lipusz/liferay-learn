@@ -89,3 +89,6 @@ From the local cluster containing the follower indexes, set the leader and perfo
 ## Replicate the Leader Indexes
 
 - Call the `[indexName]/_ccr/follow` Elasticsearch API to configure the follower indexes on the appropriate cluster.
+
+Ready to try? Checkout the [next article](./configuring-cross-cluster-replication.md) to get a local example up and running.
+
