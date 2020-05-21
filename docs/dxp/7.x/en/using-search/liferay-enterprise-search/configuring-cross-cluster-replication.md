@@ -140,6 +140,20 @@ Remember that "soft deletes" are enabled by default in Elasticsearch 7, however,
 
 Start the Liferay DXP server.
 
+```note::
+   If this is a new DXP installation, don't forget to reindex the spell check indexes through the Search admin in the Control Panel.
+```
+
+If you are using Kibana and it is configured to connect to your remote/leader Elasticsearch cluster, navigate to Management - Index Management to see the available Liferay indexes. You will see a similar overview:
+
+![Leader indexes overview in Kibana.](./cross-cluster-replication/images/ccr-leader-indexes-overview-kibana_remote-cluster.png)
+
+Now is the time to restart Kibana after updating `kibana.yml` to connect to your local/follower Elasticsearch cluster:
+
+```yaml
+elasticsearch.hosts: [ "http://localhost:9201" ]
+```
+
 ## Replicate the Leader Indexes into the Local Follower Elasticsearch Cluster
 
 Here you'll use two Elasticsearch API endpoints, `_cluster/settings` and `_ccr/follow`, from the local follower cluster.
