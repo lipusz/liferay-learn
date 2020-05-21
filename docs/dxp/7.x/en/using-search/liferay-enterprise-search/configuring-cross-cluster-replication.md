@@ -29,15 +29,21 @@ A vanilla Liferay DXP 7.2 installation contains the indexes presented in the [Cr
 
 All the Elasticsearch clusters being used by Liferay DXP (2 clusters in this example) need these indexes.
 
-### Configure the Leader Elasticsearch Cluster
+### Configure the Remote Leader Elasticsearch Cluster
 
 In our example setup, the first Elasticsearch cluster is a REMOTE mode cluster with no special configuration required: it accepts reads and writes from it's local Liferay DXP node, and write requests from the Liferay DXP nodes that are in a separate data center.
 
 Configure its `elasticsearch.yml` by specifying a sensible cluster name:
 
-```json
+`ES_HOME/config/elasticsearch.yml`
+
+```yaml
 cluster.name: LiferayElasticsearchCluster_LEADER
+http.port: 9200
+node.name: es-leader-node-1
+transport.port: 9300
 ```
+
 Start the server. If you're in the root of the server directory, execute
 
 ```bash
@@ -60,16 +66,19 @@ You'll see a `- valid` message in your log when it installs successfully:
 [2020-02-26T10:19:36,420][INFO ][o.e.l.LicenseService     ] [user-pc] license [lf263a315-8da3-41f7-8622-lfd7cc14cae29] mode [trial] - valid
 ```
 
-### Configure the Follower Elasticsearch Cluster 
+### Configure the Local Follower Elasticsearch Cluster 
 
 The second Elasticsearch cluster is going to contain the follower (read-only) indexes in the second data center, and will be local to a Liferay DXP node.
 
 Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port` that won't collide with the other Elasticsearch server:
 
-```json
+`ES/HOME/config/elasticsearch.yml`
+
+```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
-http.port: 9202
-transport.port: 9500-9600
+http.port: 9201
+node.name: es-follower-node-1
+transport.port: 9301
 ```
 
 Start the server. If you're in the root of the server directory, execute
@@ -88,9 +97,7 @@ POST /_license/start_trial?acknowledge=true
 > 
 > `POST _xpack/license/start_trial?acknowledge=true`
 
-## Configure the Liferay DXP Connectors to Elasticsearch
-
-### Configure the Remote Liferay DXP Node
+## Configure the Remote Liferay DXP Cluster Node
 
 Admin prepares remote Liferay Instance, that talks with the REMOTE mode Elasticsearch server.
 
@@ -118,9 +125,13 @@ com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguratio
 Give it these contents:
 
 ```properties
+clusterName="LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
-clusterName = "LiferayElasticsearchCluster_LEADER"
+transportAddresses=["localhost:9300"]
+additionalIndexConfigurations="index.soft_deletes.enabled: true"
 ```
+
+Remember that "soft deletes" are enabled by default in Elasticsearch 7, however, you must enable it in Elasticsearch 6 as it is described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
 
 ```tip::
    During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration file as well.
@@ -128,13 +139,13 @@ clusterName = "LiferayElasticsearchCluster_LEADER"
 
 Start the Liferay DXP server.
 
-## Replicate the Leader Indexes into the Local Elasticsearch Server
+## Replicate the Leader Indexes into the Local Follower Elasticsearch Cluster
 
 Here you'll use two Elasticsearch API endpoints, `_cluster/settings` and `_ccr/follow`, from the local follower cluster.
 
 You can use [Kibana](./monitoring-elasticsearch.md) to call Elasticsearch's APIs. 
 
-First, from the local cluster that will contain the follower indexes, set the leader cluster:
+First, from the local Follower Elasticsearch cluster that will contain the follower indexes, set the leader cluster:
 
 ```json
 PUT /_cluster/settings
@@ -153,19 +164,18 @@ PUT /_cluster/settings
 }
 ```
 
+Alternatively, this can also be done through Kibana - Management - Remote Clusters: click on the "Add a remote cluster" button and fill out the form as it is shown on the image below:
+
+![Adding a Remote Cluster in Kibana.](./cross-cluster-replication/images/ccr-add-remote-cluster-kibana_follower-cluster.png)
+
 Messages including `updating [cluster.remote.leader.seeds]` will appear in the log:
 
 ```bash
-[2020-02-26T14:15:54,752][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,758][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,759][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,760][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,815][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,819][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,820][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
-[2020-02-26T14:15:54,821][INFO ][o.e.c.s.ClusterSettings  ] [user-pc] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
+[2020-05-21T13:22:00,256][INFO ][o.e.c.s.ClusterSettings  ] [es-follower-node-1] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
+[2020-05-21T13:22:00,259][INFO ][o.e.c.s.ClusterSettings  ] [es-follower-node-1] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
+[2020-05-21T13:22:00,263][INFO ][o.e.c.s.ClusterSettings  ] [es-follower-node-1] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
+[2020-05-21T13:22:00,263][INFO ][o.e.c.s.ClusterSettings  ] [es-follower-node-1] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
 ```
-
 
 Once the leader is configured, use the Follow API to perform the initial index replication of the leader's indexes into the local/follower cluster:
 
@@ -177,6 +187,10 @@ PUT /liferay-20101/_ccr/follow?wait_for_active_shards=1
 }
 ```
 
+Alternatively, this can also be done through Kibana - Management - Cross Cluster Replication: click on the "Create a follower index" button and fill out the form as it is shown on the image below:
+
+![Adding a follower index in Kibana.](./cross-cluster-replication/images/ccr-add-follower-index-kibana_follower-cluster.png)
+
 ```note::
    The value ``leader`` is used in the API calls above, as it is the default `alias to the remote cluster <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-getting-started.html#ccr-getting-started-remote-cluster>`_: if you use a different alias, change this value in the API calls, and set the same value in the ``remoteClusterAlias`` property of the ``CrossClusterReplicationConfiguration``.
 ```
@@ -184,15 +198,14 @@ PUT /liferay-20101/_ccr/follow?wait_for_active_shards=1
 Messages indicating that the shard has started and that the leader is being tracked will appear in the console:
 
 ```bash
-[2020-02-26T14:25:06,806][INFO ][o.e.c.r.a.AllocationService] [user-pc] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[liferay-20101][0]]]).
-[2020-02-26T14:25:06,867][DEBUG][o.e.a.a.c.s.r.RestoreClusterStateListener] [user-pc] restore of [_latest_/_latest_] completed
-[2020-02-26T14:25:07,019][INFO ][o.e.x.c.a.ShardFollowTasksExecutor] [user-pc] [liferay-20101][0] Starting to track leader shard [liferay-20101][0]
-[2020-02-26T14:25:07,080][INFO ][o.e.x.c.a.ShardFollowNodeTask] [user-pc] [liferay-20101][0] following leader shard [liferay-20101][0], follower global checkpoint=[177], mapping version=[12], settings version=[0], aliases version=[0]
+[2020-05-21T13:31:29,888][INFO ][o.e.c.r.a.AllocationService] [es-follower-node-1] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[liferay-20101][0]] ...]).
+[2020-05-21T13:31:29,902][DEBUG][o.e.a.a.c.s.r.RestoreClusterStateListener] [es-follower-node-1] restore of [_latest_/_latest_] completed
+[2020-05-21T13:31:29,940][INFO ][o.e.x.c.a.ShardFollowTasksExecutor] [es-follower-node-1] [liferay-20101][0] Starting to track leader shard [liferay-20101][0]
+[2020-05-21T13:31:29,972][INFO ][o.e.x.c.a.ShardFollowNodeTask] [es-follower-node-1] [liferay-20101][0] following leader shard [liferay-20101][0], follower global checkpoint=[-1], mapping version=[11], settings version=[1]
 ```
 
 Repeat the above PUT call for all the indexes you see listed at Control Panel &rarr; Configuration &rarr; Search &rarr; Field Mappings. For example, these indexes are present in most systems:
 
-- liferay-0
 - liferay-20101
 - liferay-search-tuning-rankings
 - liferay-search-tuning-synonyms-liferay-20101
@@ -203,9 +216,13 @@ Repeat the above PUT call for all the indexes you see listed at Control Panel &r
 - workflow-metrics-sla-task-results
 - workflow-metrics-tokens
 
-Now the second Elasticsearch cluster knows how to replicate from the remote leader cluster. The last step is to wire up the final Liferay DXP node so it can read from this second Elasticsearch server's indexes, and write to the first (remote/leader) Elasticsearch cluster.
+```note::
+   The SYSTEM company index `liferay-0` **must not be replicated** from the leader otherwise it will load the System Settings configurations of the remote DXP Cluster node.
+```
 
-### Configure the Local Liferay DXP Node
+Now the local/follower Elasticsearch cluster knows how to replicate from the remote/leader Elasticsearch cluster. The last step is to wire up the local Liferay DXP cluster node so it can read from this local/follower Elasticsearch cluster's indexes, and write to the remote/leader Elasticsearch cluster.
+
+### Configure the Local Liferay DXP Cluster Node
 
 Provide a `portal-ext.properties` file with these contents:
 
