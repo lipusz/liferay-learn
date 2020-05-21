@@ -243,6 +243,8 @@ Now the local/follower Elasticsearch cluster knows how to replicate from the rem
 
 ### Configure the Local Liferay DXP Cluster Node
 
+Configure Tomcat to use different ports than your remote DXP node. We use `9080` as the HTTP port in this example setup.
+
 Provide a `portal-ext.properties` file with these contents:
 
 ```properties
@@ -264,9 +266,9 @@ com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguratio
 This file configures the write-enabled connection to the remote Elasticsearch cluster with the leader indexes. Give it these contents:
 
 ```properties
-clusterName="LiferayElasticsearchCluster_LEADER"
-operationMode="REMOTE"
-transportAddresses=["localhost:9300"]
+clusterName = "LiferayElasticsearchCluster_LEADER"
+operationMode = "REMOTE"
+transportAddresses = ["localhost:9300"]
 ```
 
 Now configure the read-only connection to the local Elasticsearch server with the follower indexes. Provide a configuration file named 
@@ -278,9 +280,9 @@ com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.confi
 Give it these contents:
 
 ```properties
-connectionId = follower
-clusterName = LiferayElasticsearchCluster_FOLLOWER
-transportAddresses = localhost:9301
+connectionId = "follower"
+clusterName = "LiferayElasticsearchCluster_FOLLOWER"
+transportAddresses = ["localhost:9301"]
 ```
 
 And finally, enable CCR by providing a configuration file named
@@ -292,20 +294,22 @@ com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.confi
 with the following content:
 
 ```properties
-ccrEnabled = "true"
-ccrLocalClusterConnectionConfigurations = ["localhost:9301=follower"]
+ccrEnabled = B"true"
+ccrLocalClusterConnectionConfigurations = ["localhost:9080=follower"]
 remoteClusterAlias = "leader"
+```
+
+```note::
+   Remember that we have configured our local/follower DXP node to use `9080` as HTTP port. If you are going with a different setting, map the portal address in `ccrLocalClusterConnectionConfigurations` accordingly.
 ```
 
 Now you can start the local Liferay DXP Cluster node.
 
-To verify the setup, do the following:
+## Verify the Setup
 
-1. On the follower DXP cluster node, navigate to Control Panel - Configuration - Search and select the Connections tab. Your connections should look something like this:
+On the follower DXP cluster node, navigate to Control Panel - Configuration - Search and select the Connections tab. Your connections should look something like this:
 
 ![Verifying the follower DXP Cluster setup: Elasticsearch connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-connections-on-the-follower-dxp-cluster-node.png)
-
-2. Add new content on the follower DXP cluster node and then search for it after a few seconds.
 
 <!-- From Tibor: Add note that the actual port number may be different depending on in which order you started the Leader and the Follower clusters if both are running on localhost.-->
 <!-- From Russ: I can do this, but I'm not convinced this is possible with these instructions. We set the transport port range to 9500-9600 for this ES cluster, and we left the other with the default setting (9300-9400), so will the startup order matter?-->
