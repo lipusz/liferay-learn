@@ -2,7 +2,7 @@
 
 > Elasticsearch 6 Only
 
-For Elasticsearch 6 versions that support Cross-Cluster Replication (6.7+), you must enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. Elasticsearch 7 enables soft deletes by default.
+For Elasticsearch 6 versions that support Cross-Cluster Replication (6.7+), you must enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. This extra hurdle can be avoided if your are on Elasticsearch 7 where soft deletes are enabled by default, so we strongly recommend you to consider [upgrading to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) first before configuring CCR.
 
 ## Enabling Soft Deletes on the System and Company Indexes
 
