@@ -58,7 +58,7 @@ Unless your setup reveals a very compelling reason not to, you should replicate 
 
 ## Configure the Elasticsearch Clusters
 
-> **Elasticsearch 6 Only:** [Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for any indexes you want to replicate. Read [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to learn more about this.
+> **Elasticsearch 6 Only:** [Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for any indexes you want to replicate. Read [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to learn more about this. This extra hurdle can be avoided if your are on Elasticsearch 7, so we strongly recommend you to consider [upgrading to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) first before configuring CCR.
 
 Set up the Elasticsearch clusters, using versions supported with Liferay DXP that also support Cross-Cluster Replications (Elasticsearch 6.7+ and 7.0+). See the [LES compatibility matrix](https://help.liferay.com/hc/en-us/articles/360016511651-Liferay-Enterprise-Search-Compatibility-Matrix) for details.
 
