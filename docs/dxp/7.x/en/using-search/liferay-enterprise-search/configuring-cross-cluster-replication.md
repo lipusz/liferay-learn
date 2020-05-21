@@ -109,9 +109,6 @@ Provide a `portal-ext.properties` file with these contents:
 
 ```properties
 cluster.link.enabled=true
-cluster.link.channel.name.control=test-control-channel
-cluster.link.channel.name.transport.0=test-transport-channel
-module.framework.properties.osgi.console=11311
 ```
 
 Then configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
@@ -224,6 +221,10 @@ Repeat the above PUT call for all the indexes you see listed at Control Panel &r
    The SYSTEM company index `liferay-0` **must not be replicated** from the leader otherwise it will load the System Settings configurations of the remote DXP Cluster node.
 ```
 
+At this point, if you navigate to Management - Cross Cluster Replication in Kibana, you should see something like this:
+
+![Follower indexes configured in Kibana.](./cross-cluster-replication/images/ccr-follower-indexes-configured-kibana_follower-cluster.png)
+
 Now the local/follower Elasticsearch cluster knows how to replicate from the remote/leader Elasticsearch cluster. The last step is to wire up the local Liferay DXP cluster node so it can read from this local/follower Elasticsearch cluster's indexes, and write to the remote/leader Elasticsearch cluster.
 
 ### Configure the Local Liferay DXP Cluster Node
@@ -232,9 +233,6 @@ Provide a `portal-ext.properties` file with these contents:
 
 ```properties
 cluster.link.enabled=true
-cluster.link.channel.name.control=test-control-channel
-cluster.link.channel.name.transport.0=test-transport-channel
-module.framework.properties.osgi.console=11312
 ```
 
 Then configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
@@ -252,24 +250,39 @@ osgi/configs/com.liferay.portal.search.elasticsearch6.configuration.Elasticsearc
 This file configures the write-enabled connection to the remote Elasticsearch cluster with the leader indexes. Give it these contents:
 
 ```properties
-logExceptionsOnly="false"
+clusterName="LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
-clusterName = "LiferayElasticsearchCluster_LEADER"
+transportAddresses=["localhost:9300"]
 ```
 
 Now configure the read-only connection to the local Elasticsearch server with the follower indexes. Provide a configuration file named 
 
 ```bash
-osgi/configs/com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config
+osgi/configs/com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config
 ```
 
 Give it these contents:
 
 ```properties
-ccrEnabled="true"
-clusterName="LiferayElasticsearchCluster_FOLLOWER"
-transportAddresses="localhost:9500"
+connectionId = follower
+clusterName = LiferayElasticsearchCluster_FOLLOWER
+transportAddresses = localhost:9301
 ```
+
+And finally, enable CCR by providing a configuration file named
+
+```bash
+osgi/configs/com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config
+```
+
+with the following content:
+
+```properties
+ccrEnabled = "true"
+ccrLocalClusterConnectionConfigurations = ["localhost:9301=follower"]
+remoteClusterAlias = "leader"
+```
+
 
 <!-- From Tibor: Add note that the actual port number may be different depending on in which order you started the Leader and the Follower clusters if both are running on localhost.-->
 <!-- From Russ: I can do this, but I'm not convinced this is possible with these instructions. We set the transport port range to 9500-9600 for this ES cluster, and we left the other with the default setting (9300-9400), so will the startup order matter?-->
