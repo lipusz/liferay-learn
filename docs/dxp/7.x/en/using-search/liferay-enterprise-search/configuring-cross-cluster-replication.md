@@ -8,6 +8,10 @@ ALSO, ADD A BEFORE AND AFTER LOOK AT THE CONNECTIONS TAB
 -->
 The commands that involve calling Elasticsearch APIs are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console which can be also accessed through the [X-Pack Monitoring widget](./monitoring-elasticsearch.md).
 
+```Note::
+   If you decide to use Kibana, remember that you will have two different Elasticsearch clusters with 1-1 node running in your environment. The `elasticsearch.hosts: [ "http://localhost:<port>" ]` setting in your Kibana's `kibana.yml` must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use `9200` while the follower node is using `9201` as HTTP port.
+```
+
 <!-- From Tibor: Highlight that the guide is super-simplified and deals with setting up a 1-1 node ES clusters (leader and follower) running on localhost. A prod-ready environment needs different settings.-->
 <!-- From Russ: We should just adapt to those settings instead of saying "this guide shows steps that you can't follow for a real setup." I think we need to elevate our docs game for CCR. -->
 
