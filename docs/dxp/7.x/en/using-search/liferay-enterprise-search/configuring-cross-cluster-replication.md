@@ -252,13 +252,13 @@ cluster.link.enabled=true
 Then configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
 
 ```bash
-osgi/configs/com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
+com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
 ```
 
 If using Elasticsearch 6, the configuration file is named
 
 ```bash
-osgi/configs/com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config
+com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config
 ```
 
 This file configures the write-enabled connection to the remote Elasticsearch cluster with the leader indexes. Give it these contents:
@@ -272,7 +272,7 @@ transportAddresses=["localhost:9300"]
 Now configure the read-only connection to the local Elasticsearch server with the follower indexes. Provide a configuration file named 
 
 ```bash
-osgi/configs/com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config
+com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config
 ```
 
 Give it these contents:
@@ -286,7 +286,7 @@ transportAddresses = localhost:9301
 And finally, enable CCR by providing a configuration file named
 
 ```bash
-osgi/configs/com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config
+com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config
 ```
 
 with the following content:
