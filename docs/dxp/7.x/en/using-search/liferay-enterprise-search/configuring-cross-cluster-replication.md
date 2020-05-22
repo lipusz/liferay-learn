@@ -285,6 +285,8 @@ clusterName = "LiferayElasticsearchCluster_FOLLOWER"
 transportAddresses = ["localhost:9301"]
 ```
 
+It's recommended that the suffix (`follower` in this example) at the end of the file name be the same as what is defined as the `connectionId` in the configuration.
+
 And finally, enable CCR by providing a configuration file named
 
 ```bash
