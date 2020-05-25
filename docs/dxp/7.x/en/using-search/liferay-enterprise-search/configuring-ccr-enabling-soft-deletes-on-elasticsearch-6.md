@@ -122,7 +122,7 @@ It is slightly different from the Search Tuning index steps, because the Workflo
 	    },
 	  },
 	  "settings": 
-	  // Content of settings.json goes here
+	  // Content of settings.json goes here as-is.
 	}  
 ```
 4. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
