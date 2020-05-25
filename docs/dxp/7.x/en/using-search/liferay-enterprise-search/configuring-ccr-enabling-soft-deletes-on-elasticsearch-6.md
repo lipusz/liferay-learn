@@ -66,7 +66,7 @@ For consistency, this should be done on all DXP cluster nodes residing in your p
     It is recommended to review the default settings files after installing a new patch on your DXP environment and adjust your override files accordingly, if needed.
 ```
 
-### Step 2b: Enabling Soft Deletes on Existing App and Custom Indexes
+### Step 2b: Enabling Soft Deletes on Existing App Indexes
 
 Deployments with existing indexes should follow the steps below.
 
@@ -74,24 +74,24 @@ To enable soft delete manually,
 
 #### Enabling Soft Deletes on Search Tuning Result Rankings Index
 
- 1. Follow steps 1-7.) in "Step 2a" above to obtain `liferay-search-tuning-rankings-index.json` for index `liferay-search-tuning-rankings`
- 2. Use the content of the JSON to specify the `"mappings"` and the `"settings"` and [create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `liferay-search-tuning-rankings_backup`, like this:
+1. Follow steps 1-7.) in "Step 2a" above to obtain `liferay-search-tuning-rankings-index.json` for index `liferay-search-tuning-rankings`
+2. Use the content of the JSON to specify the `"mappings"` and the `"settings"` and [create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `liferay-search-tuning-rankings_backup`, like this:
     ```json
     PUT liferay-search-tuning-rankings_backup
     // Content of liferay-search-tuning-rankings-index.json goes here as-is.
     ```
-1. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
+3. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
     `liferay-search-tuning-rankings` -> `liferay-search-tuning-rankings_backup`
-2. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
-3. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the default mappings and settings you obtained in the first step, using the original index name (`liferay-search-tuning-rankings`):
+4. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
+5. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the default mappings and settings you obtained in the first step, using the original index name (`liferay-search-tuning-rankings`):
 
    Add `"index.soft_deletes.enabled" : true` to the end of the `"settings"` definition to enable soft deletes.
 
-4. Use the `_reindex` API to copy the existing data into the new index. 
+6. Use the `_reindex` API to copy the existing data into the new index. 
 
       `liferay-search-tuning-rankings_backup` -> `liferay-search-tuning-rankings`
  
-5. Delete the temporary index (`liferay-search-tuning-rankings_backup`).
+7. Delete the temporary index (`liferay-search-tuning-rankings_backup`).
 
 #### Enabling Soft Deletes on Search Tuning Synonyms Index
 
@@ -105,14 +105,14 @@ It is slightly different from the Search Tuning index steps, because the Workflo
 
       `META-INF/search/mappings.json` and `META-INF/search/settings.json`. Obtain both.
        
-3. Locate the relevant block from the `mappings.json` for each Workflow Metrics index:
+2. Locate the relevant block from the `mappings.json` for each Workflow Metrics index:
    - workflow-metrics-instances: `"WorkflowMetricsInstanceType": { ...}`
    - workflow-metrics-nodes: `"WorkflowMetricsNodeType": {...}`
    - workflow-metrics-processes: `"WorkflowMetricsProcessType": {...}`
     - workflow-metrics-sla-instance-results: `"WorkflowMetricsSLAProcessResultType": {...}`
     - workflow-metrics-sla-task-results: `"WorkflowMetricsSLATaskResultType": {...}`
     - workflow-metrics-tokens: `"WorkflowMetricsTokenType": {...}`
-4. [Create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `workflow-metrics-instances_backup`. To specify the `"mappings"` use the block you identified in step 2; to specify the `"settings"` use the content of `settings.json`, like this:
+3. [Create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `workflow-metrics-instances_backup`. To specify the `"mappings"` use the block you identified in step 2; to specify the `"settings"` use the content of `settings.json`, like this:
 ```json
 	PUT workflow-metrics-instances_backup
 	{
@@ -125,19 +125,19 @@ It is slightly different from the Search Tuning index steps, because the Workflo
 	  // Content of settings.json goes here
 	}  
 ```
-5. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
+4. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
     `workflow-metrics-instances` -> `workflow-metrics-instances_backup`
-6. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
-7. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the original index name (`workflow-metrics-instances`):
+5. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
+6. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the original index name (`workflow-metrics-instances`):
 
    Repeat step 3 (of course, change the index name) and also add `"index.soft_deletes.enabled" : true` to the end of the `"settings"` definition to enable soft deletes. 
 
-8. Use the `_reindex` API to copy the existing data into the new index. 
+7. Use the `_reindex` API to copy the existing data into the new index. 
 
     `workflow-metrics-instances_backup` -> `workflow-metrics-instances`
 
-9. Delete the temporary index (`workflow-metrics-instances_backup`).
+8. Delete the temporary index (`workflow-metrics-instances_backup`).
 
-10. Repeat steps 3-8 with the other Workflow Metrics indexes.
+9. Repeat steps 3-8 with the other Workflow Metrics indexes.
 
 Once your indexes are in good shape, you're ready to [configure Cross-Cluster Replication](./configuring-cross-cluster-replication.md) for Liferay DXP.
