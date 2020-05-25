@@ -154,7 +154,7 @@ Start the Liferay DXP server.
 
 If you are using Kibana and it is configured to connect to your remote/leader Elasticsearch cluster, navigate to Management - Index Management to see the available Liferay indexes. You will see a similar overview:
 
-![Leader indexes overview in Kibana.](./cross-cluster-replication/images/ccr-leader-indexes-overview-kibana_remote-cluster.png)
+![Leader indexes overview in Kibana 7.](./cross-cluster-replication/images/ccr-leader-indexes-overview-kibana-7_remote-cluster.png)
 
 Now is the time to restart Kibana after updating `kibana.yml` to connect to your local/follower Elasticsearch cluster:
 
@@ -189,7 +189,7 @@ PUT /_cluster/settings
 
 Alternatively, this can also be done through Kibana - Management - Remote Clusters: click on the "Add a remote cluster" button and fill out the form as it is shown on the image below:
 
-![Adding a Remote Cluster in Kibana.](./cross-cluster-replication/images/ccr-add-remote-cluster-kibana_follower-cluster.png)
+![Adding a Remote Cluster in Kibana 7.](./cross-cluster-replication/images/ccr-add-remote-cluster-kibana-7_follower-cluster.png)
 
 Messages including `updating [cluster.remote.leader.seeds]` will appear in the log:
 
@@ -212,7 +212,7 @@ PUT /liferay-20101/_ccr/follow?wait_for_active_shards=1
 
 Alternatively, this can also be done through Kibana - Management - Cross Cluster Replication: click on the "Create a follower index" button and fill out the form as it is shown on the image below:
 
-![Adding a follower index in Kibana.](./cross-cluster-replication/images/ccr-add-follower-index-kibana_follower-cluster.png)
+![Adding a follower index in Kibana 7.](./cross-cluster-replication/images/ccr-add-follower-index-kibana-7_follower-cluster.png)
 
 ```note::
    The value ``leader`` is used in the API calls above, as it is the default `alias to the remote cluster <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-getting-started.html#ccr-getting-started-remote-cluster>`_: if you use a different alias, change this value in the API calls, and set the same value in the ``remoteClusterAlias`` property of the ``CrossClusterReplicationConfiguration``.
@@ -242,7 +242,7 @@ Repeat the above PUT call for all the indexes you see listed at Control Panel &r
 
 At this point, if you navigate to Management - Cross Cluster Replication in Kibana, you should see something like this:
 
-![Follower indexes configured in Kibana.](./cross-cluster-replication/images/ccr-follower-indexes-configured-kibana_follower-cluster.png)
+![Follower indexes configured in Kibana 7.](./cross-cluster-replication/images/ccr-follower-indexes-configured-kibana-7_follower-cluster.png)
 
 Now the local/follower Elasticsearch cluster knows how to replicate from the remote/leader Elasticsearch cluster. The last step is to wire up the local Liferay DXP cluster node so it can read from this local/follower Elasticsearch cluster's indexes, and write to the remote/leader Elasticsearch cluster.
 
