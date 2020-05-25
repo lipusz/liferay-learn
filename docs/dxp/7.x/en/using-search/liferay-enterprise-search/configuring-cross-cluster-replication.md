@@ -326,5 +326,77 @@ If you are using Elasticsearch 6, the Connections page will be like:
 
 ![Verifying the follower DXP Cluster setup: Elasticsearch 6 connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
 
-<!-- From Tibor: Add note that the actual port number may be different depending on in which order you started the Leader and the Follower clusters if both are running on localhost.-->
-<!-- From Russ: I can do this, but I'm not convinced this is possible with these instructions. We set the transport port range to 9500-9600 for this ES cluster, and we left the other with the default setting (9300-9400), so will the startup order matter?-->
+<!--
+## Troubleshooting
+
+### `RetentionLeaseNotFoundException` and `IndexNotFoundException` during reindex
+
+When a reindex is triggered on the Leader DXP node, the Follower Elasticsearch node may throw errors like this:
+
+```bash
+[2020-05-25T14:49:21,478][WARN ][o.e.x.c.a.ShardFollowNodeTask] [es-follower-node-1] shard follow task encounter non-retryable error
+org.elasticsearch.transport.RemoteTransportException: [es-leader-node-1][127.0.0.1:9300][indices:data/read/xpack/ccr/shard_changes]
+Caused by: org.elasticsearch.index.IndexNotFoundException: no such index
+  at org.elasticsearch.cluster.routing.RoutingTable.shardRoutingTable(RoutingTable.java:119) ~[elasticsearch-6.8.6.jar:6.8.6]
+```
+
+and this:
+```bash
+[2020-05-25T14:49:50,750][WARN ][o.e.x.c.a.ShardFollowTasksExecutor] [es-follower-node-1] [liferay-20101][0] background management of retention lease [LiferayElasticsearchCluster_FOLLOWER/liferay-20101/3a22HGCGS9iDl5rCbutNHg-following-leader/liferay-20101/lZThZJuhTLSaNYTSxmeX8A] failed while following
+org.elasticsearch.index.seqno.RetentionLeaseNotFoundException: retention lease with ID [LiferayElasticsearchCluster_FOLLOWER/liferay-20101/3a22HGCGS9iDl5rCbutNHg-following-leader/liferay-20101/lZThZJuhTLSaNYTSxmeX8A] not found
+  at org.elasticsearch.index.seqno.ReplicationTracker.renewRetentionLease(ReplicationTracker.java:282) ~[elasticsearch-6.8.6.jar:6.8.6]
+```
+
+> With a shard history retention lease, a follower can mark in the history of operations on the leader where in history that follower currently is. The leader shards know that operations below that marker are safe to be merged away, but any operations above that marker must be retained for until the follower has had the opportunity to replicate them. These markers ensure that if a follower goes offline temporarily, the leader will retain operations that have not yet been replicated. Since retaining this history requires additional storage on the leader, these markers are only valid for a limited period after which the marker will expire and the leader shards will be free to merge away history. You can tune the length of this period based on how much additional storage you are willing to retain in case a follower goes offline, and how long you’re willing to accept a follower being offline before it would otherwise have to be re-bootstrapped from the leader.
+
+https://www.elastic.co/blog/follow-the-leader-an-introduction-to-cross-cluster-replication-in-elasticsearch
+
+## Hint: Auto-follow Indexes
+
+You can leverage the auto-follow functionality of Elasticsearch in case of a new DXP-Elasticsearch deployment where the company and app-driven Leader indexes do not exist yet:
+https://www.elastic.co/guide/en/elasticsearch/reference/7.7/ccr-auto-follow.html
+
+1. Configure the "leader" ES node (elasticsearch.yml) & start
+2. Configure the "follower" ES node (elasticsearch.yml) & start
+3. Connect Kibana to the "follower" ES noode (kibana.yml) & start
+4. In Kibana, go to Management - Remote Clusters and add a new remote cluster: "leader, 127.0.0.1:9300"
+```json
+PUT _cluster/settings
+{
+  "persistent": {
+    "cluster": {
+      "remote": {
+        "leader": {
+          "seeds": [
+            "127.0.0.1:9300"
+          ],
+          "skip_unavailable": false
+        }
+      }
+    }
+  }
+}
+```
+5. In Kibana, go to Management - Cross Cluster Replication - Auto-follow patterns tab:
+Name: `liferay-follow-patterns`
+Remote cluster: `leader`
+Leader patterns: `liferay-*, workflow-*`
+
+```json
+PUT /_ccr/auto_follow/liferay-follow-patterns
+{
+  "remote_cluster": "leader",
+  "leader_index_patterns": [
+    "liferay-*",
+    "workflow-*"
+  ],
+  "follow_index_pattern": "{{leader_index}}"
+}
+```
+6. Start the Leader DXP Cluster Node and wait until it is up and running
+7. Verify in Kibana that the follower indexes have been created: go to Management - Cross Cluster Replication - Follower indexes tab: you should see a similar image what is shown at the end of the section "Replicate the Leader Indexes into the Local Follower Elasticsearch Cluster" in the Configure CCR guide.
+
+The auto-follow functionality can also come in handy when you add a new Virtual Instance in DXP which creates a new company index in the Leader Elasticsearch cluster.
+
+Continue from the "Configure the Local Liferay DXP Cluster Node" section.
+-->
