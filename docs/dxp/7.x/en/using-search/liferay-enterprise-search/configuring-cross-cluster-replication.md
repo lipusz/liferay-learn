@@ -316,11 +316,15 @@ Now you can start the local Liferay DXP Cluster node.
 
 On the follower DXP cluster node, navigate to Control Panel - Configuration - Search and select the Connections tab. Your connections should look something like this:
 
-![Verifying the follower DXP Cluster setup: Elasticsearch connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-connections-on-the-follower-dxp-cluster-node.png)
+![Verifying the follower DXP Cluster setup: Elasticsearch 7 connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
 
 ```note::
    The Connections tab appears in the Search admin when the CCR module is installed.
 ```
+
+If you are using Elasticsearch 6, the Connections page will be like:
+
+![Verifying the follower DXP Cluster setup: Elasticsearch 6 connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
 
 <!-- From Tibor: Add note that the actual port number may be different depending on in which order you started the Leader and the Follower clusters if both are running on localhost.-->
 <!-- From Russ: I can do this, but I'm not convinced this is possible with these instructions. We set the transport port range to 9500-9600 for this ES cluster, and we left the other with the default setting (9300-9400), so will the startup order matter?-->
