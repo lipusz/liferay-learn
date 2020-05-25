@@ -221,6 +221,7 @@ Messages indicating that the shard has started and that the leader is being trac
 
 Repeat the above PUT call for all the indexes you see listed at Control Panel &rarr; Configuration &rarr; Search &rarr; Field Mappings. For example, these indexes are present in most systems:
 
+- liferay-0
 - liferay-20101
 - liferay-search-tuning-rankings
 - liferay-search-tuning-synonyms-liferay-20101
@@ -230,10 +231,6 @@ Repeat the above PUT call for all the indexes you see listed at Control Panel &r
 - workflow-metrics-sla-instance-results
 - workflow-metrics-sla-task-results
 - workflow-metrics-tokens
-
-```note::
-   The SYSTEM company index `liferay-0` **must not be replicated** from the leader otherwise it will load the System Settings configurations of the remote DXP Cluster node.
-```
 
 At this point, if you navigate to Management - Cross Cluster Replication in Kibana, you should see something like this:
 
