@@ -18,7 +18,7 @@ index.soft_deletes.enabled: true
 
 You can also specify the additional setting by creating a file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` in `[Liferay Home]/osgi/configs` with the following content:
 ```properties
-additionalIndexConfigurations="index.soft_deletes.enabled: true"
+additionalIndexConfigurations = "index.soft_deletes.enabled: true"
 ```
 
 ## Step 2: Enabling Soft Deletes on App Indexes
