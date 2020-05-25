@@ -15,7 +15,7 @@ The commands that involve calling Elasticsearch APIs are provided in a format th
 <!-- From Tibor: Highlight that the guide is super-simplified and deals with setting up a 1-1 node ES clusters (leader and follower) running on localhost. A prod-ready environment needs different settings.-->
 <!-- From Russ: We should just adapt to those settings instead of saying "this guide shows steps that you can't follow for a real setup." I think we need to elevate our docs game for CCR. -->
 
-## Prerequisite: Required DXP Patch Level
+## Prerequisite for DXP: Required Patch Level
 
 To use CCR, all of your DXP cluster nodes must be running on **DXP 7.2 Fix Pack 5+ / Service Pack 2+**.
 
