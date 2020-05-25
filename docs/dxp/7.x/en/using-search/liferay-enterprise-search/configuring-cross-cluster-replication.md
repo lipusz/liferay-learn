@@ -15,9 +15,17 @@ The commands that involve calling Elasticsearch APIs are provided in a format th
 <!-- From Tibor: Highlight that the guide is super-simplified and deals with setting up a 1-1 node ES clusters (leader and follower) running on localhost. A prod-ready environment needs different settings.-->
 <!-- From Russ: We should just adapt to those settings instead of saying "this guide shows steps that you can't follow for a real setup." I think we need to elevate our docs game for CCR. -->
 
+## Prerequisite: Required DXP Patch Level
+
+To use CCR, all of your DXP cluster nodes must be running on **DXP 7.2 Fix Pack 5+ / Service Pack 2+**.
+
 ## Prerequisite for Elasticsearch 6: Enable Soft Deletes
 
 [Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for all existing indexes. This is not done by default on Elasticsearch 6. Before proceeding, read [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to configure soft deletes on your Elasticsearch 6 indexes, then resume reading here to set up CCR.
+
+## Prerequisite for Elasticsearch 7: Install the Liferay Connector to Elasticsearch 7
+
+If you are using Elasticsearch 7, you have to install the [Elasticsearch 7 connector](https://web.liferay.com/marketplace/-/mp/application/170390307) from Marketplace **version `3.0.1+`** (requires DXP 7.2 FP5+/SP2+) on all DXP cluster nodes. Read [this article](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) on how to upgrade to Elasticsearch 7.
 
 ## Install the Cross-Cluster Replication Module
 
