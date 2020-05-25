@@ -115,7 +115,7 @@ To enable soft delete manually,
 
 Once your index is in good shape, you're ready to [configure Cross-Cluster Replication](./configuring-cross-cluster-replication.md) for Liferay DXP.
 
-## Step 2b: Enabling Soft Deletes App Indexes Using the Overriding LPKG Files Mechanism
+## Step 2b: Enabling Soft Deletes on App Indexes Using the Overriding LPKG Files Mechanism
 
 You can customize the default index settings of the out-of-the-box Liferay app-driven indexes by leveraging the [overriding LPKG files](https://help.liferay.com/hc/en-us/articles/360028808552-Overriding-lpkg-Files) mechanism. By doing so, you can ensure that when DXP starts up, the leader indexes will be created with the required settings. This can come in handy for new DXP deployments.
 
