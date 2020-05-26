@@ -2,7 +2,7 @@
 
 > Elasticsearch 6 Only
 
-For Elasticsearch 6 versions that support Cross-Cluster Replication (6.7+), you must enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. This extra hurdle can be avoided if your are on Elasticsearch 7 where soft deletes are enabled by default, so we strongly recommend you to consider [upgrading to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) first before configuring CCR.
+For Elasticsearch 6 versions that support Cross-Cluster Replication (6.7+), you must enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. This extra hurdle can be avoided if your are on Elasticsearch 7 where soft deletes are enabled by default, so you should [upgrade to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) if at all possible before configuring CCR.
 
 ## Step 1: Enabling Soft Deletes on the System and Company Indexes
 
@@ -12,21 +12,26 @@ The system (`liferay-0`) and company (`liferay-[companyId]`) indexes can be soft
 index.soft_deletes.enabled: true
 ```
 
-```note::
-   Requires to perform a full reindex from the Server Admin in the Control Panel.
-```
-
-You can also specify the additional setting by creating a file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` in `[Liferay Home]/osgi/configs` with the following content:
+Alternatively, specify the ot delete setting in a configuration file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` and placed in `[Liferay Home]/osgi/configs`. This file would have the following contents:
 ```properties
 additionalIndexConfigurations = "index.soft_deletes.enabled: true"
 ```
+<!-- To Tibor: You've added this configuration to the "Configuring Cross-Cluster Replication" article. I think it belongs here only. -Russ -->
 
+```note::
+   These steps require performing a full reindex from Control Panel &rarr; Configuration &rarr; Search, in the Index Actions tab.
+```
+
+<!-- Stopped here: I need to work on the rest of this file still -Russ -->
 ## Step 2: Enabling Soft Deletes on App Indexes
 
-The app and custom indexes are those not controlled directly by Liferay's Search Framework in terms of index settings and mappings. They include Liferay DXP app indexes prefixed with `liferay-search-tuning-*` and `workflow-metrics-*`, and your own custom indexes.
+The app and custom indexes are those not controlled directly by Liferay's Search Framework: they're entirely in control of their own index settings and mappings. They include Liferay DXP app indexes prefixed with `liferay-search-tuning-*` and `workflow-metrics-*`, and your own custom indexes.
 
-### Step 2a: Enabling Soft Deletes on App Indexes Using the Overriding LPKG Files Mechanism
+There are two approaches for enabling soft deletes on App and Custom Indexes: one that only new deployments can leverage, and one that any deployment, new or existing, can follow.
 
+### New Deployments: Overriding LPKG Files to Enable Soft Deletes
+
+<!-- As written I think this introduces confusion. If this approach is preferable for new deployments, we should just state up front, do this if you have a new deployment, otherwise see -->
 You can customize the default index settings of the out-of-the-box Liferay app-driven indexes by leveraging the [overriding LPKG files](https://help.liferay.com/hc/en-us/articles/360028808552-Overriding-lpkg-Files) mechanism. By doing so, you can ensure that when DXP starts up, the leader indexes will be created with the required settings. This can come in handy for new DXP deployments.
 
 ```note::
@@ -35,19 +40,29 @@ You can customize the default index settings of the out-of-the-box Liferay app-d
 
 We are going to override three JARs from two LPKG files that are bundled with DXP 7.2.
 
-0. Make sure your DXP cluster nodes are not running
-1. Go to `[Liferay Home]/osgi/marketplace`
-2. Locate `Liferay Foundation - Liferay Search Tuning - Impl.lpkg`
-3. Open with an archive manager and extract the following JAR files into `osgi/marketplace/override` (create a folder called `override` if it does not exist yet):  
-3.1 `com.liferay.portal.search.tuning.rankings.web.jar-x.y.z`  
-3.2 `com.liferay.portal.search.tuning.synonyms.web.jar-x.y.z`  
-4. Locate `Liferay Forms and Workflow - Liferay Portal Workflow - Impl.lpkg`  
-5. Open with an archive manager and extract the following JAR file into `osgi/marketplace/override`:  
-5.1 `com.liferay.portal.workflow.metrics.service.jar-x.y.z`  
-6. Go to `osgi/marketplace/override` and remove the version like `1.0.21` from the name of the files  
-7. Open `com.liferay.portal.search.tuning.rankings.web.jar` with an archive manager  
-7.1. Navigate to `META-INF/search` and open `liferay-search-tuning-rankings-index.json` with a text editor  
-7.2. Edit the `"settings"` snippet and add `"index.soft_deletes.enabled" : true` so it will look like this:
+1. Stop your Liferay DXP cluster nodes if they're running.
+
+1. Go to `[Liferay Home]/osgi/marketplace` and find `Liferay Foundation - Liferay Search Tuning - Impl.lpkg`.
+
+1. Open the LPKG with an archive manager and extract the following JAR files into `Liferay Home/osgi/marketplace/override` (create the `override` folder if it does not exist):  
+
+   - `com.liferay.portal.search.tuning.rankings.web.jar-x.y.z`  
+   - `com.liferay.portal.search.tuning.synonyms.web.jar-x.y.z`  
+
+1. Next locate the `Liferay Forms and Workflow - Liferay Portal Workflow - Impl.lpkg`  
+
+1. Open the LPKG with an archive manager and extract the following JAR file into `Liferay Home/osgi/marketplace/override`:  
+
+   - `com.liferay.portal.workflow.metrics.service.jar-x.y.z`  
+
+1. Go to `Liferay Home/osgi/marketplace/override` and remove the version (e.g., `1.0.21`) from the name of all the JAR files  
+
+1. Open `com.liferay.portal.search.tuning.rankings.web.jar` with an archive manager 
+
+1. Navigate to `META-INF/search` and open `liferay-search-tuning-rankings-index.json` with a text editor. 
+
+1. Edit the `"settings"` snippet and add `"index.soft_deletes.enabled" : true`:
+
   ```json
 	 "settings": {
 		    "index.auto_expand_replicas": "0-all",
@@ -55,23 +70,25 @@ We are going to override three JARs from two LPKG files that are bundled with DX
 		    "index.soft_deletes.enabled" : true
   }
   ```
-   7.3. Save the file and let your archive manager re-pack the JAR automatically.  
-8. Repeat step 7.) with `com.liferay.portal.search.tuning.synonyms.web.jar`  
-9. Repeat step 7.) with `com.liferay.portal.workflow.metrics.service.jar` (the name of the file is `settings.json` and its content and structure may be different from the Search Tuning settings)  
-10. Start DXP (Leader node)
+1. Save the file and let your archive manager re-package the JAR automatically.  
+
+1. Do the same for `com.liferay.portal.search.tuning.synonyms.web.jar`  
+
+1. Do the same for `com.liferay.portal.workflow.metrics.service.jar` (the name of the file is `settings.json` and its content and structure may be different from the Search Tuning settings).  
+
+1. Start Liferay DXP (the Leader node).
  
 For consistency, this should be done on all DXP cluster nodes residing in your primary (leader) data center.
  
 ```note::
-    It is recommended to review the default settings files after installing a new patch on your DXP environment and adjust your override files accordingly, if needed.
+    You should review the default settings files each time you install a new patch in your DXP environment, and adjust your override files accordingly.
 ```
 
-### Step 2b: Enabling Soft Deletes on Existing App Indexes
+### Existing Deployments: Manually Enabling Soft Deletes
 
-Deployments with existing indexes should follow the steps below.
+Deployments with existing App Indexes must follow these steps to enable soft deletes.
 
-To enable soft delete manually,
-
+<!-- I made it here, will continue working on this file later - Russ -->
 #### Enabling Soft Deletes on Search Tuning Result Rankings Index
 
 1. Follow steps 1-7.) in "Step 2a" above to obtain `liferay-search-tuning-rankings-index.json` for index `liferay-search-tuning-rankings`

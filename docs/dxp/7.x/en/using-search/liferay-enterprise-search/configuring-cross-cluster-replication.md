@@ -2,42 +2,46 @@
 
 > **Liferay Enterprise Search (LES) Subscribers**
 
-<!-- SAME DIAGRAM USED IN INTRO ARTICLE
+Configure Liferay DXP's Cross-Cluster Replication module and Elasticsearch to set up a read-write connection from one Elasticsearch server to one Liferay DXP cluster node, and a read connection from another Elasticsearch server to a second Liferay DXP cluster node:
 
-ALSO, ADD A BEFORE AND AFTER LOOK AT THE CONNECTIONS TAB
--->
-The commands that involve calling Elasticsearch APIs are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console which can be also accessed through the [X-Pack Monitoring widget](./monitoring-elasticsearch.md).
+![With Cross-Cluster Replication, disparate data centers can hold synchronized Elasticsearch clusters with Liferay DXP indexes.](./configuring-cross-cluster-replication/images/01.png)
 
-```Note::
-   If you decide to use Kibana, remember that you will have two different Elasticsearch clusters with 1-1 node running in your environment. The `elasticsearch.hosts: [ "http://localhost:<port>" ]` setting in your Kibana's `kibana.yml` must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use `9200` while the follower node is using `9201` as HTTP port.
+This represents the simplest scenario you can configure to reap the data locality and disaster recovery benefits of Cross-Cluster Replication.
+
+The Elasticsearch API calls are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console, which can be accessed via a separate Kibana installation or through the [X-Pack Monitoring widget](./monitoring-elasticsearch.md).
+
+```note::
+   If you use Kibana, remember that you have multiple Elasticsearch clusters (two single-node clusters in this example) running. The `elasticsearch.hosts: [ "http://localhost:<port>" ]` setting in your Kibana's `kibana.yml` must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use `9200` while the follower node is using `9201` as HTTP port.
 ```
 
 <!-- From Tibor: Highlight that the guide is super-simplified and deals with setting up a 1-1 node ES clusters (leader and follower) running on localhost. A prod-ready environment needs different settings.-->
 <!-- From Russ: We should just adapt to those settings instead of saying "this guide shows steps that you can't follow for a real setup." I think we need to elevate our docs game for CCR. -->
 
-## Prerequisite for DXP: Required Patch Level
-
-To use CCR, all of your DXP cluster nodes must be running on **DXP 7.2 Fix Pack 5+ / Service Pack 2+**.
+```important::
+   To use CCR, all of your DXP cluster nodes must be running Liferay DXP 7.2 Fix Pack 5+ / Service Pack 2+.
+```
 
 ## Prerequisite for Elasticsearch 6: Enable Soft Deletes
 
 [Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for all existing indexes. This is not done by default on Elasticsearch 6. Before proceeding, read [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to configure soft deletes on your Elasticsearch 6 indexes, then resume reading here to set up CCR.
 
+If Elasticsearch 6 is not a hard requirement for your system, you should upgrade to Elasticsearch 7 before configuring CCR. 
+
 ## Prerequisite for Elasticsearch 7: Install the Liferay Connector to Elasticsearch 7
 
-If you are using Elasticsearch 7, you have to install the [Elasticsearch 7 connector](https://web.liferay.com/marketplace/-/mp/application/170390307) from Marketplace **version `3.0.1+`** (requires DXP 7.2 FP5+/SP2+) on all DXP cluster nodes. Read [this article](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) on how to upgrade to Elasticsearch 7.
+If you are using Elasticsearch 7, you have to install the [Elasticsearch 7 connector](https://web.liferay.com/marketplace/-/mp/application/170390307) from Marketplace **version `3.0.1+`** (requires DXP 7.2 FP5+/SP2+) on all DXP cluster nodes. Read [Upgrading to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) for details.
 
 ## Install the Cross-Cluster Replication Module
 
 1. Download the Liferay DXP Cross-Cluster Replication for Elasticsearch LPKG from the [LES downloads page](https://customer.liferay.com/downloads).
 
-2. [Install the LPKG](../../system-administration/installing-and-managing-apps/installing-apps/installing-apps.md) into the local Liferay DXP instance.
+1. [Install the LPKG](../../system-administration/installing-and-managing-apps/installing-apps/installing-apps.md) into the local Liferay DXP instance.
 
 ## Configure the Elasticsearch Clusters
 
 This example uses two single-node Elasticsearch clusters on `localhost`, each with a copy of the same indexes.
 
-A vanilla Liferay DXP 7.2 installation contains the indexes presented in the [Cross Cluster Replication](./cross-cluster-replication.md#liferay-dxp-decide-whichindexes-to-replicate-from-the-remote-cluster) article.
+A vanilla Liferay DXP 7.2 installation contains the indexes presented in the introductory [Cross Cluster Replication](./cross-cluster-replication.md#liferay-dxp-decide-whichindexes-to-replicate-from-the-remote-cluster) article.
 
 All the Elasticsearch clusters being used by Liferay DXP (2 clusters in this example) need these indexes.
 
@@ -78,9 +82,9 @@ You'll see a `- valid` message in your log when it installs successfully:
 [2020-02-26T10:19:36,420][INFO ][o.e.l.LicenseService     ] [es-leader-node-1] license [lf263a315-8da3-41f7-8622-lfd7cc14cae29] mode [trial] - valid
 ```
 
-### Configure the Local Follower Elasticsearch Cluster 
+### Configure the Local Elasticsearch Cluster 
 
-The second Elasticsearch cluster is going to contain the follower (read-only) indexes in the second data center, and will be local to a Liferay DXP node.
+The second Elasticsearch cluster must hold follower (replicated; read-only) indexes in the second data center, and will act as the local search engine the Liferay DXP nodes can read from.
 
 Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port` that won't collide with the other Elasticsearch server:
 
@@ -109,9 +113,13 @@ POST /_license/start_trial?acknowledge=true
 > 
 > `POST _xpack/license/start_trial?acknowledge=true`
 
-## Configure the Remote Liferay DXP Cluster Node
+## Configure the Liferay DXP Cluster
 
-Admin prepares remote Liferay Instance, that talks with the REMOTE mode Elasticsearch server.
+To DXP nodes comprise the Liferay DXP cluster in this simplified setup: a Remote node, and a Local node.
+
+### Configure the Remote Liferay DXP Cluster Node
+
+The remote Liferay DXP node talks with the REMOTE mode Elasticsearch server. Even though they're both called _remote_, they're co-located in this setup.
 
 Provide a `portal-ext.properties` file with these contents:
 
@@ -137,10 +145,12 @@ Give it these contents:
 clusterName="LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
 transportAddresses=["localhost:9300"]
-additionalIndexConfigurations="index.soft_deletes.enabled: true"
+
+# Uncomment the below setting for Elasticsearch 6:
+# additionalIndexConfigurations="index.soft_deletes.enabled: true"
 ```
 
-Remember that "soft deletes" are enabled by default in Elasticsearch 7, however, you must enable it in Elasticsearch 6 as it is described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
+Soft deletes are enabled by default in Elasticsearch 7, but must be enabled manually for Elasticsearch 6 as described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
 
 ```tip::
    During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration file as well.
@@ -148,27 +158,28 @@ Remember that "soft deletes" are enabled by default in Elasticsearch 7, however,
 
 Start the Liferay DXP server.
 
-```note::
-   If this is a new DXP installation, don't forget to reindex the spell check indexes through the Search admin in the Control Panel.
+```important::
+   If you're configuring a new DXP installation, mak sure to reindex the spell check indexes at Control Panel &rarr; Configuration &rarr; Search, in the _Index Actions_ tab.
 ```
 
-If you are using Kibana and it is configured to connect to your remote/leader Elasticsearch cluster, navigate to Management - Index Management to see the available Liferay indexes. You will see a similar overview:
+If Kibana is connected to your remote/leader Elasticsearch cluster, navigate to Management - Index Management to see the available Liferay indexes:
 
-![Leader indexes overview in Kibana 7.](./cross-cluster-replication/images/ccr-leader-indexes-overview-kibana-7_remote-cluster.png)
+![Inspect the leader indexes in Kibana 7.](./cross-cluster-replication/images/ccr-leader-indexes-overview-kibana-7_remote-cluster.png)
 
-Now is the time to restart Kibana after updating `kibana.yml` to connect to your local/follower Elasticsearch cluster:
+## Replicate the Leader Indexes
 
-```yaml
-elasticsearch.hosts: [ "http://localhost:9201" ]
+The replication of the indexes is a _pull_ type operation: it's executed from the local cluster holding the follower indexes. First you'll need to configure the leader/follower relationship.
+
+```tip::
+   Restart Kibana after reconfiguring the ``kibana.yml`` to connect to your local/follower Elasticsearch cluster:
+
+``elasticsearch.hosts: [ "http://localhost:9201" ]``
+
 ```
 
-## Replicate the Leader Indexes into the Local Follower Elasticsearch Cluster
+Two Elasticsearch API endpoints are called from the local Elasticsearch cluster: `_cluster/settings` and `_ccr/follow`.
 
-Here you'll use two Elasticsearch API endpoints, `_cluster/settings` and `_ccr/follow`, from the local follower cluster.
-
-You can use [Kibana](./monitoring-elasticsearch.md) to call Elasticsearch's APIs. 
-
-First, from the local Follower Elasticsearch cluster that will contain the follower indexes, set the leader cluster:
+First set the leader cluster:
 
 ```json
 PUT /_cluster/settings
@@ -187,11 +198,11 @@ PUT /_cluster/settings
 }
 ```
 
-Alternatively, this can also be done through Kibana - Management - Remote Clusters: click on the "Add a remote cluster" button and fill out the form as it is shown on the image below:
+This can also be done from Kibana &rarr; Management &rarr; Remote Clusters: click on the _Add a remote cluster_ button and fill out the form.
 
-![Adding a Remote Cluster in Kibana 7.](./cross-cluster-replication/images/ccr-add-remote-cluster-kibana-7_follower-cluster.png)
+![Add a remote cluster in Kibana 7.](./cross-cluster-replication/images/ccr-add-remote-cluster-kibana-7_follower-cluster.png)
 
-Messages including `updating [cluster.remote.leader.seeds]` will appear in the log:
+Messages including `updating [cluster.remote.leader.seeds]` are printed in the log:
 
 ```bash
 [2020-05-21T13:22:00,256][INFO ][o.e.c.s.ClusterSettings  ] [es-follower-node-1] updating [cluster.remote.leader.seeds] from [[]] to [["127.0.0.1:9300"]]
@@ -210,9 +221,9 @@ PUT /liferay-20101/_ccr/follow?wait_for_active_shards=1
 }
 ```
 
-Alternatively, this can also be done through Kibana - Management - Cross Cluster Replication: click on the "Create a follower index" button and fill out the form as it is shown on the image below:
+This can also be done through Kibana &rarr; Management &rarr; Cross Cluster Replication: click on the _Create a follower index_ button and fill out the form.
 
-![Adding a follower index in Kibana 7.](./cross-cluster-replication/images/ccr-add-follower-index-kibana-7_follower-cluster.png)
+![Add a follower index in Kibana 7.](./cross-cluster-replication/images/ccr-add-follower-index-kibana-7_follower-cluster.png)
 
 ```note::
    The value ``leader`` is used in the API calls above, as it is the default `alias to the remote cluster <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-getting-started.html#ccr-getting-started-remote-cluster>`_: if you use a different alias, change this value in the API calls, and set the same value in the ``remoteClusterAlias`` property of the ``CrossClusterReplicationConfiguration``.
@@ -240,11 +251,11 @@ Repeat the above PUT call for all the indexes you see listed at Control Panel &r
 - workflow-metrics-sla-task-results
 - workflow-metrics-tokens
 
-At this point, if you navigate to Management - Cross Cluster Replication in Kibana, you should see something like this:
+> Checkpoint---Navigate to Management &rarr; Cross Cluster Replication in Kibana and you see something like this:
 
-![Follower indexes configured in Kibana 7.](./cross-cluster-replication/images/ccr-follower-indexes-configured-kibana-7_follower-cluster.png)
+![Verify that the follower indexes are present in Kibana 7.](./cross-cluster-replication/images/ccr-follower-indexes-configured-kibana-7_follower-cluster.png)
 
-Now the local/follower Elasticsearch cluster knows how to replicate from the remote/leader Elasticsearch cluster. The last step is to wire up the local Liferay DXP cluster node so it can read from this local/follower Elasticsearch cluster's indexes, and write to the remote/leader Elasticsearch cluster.
+Now the local/follower Elasticsearch cluster knows how to replicate from the remote/leader Elasticsearch cluster. The last step is to wire up the local Liferay DXP cluster node so it reads from this local Elasticsearch cluster's follower indexes, and writes to the remote/leader Elasticsearch cluster.
 
 ### Configure the Local Liferay DXP Cluster Node
 
@@ -256,7 +267,7 @@ Provide a `portal-ext.properties` file with these contents:
 cluster.link.enabled=true
 ```
 
-Then configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
+Then configure the Liferay Connector to Elasticsearch X [6 or 7] by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
 
 ```bash
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
@@ -290,15 +301,15 @@ clusterName = "LiferayElasticsearchCluster_FOLLOWER"
 transportAddresses = ["localhost:9301"]
 ```
 
-It's recommended that the suffix (`follower` in this example) at the end of the file name be the same as what is defined as the `connectionId` in the configuration.
+You can use any suffix (`-follower` in this example) for the configuration file name, but for consistency you should make it identical to the `connectionId` property in the configuration.
 
-And finally, enable CCR by providing a configuration file named
+The connection is configured. Next enable CCR by providing a configuration file named
 
 ```bash
 com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config
 ```
 
-with the following content:
+Give it the following contents:
 
 ```properties
 ccrEnabled = B"true"
@@ -307,24 +318,24 @@ remoteClusterAlias = "leader"
 ```
 
 ```note::
-   Remember that we have configured our local/follower DXP node to use `9080` as HTTP port. If you are going with a different setting, map the portal address in `ccrLocalClusterConnectionConfigurations` accordingly.
+   The local/follower DXP node used `9080` as its HTTP port. If you have a different port, adjust the portal address in `ccrLocalClusterConnectionConfigurations` accordingly.
 ```
 
-Now you can start the local Liferay DXP Cluster node.
+Now start the local Liferay DXP Cluster node.
 
 ## Verify the Setup
 
-On the follower DXP cluster node, navigate to Control Panel - Configuration - Search and select the Connections tab. Your connections should look something like this:
+On the follower DXP cluster node, navigate to Control Panel &rarr; Configuration &rarr; Search and select the _Connections_ tab. Your connections look like this:
 
-![Verifying the follower DXP Cluster setup: Elasticsearch 7 connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
+![Verify the Elasticsearch 7 connections in the Search administration panel.](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
 
 ```note::
-   The Connections tab appears in the Search admin when the CCR module is installed.
+   The Connections tab only appears in the Search admin if the CCR module is installed and running.
 ```
 
-If you are using Elasticsearch 6, the Connections page will be like:
+If you are using Elasticsearch 6, the Connections page looks a little different:
 
-![Verifying the follower DXP Cluster setup: Elasticsearch 6 connections in the Search admin](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
+![Verifying the Elasticsearch 6 connections in the Search administration panel.](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
 
 <!--
 ## Troubleshooting
