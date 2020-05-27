@@ -28,7 +28,7 @@ Read this article for an overview of the steps, then see the next article, [a st
 
 Any Liferay DXP node that will read from a local cluster's follower indexes and write through a separate connection to the remote cluster's leader indexes, must have the CCR module installed. This module is available with your LES subscription.
 
-Though all DXP nodes will have the CCR module installed, those that read and write from the same cluster only need to configure a normal REMOTE mode connection to the Elasticsearch cluster.
+Those DXP cluster nodes that read and write from the same cluster only need to configure a normal REMOTE mode connection to the Leader Elasticsearch cluster.
 
 ##  Liferay DXP: Decide Which Indexes to Replicate from the Remote Cluster
 
