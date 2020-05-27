@@ -4,6 +4,10 @@
 
 Configure Liferay DXP's Cross-Cluster Replication module and Elasticsearch to set up a read-write connection from one Elasticsearch server to one Liferay DXP cluster node, and a read connection from another Elasticsearch server to a second Liferay DXP cluster node:
 
+```important::
+   To use CCR, all of your DXP cluster nodes must be running Liferay DXP 7.2 Fix Pack 5+ / Service Pack 2+.
+```
+
 ![With Cross-Cluster Replication, disparate data centers can hold synchronized Elasticsearch clusters with Liferay DXP indexes.](./configuring-cross-cluster-replication/images/01.png)
 
 This represents the simplest scenario you can configure to reap the data locality and disaster recovery benefits of Cross-Cluster Replication.
@@ -11,15 +15,11 @@ This represents the simplest scenario you can configure to reap the data localit
 The Elasticsearch API calls are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console, which can be accessed via a separate Kibana installation or through the [X-Pack Monitoring widget](./monitoring-elasticsearch.md).
 
 ```note::
-   If you use Kibana, remember that you have multiple Elasticsearch clusters (two single-node clusters in this example) running. The `elasticsearch.hosts: [ "http://localhost:<port>" ]` setting in your Kibana's `kibana.yml` must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use `9200` while the follower node is using `9201` as HTTP port.
+   To use Kibana, remember that you have multiple Elasticsearch clusters (two single-node clusters in this example) running. The `elasticsearch.hosts: [ "http://localhost:<port>" ]` setting in Kibana's `kibana.yml` file must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use `9200` while the follower node is using `9201` as HTTP port.
 ```
 
 <!-- From Tibor: Highlight that the guide is super-simplified and deals with setting up a 1-1 node ES clusters (leader and follower) running on localhost. A prod-ready environment needs different settings.-->
 <!-- From Russ: We should just adapt to those settings instead of saying "this guide shows steps that you can't follow for a real setup." I think we need to elevate our docs game for CCR. -->
-
-```important::
-   To use CCR, all of your DXP cluster nodes must be running Liferay DXP 7.2 Fix Pack 5+ / Service Pack 2+.
-```
 
 ## Prerequisite for Elasticsearch 6: Enable Soft Deletes
 
@@ -88,7 +88,7 @@ The second Elasticsearch cluster must hold follower (replicated; read-only) inde
 
 Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port` that won't collide with the other Elasticsearch server:
 
-`ES/HOME/config/elasticsearch.yml`
+`Elasticsearch/HOME/config/elasticsearch.yml`
 
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
@@ -115,7 +115,7 @@ POST /_license/start_trial?acknowledge=true
 
 ## Configure the Liferay DXP Cluster
 
-To DXP nodes comprise the Liferay DXP cluster in this simplified setup: a Remote node, and a Local node.
+Two DXP nodes comprise the Liferay DXP cluster in this simplified setup: a Remote node, and a Local node.
 
 ### Configure the Remote Liferay DXP Cluster Node
 
@@ -126,7 +126,10 @@ Provide a `portal-ext.properties` file with these contents:
 ```properties
 cluster.link.enabled=true
 ```
+<!-- To Tibor: Should we say > "Though configuration values are propagated throughout the cluster, for transparency you should provide an identical configuration file for each Liferay DXP node. Therefore, make sure all the Liferay DXP nodes in both data centers have identical Elasticsearch connector configurations."
 
+This is our messaging on config files these days. Is it useful here, since we're showing configs for the DXP nodes in each data center as if they're separate?
+ -Russ -->
 Then configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
 
 ```bash
@@ -153,7 +156,7 @@ transportAddresses=["localhost:9300"]
 Soft deletes are enabled by default in Elasticsearch 7, but must be enabled manually for Elasticsearch 6 as described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
 
 ```tip::
-   During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration file as well.
+   During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration files as well.
 ```
 
 Start the Liferay DXP server.
@@ -162,13 +165,77 @@ Start the Liferay DXP server.
    If you're configuring a new DXP installation, mak sure to reindex the spell check indexes at Control Panel &rarr; Configuration &rarr; Search, in the _Index Actions_ tab.
 ```
 
-If Kibana is connected to your remote/leader Elasticsearch cluster, navigate to Management - Index Management to see the available Liferay indexes:
+If Kibana is connected to your remote/leader Elasticsearch cluster, navigate to Management &rarr; Index Management to see the available Liferay indexes:
 
 ![Inspect the leader indexes in Kibana 7.](./cross-cluster-replication/images/ccr-leader-indexes-overview-kibana-7_remote-cluster.png)
 
 ## Replicate the Leader Indexes
 
-The replication of the indexes is a _pull_ type operation: it's executed from the local cluster holding the follower indexes. First you'll need to configure the leader/follower relationship.
+If you're configuring a new installation with CCR, you can [Aut-Follow](#configuring-auto-follow) the leader's indexes from the local/follower Elasticsearch cluster. Otherwise, [manually replicate](#manually-replicating-the-leader-indexes) the leader's indexes.
+
+### Configuring Auto-Follow
+
+> Only Possible with New Installations
+
+If your new Liferay DXP/Elasticsearch Cross-Cluster Replication installation is likely to add indexes over time, or you just want to avoid manually replicating all the Liferay DXP indexes, you can leverage the auto-follow functionality of Elasticsearch.
+
+> Refer to Elastic's Auto-Follow documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-auto-follow.html>
+
+Here's the overview:
+
+1. Configure and start the leader and follower Elasticsearch nodes.
+1. Connect Kibana to the follower Elasticsearch node.
+1. In Kibana, go to Management &rarr; Remote Clusters and add a new remote cluster: "leader, 127.0.0.1:9300"
+
+    ```json
+    PUT _cluster/settings
+    {
+      "persistent": {
+        "cluster": {
+          "remote": {
+            "leader": {
+              "seeds": [
+                "127.0.0.1:9300"
+              ],
+              "skip_unavailable": false
+            }
+          }
+        }
+      }
+    }
+    ```
+
+1. In Kibana, go to Management &rarr; Cross Cluster Replication &rarr; Auto-follow patterns tab:
+
+    Name: `liferay-follow-patterns`
+    Remote cluster: `leader`
+    Leader patterns: `liferay-*, workflow-*`
+
+
+    Or use the `auto_follow` api endpoint:
+    ```json
+    PUT /_ccr/auto_follow/liferay-follow-patterns
+    {
+      "remote_cluster": "leader",
+      "leader_index_patterns": [
+        "liferay-*",
+        "workflow-*"
+      ],
+      "follow_index_pattern": "{{leader_index}}"
+    }
+    ```
+
+1. Start the Leader Liferay DXP Cluster Node and wait until it is up and running. The indexes matching the provided pattern automatically replicate into the local/follower Elasticsearch cluster. 
+
+1. Verify in Kibana that the follower indexes have been created: in Management &rarr; Cross Cluster Replication &rarr; Follower indexes tab, you should see all matching indexes listed.
+
+```tip::
+   The auto-follow functionality also comes in handy when you add a new Virtual Instance in Liferay DXP which creates a new company index in the Leader Elasticsearch cluster. As long as it matches the auto-follow pattern, replication occurs automatically.
+```
+
+### Manually Replicating the Leader Indexes
+
+The replication of indexes in CCR is a _pull_ type operation: it's executed from the local cluster holding the follower indexes. First you'll need to configure the leader/follower relationship between the clusters, then perform the replication on each index.
 
 ```tip::
    Restart Kibana after reconfiguring the ``kibana.yml`` to connect to your local/follower Elasticsearch cluster:
@@ -318,7 +385,7 @@ remoteClusterAlias = "leader"
 ```
 
 ```note::
-   The local/follower DXP node used `9080` as its HTTP port. If you have a different port, adjust the portal address in `ccrLocalClusterConnectionConfigurations` accordingly.
+   The local/follower DXP node used ``9080`` as its HTTP port. If you have a different port, adjust the portal address in ``ccrLocalClusterConnectionConfigurations`` accordingly.
 ```
 
 Now start the local Liferay DXP Cluster node.
@@ -330,17 +397,18 @@ On the follower DXP cluster node, navigate to Control Panel &rarr; Configuration
 ![Verify the Elasticsearch 7 connections in the Search administration panel.](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
 
 ```note::
-   The Connections tab only appears in the Search admin if the CCR module is installed and running.
+   The Connections tab only appears in the Search admin if the CCR module is installed and running. Therefore, it's only available in the local Liferay DXP nodes.
 ```
 
 If you are using Elasticsearch 6, the Connections page looks a little different:
 
 ![Verifying the Elasticsearch 6 connections in the Search administration panel.](./cross-cluster-replication/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
 
-<!--
 ## Troubleshooting
 
-### `RetentionLeaseNotFoundException` and `IndexNotFoundException` during reindex
+Known common pitfalls encountered during the CCR setup are covered here. For further troubleshooting, look at [Elastic's forum](https://discuss.elastic.co/tag/cross-cluster-replication).
+
+### Exceptions During Reindex: `RetentionLeaseNotFoundException` and `IndexNotFoundException`
 
 When a reindex is triggered on the Leader DXP node, the Follower Elasticsearch node may throw errors like this:
 
@@ -358,56 +426,7 @@ org.elasticsearch.index.seqno.RetentionLeaseNotFoundException: retention lease w
   at org.elasticsearch.index.seqno.ReplicationTracker.renewRetentionLease(ReplicationTracker.java:282) ~[elasticsearch-6.8.6.jar:6.8.6]
 ```
 
+From <https://www.elastic.co/blog/follow-the-leader-an-introduction-to-cross-cluster-replication-in-elasticsearch>:
+
 > With a shard history retention lease, a follower can mark in the history of operations on the leader where in history that follower currently is. The leader shards know that operations below that marker are safe to be merged away, but any operations above that marker must be retained for until the follower has had the opportunity to replicate them. These markers ensure that if a follower goes offline temporarily, the leader will retain operations that have not yet been replicated. Since retaining this history requires additional storage on the leader, these markers are only valid for a limited period after which the marker will expire and the leader shards will be free to merge away history. You can tune the length of this period based on how much additional storage you are willing to retain in case a follower goes offline, and how long you’re willing to accept a follower being offline before it would otherwise have to be re-bootstrapped from the leader.
 
-https://www.elastic.co/blog/follow-the-leader-an-introduction-to-cross-cluster-replication-in-elasticsearch
-
-## Hint: Auto-follow Indexes
-
-You can leverage the auto-follow functionality of Elasticsearch in case of a new DXP-Elasticsearch deployment where the company and app-driven Leader indexes do not exist yet:
-https://www.elastic.co/guide/en/elasticsearch/reference/7.7/ccr-auto-follow.html
-
-1. Configure the "leader" ES node (elasticsearch.yml) & start
-2. Configure the "follower" ES node (elasticsearch.yml) & start
-3. Connect Kibana to the "follower" ES noode (kibana.yml) & start
-4. In Kibana, go to Management - Remote Clusters and add a new remote cluster: "leader, 127.0.0.1:9300"
-```json
-PUT _cluster/settings
-{
-  "persistent": {
-    "cluster": {
-      "remote": {
-        "leader": {
-          "seeds": [
-            "127.0.0.1:9300"
-          ],
-          "skip_unavailable": false
-        }
-      }
-    }
-  }
-}
-```
-5. In Kibana, go to Management - Cross Cluster Replication - Auto-follow patterns tab:
-Name: `liferay-follow-patterns`
-Remote cluster: `leader`
-Leader patterns: `liferay-*, workflow-*`
-
-```json
-PUT /_ccr/auto_follow/liferay-follow-patterns
-{
-  "remote_cluster": "leader",
-  "leader_index_patterns": [
-    "liferay-*",
-    "workflow-*"
-  ],
-  "follow_index_pattern": "{{leader_index}}"
-}
-```
-6. Start the Leader DXP Cluster Node and wait until it is up and running
-7. Verify in Kibana that the follower indexes have been created: go to Management - Cross Cluster Replication - Follower indexes tab: you should see a similar image what is shown at the end of the section "Replicate the Leader Indexes into the Local Follower Elasticsearch Cluster" in the Configure CCR guide.
-
-The auto-follow functionality can also come in handy when you add a new Virtual Instance in DXP which creates a new company index in the Leader Elasticsearch cluster.
-
-Continue from the "Configure the Local Liferay DXP Cluster Node" section.
--->
