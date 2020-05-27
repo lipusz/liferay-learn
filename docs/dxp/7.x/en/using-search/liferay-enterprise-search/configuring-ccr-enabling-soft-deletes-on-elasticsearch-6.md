@@ -6,17 +6,16 @@ For Elasticsearch 6 versions that support Cross-Cluster Replication (6.7+), you 
 
 ## Step 1: Enabling Soft Deletes on the System and Company Indexes
 
-The system (`liferay-0`) and company (`liferay-[companyId]`) indexes can be soft delete-enabled by adding one line to the _Additional Index Configurations_ setting in Control Panel &rarr; Configuration &rarr; System Settings &rarr; Elasticsearch [Version]:
+You can enable soft deletes on the system (`liferay-0`) and company (`liferay-[companyId]`) indexes by adding one line to the _Additional Index Configurations_ setting in Control Panel &rarr; Configuration &rarr; System Settings &rarr; Elasticsearch [Version]:
  
 ```yaml
 index.soft_deletes.enabled: true
 ```
 
-Alternatively, specify the ot delete setting in a configuration file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` and placed in `[Liferay Home]/osgi/configs`. This file would have the following contents:
+Alternatively, specify the soft deletes setting in a configuration file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` and placed in `[Liferay Home]/osgi/configs`. This file would have the following contents:
 ```properties
 additionalIndexConfigurations = "index.soft_deletes.enabled: true"
 ```
-<!-- To Tibor: You've added this configuration to the "Configuring Cross-Cluster Replication" article. I think it belongs here only. -Russ -->
 
 ```note::
    These steps require performing a full reindex from Control Panel &rarr; Configuration &rarr; Search, in the Index Actions tab.
