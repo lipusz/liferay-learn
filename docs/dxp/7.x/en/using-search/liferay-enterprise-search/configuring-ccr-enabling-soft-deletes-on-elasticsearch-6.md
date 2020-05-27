@@ -4,40 +4,40 @@
 
 For Elasticsearch 6 versions that support Cross-Cluster Replication (6.7+), you must enable [soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) for all existing indexes. This extra hurdle can be avoided if your are on Elasticsearch 7 where soft deletes are enabled by default, so you should [upgrade to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) if at all possible before configuring CCR.
 
-## Step 1: Enabling Soft Deletes on the System and Company Indexes
+## Enabling Soft Deletes on the System and Company Indexes
 
-You can enable soft deletes on the system (`liferay-0`) and company (`liferay-[companyId]`) indexes by adding one line to the _Additional Index Configurations_ setting in Control Panel &rarr; Configuration &rarr; System Settings &rarr; Elasticsearch [Version]:
+Enable soft deletes on the system (`liferay-0`) and company (`liferay-[companyId]`) indexes by adding one line to the _Additional Index Configurations_ setting in Control Panel &rarr; Configuration &rarr; System Settings &rarr; Elasticsearch [Version]:
  
 ```yaml
 index.soft_deletes.enabled: true
 ```
 
-Alternatively, specify the soft deletes setting in a configuration file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` and placed in `[Liferay Home]/osgi/configs`. This file would have the following contents:
+Alternatively, enable soft deletes in a configuration file named `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` and placed in `[Liferay Home]/osgi/configs`. Give the file these contents:
+
 ```properties
-additionalIndexConfigurations = "index.soft_deletes.enabled: true"
+additionalIndexConfigurations="index.soft_deletes.enabled: true"
 ```
 
 ```note::
-   These steps require performing a full reindex from Control Panel &rarr; Configuration &rarr; Search, in the Index Actions tab.
+   These steps require performing a full reindex from Control Panel > Configuration > Search, in the Index Actions tab.
 ```
 
-<!-- Stopped here: I need to work on the rest of this file still -Russ -->
-## Step 2: Enabling Soft Deletes on App Indexes
+## Enabling Soft Deletes on App Indexes
 
 The app and custom indexes are those not controlled directly by Liferay's Search Framework: they're entirely in control of their own index settings and mappings. They include Liferay DXP app indexes prefixed with `liferay-search-tuning-*` and `workflow-metrics-*`, and your own custom indexes.
 
 There are two approaches for enabling soft deletes on App and Custom Indexes: one that only new deployments can leverage, and one that any deployment, new or existing, can follow.
 
-### New Deployments: Overriding LPKG Files to Enable Soft Deletes
+## New Deployments: Overriding LPKG Files to Enable Soft Deletes
 
 <!-- As written I think this introduces confusion. If this approach is preferable for new deployments, we should just state up front, do this if you have a new deployment, otherwise see -->
 You can customize the default index settings of the out-of-the-box Liferay app-driven indexes by leveraging the [overriding LPKG files](https://help.liferay.com/hc/en-us/articles/360028808552-Overriding-lpkg-Files) mechanism. By doing so, you can ensure that when DXP starts up, the leader indexes will be created with the required settings. This can come in handy for new DXP deployments.
 
 ```note::
-   The steps below assume that you are building a new DXP 7.2 environment and your Leader Elasticsearch cluster node is empty: it should not contain any `liferay-*` or `workflow-*` indexes.
+   The steps below assume that you are building a new DXP 7.2 environment and your Leader Elasticsearch cluster node is empty: it should not contain any ``liferay-*`` or ``workflow-*`` indexes.
 ```
 
-We are going to override three JARs from two LPKG files that are bundled with DXP 7.2.
+Override three JARs from two LPKG files that are bundled with Liferay DXP 7.2:
 
 1. Stop your Liferay DXP cluster nodes if they're running.
 
@@ -80,80 +80,160 @@ We are going to override three JARs from two LPKG files that are bundled with DX
 For consistency, this should be done on all DXP cluster nodes residing in your primary (leader) data center.
  
 ```note::
-    You should review the default settings files each time you install a new patch in your DXP environment, and adjust your override files accordingly.
+    You should review the default settings files each time you `install a new patch <./../../installation-and-upgrades/maintaining-a-liferay-dxp-installation/installing-patches/introduction-to-installing-patches.md>`__ in your DXP environment, and adjust your override files accordingly.
 ```
 
-### Existing Deployments: Manually Enabling Soft Deletes
+## Existing Deployments: Manually Enabling Soft Deletes
 
 Deployments with existing App Indexes must follow these steps to enable soft deletes.
 
-<!-- I made it here, will continue working on this file later - Russ -->
-#### Enabling Soft Deletes on Search Tuning Result Rankings Index
+### Enabling Soft Deletes on Search Tuning Result Rankings Index
 
-1. Follow steps 1-7.) in "Step 2a" above to obtain `liferay-search-tuning-rankings-index.json` for index `liferay-search-tuning-rankings`
-2. Use the content of the JSON to specify the `"mappings"` and the `"settings"` and [create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `liferay-search-tuning-rankings_backup`, like this:
+1. Using the steps above, extract the `liferay-search-tuning-rankings-index.json` file from the Search Tuning LPKG archive's `com.liferay.portal.search.tuning.rankings.web.jar-x.y.z`. This file defines the mappings and settings for the index `liferay-search-tuning-rankings`.
+
+1. The extracted file's JSON provides the `"mappings"` and the `"settings"` you'll use to [create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `liferay-search-tuning-rankings_backup`:
+
     ```json
     PUT liferay-search-tuning-rankings_backup
-    // Content of liferay-search-tuning-rankings-index.json goes here as-is.
+    // Copy the exact contents of liferay-search-tuning-rankings-index.json here.
     ```
-3. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
-    `liferay-search-tuning-rankings` -> `liferay-search-tuning-rankings_backup`
-4. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
-5. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the default mappings and settings you obtained in the first step, using the original index name (`liferay-search-tuning-rankings`):
 
-   Add `"index.soft_deletes.enabled" : true` to the end of the `"settings"` definition to enable soft deletes.
+1. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index:
 
-6. Use the `_reindex` API to copy the existing data into the new index. 
+   ```json
+   POST _reindex
+   {
+     "source": {
+       "index": "liferay-search-tuning-rankings"
+     },
+     "dest": {
+       "index": "liferay-search-tuning-rankings_backup"
+     }
+   }
+   ```
+1. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index:
 
-      `liferay-search-tuning-rankings_backup` -> `liferay-search-tuning-rankings`
+   ```json
+   DELETE /liferay-search-tuning-rankings
+   ```
+
+1. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the default mappings and settings you obtained in the first step plus the soft deletes setting. Use the original index name (`liferay-search-tuning-rankings`):
+
+    ```json
+    PUT liferay-search-tuning-rankings_backup
+    {
+        // Copy the exact contents of liferay-search-tuning-rankings-index.json here.
+        // Add the soft deletes configuration to the end of the settings definition.
+        "index.soft_deletes.enabled": true
+    }
+    ```
+
+1. Use the `_reindex` API to copy the existing data into the new index:
+
+    ```json
+    POST _reindex
+    {
+     "source": {
+       "index": "liferay-search-tuning-rankings_backup"
+     },
+     "dest": {
+       "index": "liferay-search-tuning-rankings"
+     }
+    }
+    ```
  
-7. Delete the temporary index (`liferay-search-tuning-rankings_backup`).
+7. Delete the temporary index:
 
-#### Enabling Soft Deletes on Search Tuning Synonyms Index
+    ```json
+    DELETE /liferay-search-tuning-rankings_backup
+    ```
 
-Same as Result Rankings, but use `com.liferay.portal.search.tuning.synonyms.web.jar` to obtain the default settings JSON (`liferay-search-tuning-synonyms-index.json`).
+### Enabling Soft Deletes on the Search Tuning: Synonyms Index
 
-#### Enabling Soft Deletes on Workflow Metrics Indexes
+Repeat the steps for Result Rankings, but use the mappings and settings from `com.liferay.portal.search.tuning.synonyms.web.jar` (in the `liferay-search-tuning-synonyms-index.json` file).
 
-It is slightly different from the Search Tuning index steps, because the Workflow Metrics consists of six indexes.
+### Enabling Soft Deletes on Workflow Metrics Indexes
 
-1. When inspecting `com.liferay.portal.workflow.metrics.service.jar` you will find 2 JSON files:
+The Workflow Metrics indexes work differently from the Search Tuning indexes. Six indexes must be soft-delete enabled.
 
-      `META-INF/search/mappings.json` and `META-INF/search/settings.json`. Obtain both.
+1. Extract the two JSON files from `com.liferay.portal.workflow.metrics.service.jar` (embedded in the Liferay Portal Workflow LPKG):
+
+    - `META-INF/search/mappings.json` 
+    - `META-INF/search/settings.json`
+
+    The `mappings` file contains separate mappings sections for each index. The `settings` file is shared; the Workflow Metrics indexes use identical settings.
        
-2. Locate the relevant block from the `mappings.json` for each Workflow Metrics index:
-   - workflow-metrics-instances: `"WorkflowMetricsInstanceType": { ...}`
-   - workflow-metrics-nodes: `"WorkflowMetricsNodeType": {...}`
-   - workflow-metrics-processes: `"WorkflowMetricsProcessType": {...}`
+1. Locate the relevant block from the `mappings.json` for each Workflow Metrics index:
+
+    - workflow-metrics-instances: `"WorkflowMetricsInstanceType": { ...}`
+    - workflow-metrics-nodes: `"WorkflowMetricsNodeType": {...}`
+    - workflow-metrics-processes: `"WorkflowMetricsProcessType": {...}`
     - workflow-metrics-sla-instance-results: `"WorkflowMetricsSLAProcessResultType": {...}`
     - workflow-metrics-sla-task-results: `"WorkflowMetricsSLATaskResultType": {...}`
     - workflow-metrics-tokens: `"WorkflowMetricsTokenType": {...}`
-3. [Create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `workflow-metrics-instances_backup`. To specify the `"mappings"` use the block you identified in step 2; to specify the `"settings"` use the content of `settings.json`, like this:
-```json
-	PUT workflow-metrics-instances_backup
-	{
-	  "mappings": {
-	    "WorkflowMetricsInstanceType": {
-	    // ...
-	    },
-	  },
-	  "settings": 
-	  // Content of settings.json goes here as-is.
-	}  
-```
-4. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
-    `workflow-metrics-instances` -> `workflow-metrics-instances_backup`
-5. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
-6. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the original index name (`workflow-metrics-instances`):
+
+1. [Create a temporary](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html) (empty, at first) index, for example called `workflow-metrics-instances_backup`. To specify the `"mappings"` use the relevant mappings block identified above; to specify the `"settings"` use the contents of `settings.json`, like this:
+
+    ```json
+    PUT workflow-metrics-instances_backup
+    {
+      "mappings": {
+        "WorkflowMetricsInstanceType": {
+        // ...
+        },
+      },
+      "settings": 
+      // Contents of settings.json goes here
+    }  
+    ```
+
+1. Use the [`_reindex` API](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docs-reindex.html) to copy the existing data into the temporary index.
+
+    ```json
+    POST _reindex
+    {
+     "source": {
+       "index": "workflow-metrics-instances"
+     },
+     "dest": {
+       "index": "workflow-metrics-instances_backup"
+     }
+    }
+    ```
+
+1. [Delete](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-delete-index.html) the original index.
+
+1. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the original index name (`workflow-metrics-instances`):
 
    Repeat step 3 (of course, change the index name) and also add `"index.soft_deletes.enabled" : true` to the end of the `"settings"` definition to enable soft deletes. 
 
-7. Use the `_reindex` API to copy the existing data into the new index. 
+1. [Recreate the index](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/indices-create-index.html), using the mappings and settings as the backup index, plus the soft deletes setting. Use the original index name (e.g., `workflow-metrics-instances`):
 
-    `workflow-metrics-instances_backup` -> `workflow-metrics-instances`
+    ```json
+    PUT workflow-metrics-instances
+    {
+        // Copy in the same mappings and settings used to create the backup. 
+        // Add the soft deletes configuration to the end of the settings definition.
+        "index.soft_deletes.enabled": true
+    }
+    ```
 
-8. Delete the temporary index (`workflow-metrics-instances_backup`).
+1. Use the `_reindex` API to copy the existing data into the new index. 
 
-9. Repeat steps 3-8 with the other Workflow Metrics indexes.
+    ```json
+    POST _reindex
+    {
+     "source": {
+       "index": "workflow-metrics-instances_backup"
+     },
+     "dest": {
+       "index": "workflow-metrics-instances"
+     }
+    }
+    ```
 
-Once your indexes are in good shape, you're ready to [configure Cross-Cluster Replication](./configuring-cross-cluster-replication.md) for Liferay DXP.
+1. Delete the temporary index (e.g., `workflow-metrics-instances_backup`).
+
+1. Follow these steps for each additional Workflow Metrics index.
+
+Once your Elasticsearch 6 indexes are soft-delete enabled, you're ready to [configure Cross-Cluster Replication](./configuring-cross-cluster-replication.md) for Liferay DXP.
