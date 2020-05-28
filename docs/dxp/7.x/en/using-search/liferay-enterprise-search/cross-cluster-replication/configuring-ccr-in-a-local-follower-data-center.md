@@ -294,4 +294,6 @@ If you are using Elasticsearch 6, the Connections page looks a little different:
 
 > Don't forget to delete the "auto-follow" pattern from the Follower Elasticsearch cluster otherwise you may experience exceptions reporting when performing a reindex.
 
+You can get an overview about the example configurations [here](./ccr-basic-use-case-config-reference.md).
+
 If you run into trouble with your configuration, check out the [troubleshooting guide](./troubleshooting-cross-cluster-replication.md).
