@@ -1,8 +1,5 @@
-Liferay Enterprise Search
-=========================
-
 Cross-Cluster Replication
-~~~~~~~~~~~~~~~~~~~~~~~~~
+=========================
 
 -  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/cross-cluster-replication`
 -  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/configuring-ccr-a-basic-use-case`
