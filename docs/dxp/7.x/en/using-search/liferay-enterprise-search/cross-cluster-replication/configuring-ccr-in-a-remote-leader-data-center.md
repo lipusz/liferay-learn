@@ -95,3 +95,5 @@ If Kibana is connected to your remote/leader Elasticsearch cluster, navigate to 
 ![Inspect the leader indexes in Kibana 7.](./configuring-ccr-in-a-remote-leader-data-center/images/01.png)
 
 Once the data containing the remote/leader Elasticsearch is configured and running, you're ready to move on to the [local/follower data center](./configuring-ccr-in-a-local-follower-data-center.md).
+
+You can get an overview about the example configurations [here](./ccr-basic-use-case-config-reference.md).
