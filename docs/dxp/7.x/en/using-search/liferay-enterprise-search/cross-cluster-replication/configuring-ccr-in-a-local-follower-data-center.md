@@ -35,7 +35,13 @@ POST /_license/start_trial?acknowledge=true
 
 ## Replicate the Leader Indexes
 
-If you're configuring a new installation with CCR, you can [Aut-Follow](#configuring-auto-follow) the leader's indexes from the local/follower Elasticsearch cluster. Otherwise, [manually replicate](#manually-replicating-the-leader-indexes) the leader's indexes.
+If you're configuring a new installation with CCR, you can [auto-follow](#configuring-auto-follow) the leader's indexes from the local/follower Elasticsearch cluster. Otherwise, [manually replicate](#manually-replicating-the-leader-indexes) the leader's indexes.
+
+```note::
+   Company indexes (`liferay-0` and `liferay-<companyId>`) are re-followed automatically when a **reindex** is performed in DXP. Since the Search Tuning and Workflow Metrics indexes will not be dropped and re-created by a full reindex action the "auto-follow" pattern can be deleted after your initial installation is done.
+```
+
+> It is on our roadmap to make it easier for Search admins to setup follower indexes in a future version of the CCR Module. See [LPS-109204](https://issues.liferay.com/browse/LPS-109204).
 
 ### Configuring Auto-Follow
 
@@ -43,7 +49,7 @@ If you're configuring a new installation with CCR, you can [Aut-Follow](#configu
 
 If your new Liferay DXP/Elasticsearch Cross-Cluster Replication installation is likely to add indexes over time, or you just want to avoid manually replicating all the Liferay DXP indexes, you can leverage the auto-follow functionality of Elasticsearch.
 
-> Refer to Elastic's Auto-Follow documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-auto-follow.html>
+> Refer to Elastic's auto-follow documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-auto-follow.html>
 
 Here's the overview:
 
@@ -267,5 +273,7 @@ On the follower DXP cluster node, navigate to Control Panel &rarr; Configuration
 If you are using Elasticsearch 6, the Connections page looks a little different:
 
 ![Verifying the Elasticsearch 6 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
+
+> Don't forget to delete the "auto-follow" pattern from the Follower Elasticsearch cluster otherwise you may experience exceptions reporting when performing a reindex.
 
 If you run into trouble with your configuration, check out the [troubleshooting guide](./troubleshooting-cross-cluster-replication.md).
