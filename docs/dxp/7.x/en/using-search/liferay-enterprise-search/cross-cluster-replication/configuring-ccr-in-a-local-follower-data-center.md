@@ -239,9 +239,24 @@ connectionId = "follower"
 clusterName = "LiferayElasticsearchCluster_FOLLOWER"
 networkHostAddress = "http://localhost:9201"
 transportAddresses = ["localhost:9301"]
+
+#networkHostAddress = "https://localhost:9201"
+#authenticationEnabled = B"true"
+#username = "elastic"
+#password = "liferay"
+#certificateFormat = "PEM"
+#sslKeyPath = "/PATH/TO/elastic-certificates.key"
+#sslCertificatePath = "/PATH/TO/elastic-certificates.crt"
+#sslCertificateAuthoritiesPaths = "/PATH/TO/ca.crt"
+#transportSSLVerificationMode = "certificate"
+#transportSSLEnabled = B"true"
 ```
 
 You can use any suffix (`-follower` in this example) for the configuration file name, but for consistency you should make it identical to the `connectionId` property in the configuration.
+
+```note::
+   **To enable security**, uncomment the properties in the above configuration, update the settings to match your environment and remove the other ```networkHostAddress = "http://localhost:9201"``` property (or change it to use ```https```). We assume you went through the [prerequisites](./configuring-ccr-a-basic-use-case.md#prerequisite-for-security-configure-x-pack-security) to configure X-Pack Security.
+```
 
 The connection is configured. Next enable CCR by providing a configuration file named
 
