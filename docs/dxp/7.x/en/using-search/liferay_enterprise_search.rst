@@ -2,11 +2,9 @@ Liferay Enterprise Search
 =========================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
 
-   liferay-enterprise-search/cross-cluster-replication.md
-   liferay-enterprise-search/configuring-cross-cluster-replication.md
-   liferay-enterprise-search/configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md
+   liferay-enterprise-search/cross_cluster_replication.rst
 
 .. include:: /using-search/liferay-enterprise-search/README.rst
    :start-line: 2

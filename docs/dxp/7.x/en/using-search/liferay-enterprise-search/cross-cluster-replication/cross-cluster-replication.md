@@ -90,5 +90,5 @@ Perform the initial index replication from the leader into the follower:
 
 - Call the `[indexName]/_ccr/follow` [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-put-follow.html) to configure the follower indexes on the appropriate cluster.
 
-Ready to get a simple local example up and running? Proceed to the [Configuring Cross-Cluster Replication article](./configuring-cross-cluster-replication.md).
+Ready to get a local example up and running? Proceed to the [Configuring CCR: A Basic Use Case article](./configuring-ccr-a-basic-use-case.md).
 
