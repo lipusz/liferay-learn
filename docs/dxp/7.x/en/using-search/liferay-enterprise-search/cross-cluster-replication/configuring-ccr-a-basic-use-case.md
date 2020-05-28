@@ -48,6 +48,8 @@ The high level steps are,
 
 3. If your Elastic Stack is 6.x, you will need to deploy Liferay's [X-Pack Security Connector](https://web.liferay.com/marketplace/-/mp/application/106163963) on all DXP nodes.
 
+You can get an overview about the example configurations [here](./ccr-basic-use-case-config-reference.md).
+
 ## Install the Cross-Cluster Replication Module
 
 1. Download the Liferay DXP Cross-Cluster Replication for Elasticsearch LPKG from the [LES downloads page](https://customer.liferay.com/downloads).
