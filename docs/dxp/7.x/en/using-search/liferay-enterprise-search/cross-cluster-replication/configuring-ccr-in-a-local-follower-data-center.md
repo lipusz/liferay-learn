@@ -237,6 +237,7 @@ Give it these contents:
 ```properties
 connectionId = "follower"
 clusterName = "LiferayElasticsearchCluster_FOLLOWER"
+networkHostAddress = "http://localhost:9201"
 transportAddresses = ["localhost:9301"]
 ```
 
