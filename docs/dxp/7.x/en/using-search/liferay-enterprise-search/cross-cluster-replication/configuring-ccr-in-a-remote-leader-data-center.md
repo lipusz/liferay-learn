@@ -1,5 +1,7 @@
 # Configuring CCR In a Remote Leader Data Center
 
+> Go through the [prerequisites](./configuring-ccr-a-basic-use-case.md) before following the steps below.
+
 This data center holds Liferay DXP cluster nodes with a read-write connection to a co-located Elasticsearch cluster.
 
 The example configured here consists of a single Liferay DXP node and a single Elasticsearch node.
