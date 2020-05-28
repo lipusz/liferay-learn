@@ -33,6 +33,21 @@ If Elasticsearch 6 is not a hard requirement for your system, you should upgrade
 
 If you are using Elasticsearch 7, you have to install the [Elasticsearch 7 connector](https://web.liferay.com/marketplace/-/mp/application/170390307) from Marketplace **version `3.0.1+`** (requires DXP 7.2 FP5+/SP2+) on all DXP cluster nodes. Read [Upgrading to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) for details.
 
+## Prerequisite for Security: Configure X-Pack Security
+
+To encrypt the communications (TLS/SSL) and enable user authentication between the DXP and the Elasticsearch nodes, you also have to go through the [Installing Liferay Enterprise Search Security](https://help.liferay.com/hc/en-us/articles/360028711172-Installing-Liferay-Enterprise-Search-Security) article. 
+
+The high level steps are,
+
+1. Configure X-Pack Security in your Elasticsearch clusters and make sure the node certificates are signed by the same CA and the security settings of the Leader and the Follower clusters match.
+
+   ```note::
+      TLS/SSL must be enabled on the HTTP layer as well (besides the Transport layer) on the Follower Elasticsearch cluster nodes. It's because DXP connects to the Follower cluster over HTTP to re-follow the company indexes after a full reindex is performed.
+
+2. Configure X-Pack Security on the DXP nodes through the connector configurations. The [Configuring CCR in a Local Follower Data Center](./configuring-ccr-in-a-local-follower-data-center.md) article will show you where you need to add the securtiy related settings for the CCR ("read-only") connection on the local/follower DXP node.
+
+3. If your Elastic Stack is 6.x, you will need to deploy Liferay's [X-Pack Security Connector](https://web.liferay.com/marketplace/-/mp/application/106163963) on all DXP nodes.
+
 ## Install the Cross-Cluster Replication Module
 
 1. Download the Liferay DXP Cross-Cluster Replication for Elasticsearch LPKG from the [LES downloads page](https://customer.liferay.com/downloads).
