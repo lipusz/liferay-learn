@@ -1,5 +1,7 @@
 # Configuring CCR in a Local Follower Data Center
 
+> Go through the [configuring CCR In a Remote Leader Data Center](./configuring-ccr-in-a-remote-leader-data-center.md) article before following the steps below.
+
 This data center holds Liferay DXP cluster nodes with a read-only connection to the co-located Elasticsearch cluster, and a write-only connection to the remote/leader data center's Elasticsearch cluster.
 
 ### Configure the Local Elasticsearch Cluster 
