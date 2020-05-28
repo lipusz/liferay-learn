@@ -1,6 +1,6 @@
 # CCR Basic Use Case Config Reference
 
-To help you configuring CCR, we have collected here the example configurations we use in the Basic Use Case setup guide. We tried to make them _generic_ as much as possible, however paths, ports etc. may still need to be adjusted to match your environment. In addition, you still need to perform certain steps manually to complete the installation. This is really just the collection of the configuration files.
+To help you configuring CCR, we have collected here the example configurations we use in the [Basic Use Case setup guide](./configuring-ccr-a-basic-use-case.md). We tried to make them _generic_ as much as possible, however paths, ports etc. may still need to be adjusted to match your environment. In addition, you still need to perform certain steps manually to complete the installation. This is really just the collection of the configuration files.
 
 > The configurations below assume you enable encrypted communications (TLS/SSL) and user authentication through X-Pack Security in your installation.
 
