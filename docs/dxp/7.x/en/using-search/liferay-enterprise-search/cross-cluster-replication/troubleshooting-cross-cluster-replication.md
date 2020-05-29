@@ -36,11 +36,11 @@ ElasticsearchSecurityException security_exception current license is non-complia
 
 ## SnapshotRestoreException on the Follower Elasticsearch Node During Reindex
 
-If you set up an "auto-follow" pattern to follow the leader indexes when [configuring the local follower Elasticsearch cluster](./configuring-ccr-in-a-local-follower-data-center.md#configuring-auto-follow) and it is still in use when you reindex, you can get a similar error in the Follower Elasticsearch node's console:
+If you set up an [auto-follow pattern](./configuring-ccr-in-a-local-follower-data-center.md#replicate-the-leader-indexes) to follow the leader indexes when [configuring the local follower Elasticsearch cluster](./configuring-ccr-in-a-local-follower-data-center.md#configuring-auto-follow) and it is still in use when you reindex, you can get a similar error in the Follower Elasticsearch node's console:
 
 ```bash
 [2020-05-28T14:25:30,973][WARN ][o.e.s.RestoreService] [es-follower-node-1] [_latest_/_latest_] failed to restore snapshot
 org.elasticsearch.snapshots.SnapshotRestoreException: [_ccr_leader:_latest_/_latest_] cannot restore index [liferay-20101] because an open index with same name already exists in the cluster. Either close or delete the existing index or restore the index under a different name by providing a rename pattern and replacement name
 ```
 
-This is happening because Company indexes (`liferay-0` and `liferay-<companyId>`) are re-followed automatically when a reindex is performed in DXP. Since the app-driven indexes like the Search Tuning and Workflow Metrics indexes will not be dropped and re-created by a full reindex action the "auto-follow" pattern can be deleted after your initial installation is done.
+This is happening because system and company indexes (`liferay-0` and `liferay-<companyId>`) are re-followed automatically when a reindex is performed in Liferay DXP. Since the app-driven indexes like the Search Tuning and Workflow Metrics indexes will not be dropped and re-created by a full reindex, it's safe to delete the auto-follow patterns after the initial installation is done.

@@ -1,8 +1,10 @@
 # Configuring CCR in a Local Follower Data Center
 
-> Go through the [configuring CCR In a Remote Leader Data Center](./configuring-ccr-in-a-remote-leader-data-center.md) article before following the steps below.
+> First [configure CCR in the remote/leader data center](./configuring-ccr-in-a-remote-leader-data-center.md) before following the steps below.
 
-This data center holds Liferay DXP cluster nodes with a read-only connection to the co-located Elasticsearch cluster, and a write-only connection to the remote/leader data center's Elasticsearch cluster.
+The local/follower data center holds Liferay DXP cluster nodes with a read-only connection to the co-located Elasticsearch cluster, and a write-only connection to the remote/leader data center's Elasticsearch cluster.
+
+The example configurations are also provided in full in the [CCR configuration reference guide](./ccr-basic-use-case-config-reference.md).
 
 ### Configure the Local Elasticsearch Cluster 
 
@@ -10,7 +12,7 @@ The local Elasticsearch cluster must hold follower (replicated; read-only) index
 
 Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port` that won't collide with the other Elasticsearch server:
 
-`Elasticsearch/HOME/config/elasticsearch.yml`
+`[Follower Elasticsearch Home]/config/elasticsearch.yml`
 
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
@@ -37,13 +39,17 @@ POST /_license/start_trial?acknowledge=true
 
 ## Replicate the Leader Indexes
 
-If you're configuring a new installation with CCR, you can [auto-follow](#configuring-auto-follow) the leader's indexes from the local/follower Elasticsearch cluster. Otherwise, [manually replicate](#manually-replicating-the-leader-indexes) the leader's indexes.
+If you're configuring a new installation with CCR, you can [auto-follow](#configuring-auto-follow) the leader's indexes from the local/follower Elasticsearch cluster. For an existing installation you must [manually replicate](#manually-replicating-the-leader-indexes) the leader's indexes.
 
 ```note::
-   Company indexes (`liferay-0` and `liferay-<companyId>`) are re-followed automatically when a **reindex** is performed in DXP. Since the Search Tuning and Workflow Metrics indexes will not be dropped and re-created by a full reindex action the "auto-follow" pattern can be deleted after your initial installation is done.
+   If using auto-follow, it's advisable to delete the auto-follow patterns after the initial installation is completed. Otherwise the automatic re-following of the system and company indexes will clash with the indexes detected by the aut-follow pattern. The reason for this follows:
+
+   A full reindex operation deletes and re-creates the system and company indexes (``liferay-0`` and ``liferay-<companyId>``). Because of this reality, these indexes are programmatically re-followed each time a reindex is performed in Liferay DXP.
+
+   In contrast, the Search Tuning and Workflow Metrics indexes are not dropped and re-created by a full reindex, so they aren't programmatically re-followed. After the initial auto-follow configuration, the programmatic re-follow of the system and company indexes can clash with the pattern-matching follow operation performed by the auto-follow feature. Deleting the auto-follow patterns after the initial setup avoids these issues.
 ```
 
-> It is on our roadmap to make it easier for Search admins to setup follower indexes in a future version of the CCR Module. See [LPS-109204](https://issues.liferay.com/browse/LPS-109204).
+> A Liferay DXP administrative console for for conveniently managing follower indexes is planned for a future release. See [LPS-109204](https://issues.liferay.com/browse/LPS-109204) for more details and to follow the progress.
 
 ### Configuring Auto-Follow
 
@@ -112,11 +118,10 @@ The replication of indexes in CCR is a _pull_ type operation: it's executed from
 ```tip::
    Restart Kibana after reconfiguring the ``kibana.yml`` to connect to your local/follower Elasticsearch cluster:
 
-``elasticsearch.hosts: [ "http://localhost:9201" ]``
-
+   ``elasticsearch.hosts: [ "http://localhost:9201" ]``
 ```
 
-Two Elasticsearch API endpoints are called from the local Elasticsearch cluster: `_cluster/settings` and `_ccr/follow`.
+Two Elasticsearch API endpoints are called on the local Elasticsearch cluster: `_cluster/settings` and `_ccr/follow`.
 
 First set the leader cluster:
 
@@ -196,9 +201,9 @@ Repeat the above PUT call for all the indexes you see listed at Control Panel &r
 
 Now the local/follower Elasticsearch cluster knows how to replicate from the remote/leader Elasticsearch cluster. The last step is to wire up the local Liferay DXP cluster node so it reads from this local Elasticsearch cluster's follower indexes, and writes to the remote/leader Elasticsearch cluster.
 
-### Configure the Local Liferay DXP Cluster Node
+## Configure the Local Liferay DXP Cluster Node
 
-Configure Tomcat to use different ports than your remote DXP node. We use `9080` as the HTTP port in this example setup.
+> Configure Tomcat to use different ports than your remote DXP node. We use `9080` as the HTTP port in this example setup.
 
 Provide a `portal-ext.properties` file with these contents:
 
@@ -255,7 +260,7 @@ transportAddresses = ["localhost:9301"]
 You can use any suffix (`-follower` in this example) for the configuration file name, but for consistency you should make it identical to the `connectionId` property in the configuration.
 
 ```note::
-   **To enable security**, uncomment the properties in the above configuration, update the settings to match your environment and remove the other ```networkHostAddress = "http://localhost:9201"``` property (or change it to use ```https```). We assume you went through the [prerequisites](./configuring-ccr-a-basic-use-case.md#prerequisite-for-security-configure-x-pack-security) to configure X-Pack Security.
+   **To enable security**, assuming you've gone through the `prerequisite setup <./configuring-ccr-a-basic-use-case.md#prerequisite-for-security-configure-x-pack-security>`__, uncomment the properties in the above configuration, update the settings to match your environment and remove the ``networkHostAddress = "http://localhost:9201"`` property (the new property is only different in that it uses ``https``). 
 ```
 
 The connection is configured. Next enable CCR by providing a configuration file named
@@ -285,15 +290,13 @@ On the follower DXP cluster node, navigate to Control Panel &rarr; Configuration
 ![Verify the Elasticsearch 7 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
 
 ```note::
-   The Connections tab only appears in the Search admin if the CCR module is installed and running. Therefore, it's only available in the local Liferay DXP nodes.
+   On Elasticsearch 6 the Connections tab only appears in the Search administrative console if the CCR module is installed and running. Therefore, it's only available in the local Liferay DXP nodes.
 ```
 
 If you are using Elasticsearch 6, the Connections page looks a little different:
 
 ![Verifying the Elasticsearch 6 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
 
-> Don't forget to delete the "auto-follow" pattern from the Follower Elasticsearch cluster otherwise you may experience exceptions reporting when performing a reindex.
+> Don't forget to delete the *auto-follow* pattern from the Follower Elasticsearch cluster to avoid exceptions being reported during a reindex operation.
 
-You can get an overview about the example configurations [here](./ccr-basic-use-case-config-reference.md).
-
-If you run into trouble with your configuration, check out the [troubleshooting guide](./troubleshooting-cross-cluster-replication.md).
+Now CCR is configured. If you run into trouble with your configuration, check out the [troubleshooting guide](./troubleshooting-cross-cluster-replication.md).

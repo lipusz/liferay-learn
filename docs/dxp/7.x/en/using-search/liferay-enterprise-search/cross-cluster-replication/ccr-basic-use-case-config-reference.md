@@ -1,18 +1,25 @@
-# CCR Basic Use Case Config Reference
+# Configuring CCR: Settings Reference
 
-To help you configuring CCR, we have collected here the example configurations we use in the [Basic Use Case setup guide](./configuring-ccr-a-basic-use-case.md). We tried to make them _generic_ as much as possible, however paths, ports etc. may still need to be adjusted to match your environment. In addition, you still need to perform certain steps manually to complete the installation. This is really just the collection of the configuration files.
+To help with the CCR configuration process, the example configurations from this guide's step-by-step instructions are collected here. These configuration are made as generic as possible, but paths, ports, etc. will likely need to be adjusted to match your environment. In addition, you must perform certain steps manually to complete the installation, so these cannot replcae the step=by-step instructions.
 
-> The configurations below assume you enable encrypted communications (TLS/SSL) and user authentication through X-Pack Security in your installation.
+The configurations below assume you enable encrypted communications (TLS/SSL) and user authentication through X-Pack Security in your installation.
 
-## Remote DXP Cluster Node Configs
+```tip::
+   `Configuration values provided by .config files <../../../system-administration/system-settings/using-configuration-files.md>`__ are propagated throughout a DXP cluster as soon as the file is deployed to a single node. However, it's a best practice to provide identical configurations for each cluster node. 
 
-Location: `[Liferay Home]/osgi/configs`
+   You might notice that the instructions in this guide appear to violate the above statement. The CCR specific configuration files are not provided to the remote/leader Liferay DXP nodes. Because the CCR module is not deployed to these nodes, therefore the configurations are inert in these nodes.
+```
 
-### Remote DXP Cluster Node Configs for Elasticsearch 6
+## Remote DXP Cluster Node Configurations
 
-File: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
+These configuration files are deployed to `[Remote Liferay Home]/osgi/configs`.
 
-Content:
+### Remote DXP Cluster Node Configurations for Elasticsearch 6
+
+File name: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
+
+File contents:
+
 ```properties
 clusterName = "LiferayElasticsearchCluster_LEADER"
 operationMode = "REMOTE"
@@ -21,9 +28,10 @@ additionalIndexConfigurations = "index.soft_deletes.enabled: true"
 logExceptionsOnly = B"false"
 ```
 
-File: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
+File name: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
 
-Content:
+File contents:
+
 ```properties
 requiresAuthentication=B"true"
 username = "elastic"
@@ -38,9 +46,9 @@ transportSSLEnabled=B"true"
 
 ### Remote DXP Cluster Node Configs for Elasticsearch 7
 
-File: `com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config`
+File name: `com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config`
 
-Content:
+File contents:
 ```properties
 blacklistBundleSymbolicNames=[ \
 	"com.liferay.portal.search.elasticsearch6.api", \
@@ -51,17 +59,19 @@ blacklistBundleSymbolicNames=[ \
 ]
 ```
 
-File: `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config`
+File name: `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config`
 
-Content:
+File contents:
+<!-- I think this is incomplete? --> 
 ```properties
+clusterName = "LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
 logExceptionsOnly = B"false"
 ```
 
-File: `com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config`
+File name: `com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config`
 
-Content:
+File contents:
 ```properties
 requiresAuthentication=B"true"
 username = "elastic"
@@ -80,9 +90,9 @@ Location: `[Liferay Home]/osgi/configs`
 
 ### Local DXP Cluster Node Configs for Elasticsearch 6
 
-File: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
+File name: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
 
-Content:
+File contents:
 ```properties
 clusterName = "LiferayElasticsearchCluster_LEADER"
 operationMode = "REMOTE"
@@ -90,9 +100,9 @@ transportAddresses = ["localhost:9300"]
 logExceptionsOnly = B"false"
 ```
 
-File: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
+File name: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
 
-Content:
+File contents:
 ```properties
 requiresAuthentication=B"true"
 username = "elastic"
@@ -111,18 +121,18 @@ Same as the Elasticsearch 7 configs for the Remote DXP node.
 
 ### Local DXP Cluster Node CCR Module Configs
 
-File: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config`
+File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config`
 
-Content:
+File contents:
 ```properties
 ccrEnabled = B"true"
 ccrLocalClusterConnectionConfigurations = ["localhost:9080=follower"]
 remoteClusterAlias = "leader"
 ```
 
-File: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config`
+File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config`
 
-Content:
+File contents:
 ```properties
 connectionId = "follower"
 clusterName = "LiferayElasticsearchCluster_FOLLOWER"
@@ -143,9 +153,9 @@ transportSSLEnabled = B"true"
 
 Location: `ES_LEADER_HOME/config`
 
-File: `elasticsearch.yml`
+File name: `elasticsearch.yml`
 
-Content:
+File contents:
 ```yaml
 cluster.name: LiferayElasticsearchCluster_LEADER
 
@@ -178,9 +188,9 @@ transport.port: 9300
 
 Location: `ES_FOLLOWER_HOME/config`
 
-File: `elasticsearch.yml`
+File name: `elasticsearch.yml`
 
-Content:
+File contents:
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
 
