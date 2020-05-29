@@ -1,6 +1,6 @@
 # Configuring CCR In a Remote Leader Data Center
 
-> Ensure you have completed any necessary [prerequisite steps](./configuring-ccr-a-basic-use-case.md) before following the steps below.
+> Ensure you have completed any necessary [prerequisite steps](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) before following the steps below.
 
 This data center holds Liferay DXP cluster nodes with a read-write connection to a co-located Elasticsearch cluster.
 

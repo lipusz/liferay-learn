@@ -22,7 +22,7 @@ To set up Cross-Cluster Replication you must
 - Define the Leader and Follower
 - Replicate the Leader Indexes
 
-Read this article to better understand the steps, then see the next article, [which introduces a use case](./configuring-ccr-a-basic-use-case.md) and gets you started setting up a local example.
+Read this article to better understand the steps, then see the next article, [which introduces a use case](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) and gets you started setting up a local example.
 
 ## Liferay DXP: Install the LES Cross-Cluster Replication Module
 
@@ -90,5 +90,5 @@ Perform the initial index replication from the leader into the follower:
 
 - Call the `[indexName]/_ccr/follow` [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-put-follow.html) to configure the follower indexes on the appropriate cluster.
 
-Ready to get a local example up and running? Proceed to the [Configuring CCR: A Basic Use Case article](./configuring-ccr-a-basic-use-case.md).
+Ready to get a local example up and running? Proceed to the [Configuring CCR: A Basic Use Case article](./configuring-an-example-ccr-installation-replicating-between-data-centers.md).
 

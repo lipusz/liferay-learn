@@ -260,7 +260,7 @@ transportAddresses = ["localhost:9301"]
 You can use any suffix (`-follower` in this example) for the configuration file name, but for consistency you should make it identical to the `connectionId` property in the configuration.
 
 ```note::
-   **To enable security**, assuming you've gone through the `prerequisite setup <./configuring-ccr-a-basic-use-case.md#prerequisite-for-security-configure-x-pack-security>`__, uncomment the properties in the above configuration, update the settings to match your environment and remove the ``networkHostAddress = "http://localhost:9201"`` property (the new property is only different in that it uses ``https``). 
+   **To enable security**, assuming you've gone through the `prerequisite setup <./configuring-an-example-ccr-installation-replicating-between-data-centers.md#prerequisite-for-security-configure-x-pack-security>`__, uncomment the properties in the above configuration, update the settings to match your environment and remove the ``networkHostAddress = "http://localhost:9201"`` property (the new property is only different in that it uses ``https``). 
 ```
 
 The connection is configured. Next enable CCR by providing a configuration file named
