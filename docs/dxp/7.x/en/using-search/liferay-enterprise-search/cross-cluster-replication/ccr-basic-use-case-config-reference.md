@@ -21,11 +21,11 @@ File name: `com.liferay.portal.search.elasticsearch6.configuration.Elasticsearch
 File contents:
 
 ```properties
-clusterName = "LiferayElasticsearchCluster_LEADER"
-operationMode = "REMOTE"
-transportAddresses = ["localhost:9300"]
-additionalIndexConfigurations = "index.soft_deletes.enabled: true"
-logExceptionsOnly = B"false"
+clusterName="LiferayElasticsearchCluster_LEADER"
+operationMode="REMOTE"
+transportAddresses=["localhost:9300"]
+additionalIndexConfigurations="index.soft_deletes.enabled: true"
+logExceptionsOnly=B"false"
 ```
 
 File name: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
@@ -34,8 +34,8 @@ File contents:
 
 ```properties
 requiresAuthentication=B"true"
-username = "elastic"
-password = "liferay"
+username="elastic"
+password="liferay"
 sslKeyPath="/PATH/TO/ES_LEADER_1/config/certs/elastic-certificates.key"
 sslCertificatePath="/PATH/TO/ES_LEADER_1/config/certs/elastic-certificates.crt"
 certificateFormat="PEM"
@@ -64,9 +64,9 @@ File name: `com.liferay.portal.search.elasticsearch7.configuration.Elasticsearch
 File contents:
 
 ```properties
-clusterName = "LiferayElasticsearchCluster_LEADER"
+clusterName="LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
-logExceptionsOnly = B"false"
+logExceptionsOnly=B"false"
 ```
 
 File name: `com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config`
@@ -76,8 +76,8 @@ File contents:
 
 ```properties
 requiresAuthentication=B"true"
-username = "elastic"
-password = "liferay"
+username="elastic"
+password="liferay"
 sslKeyPath="/PATH/TO/ES_LEADER_1/config/certs/elastic-certificates.key"
 sslCertificatePath="/PATH/TO/ES_LEADER_1/config/certs/elastic-certificates.crt"
 certificateFormat="PEM"
@@ -97,10 +97,10 @@ File name: `com.liferay.portal.search.elasticsearch6.configuration.Elasticsearch
 File contents:
 
 ```properties
-clusterName = "LiferayElasticsearchCluster_LEADER"
-operationMode = "REMOTE"
-transportAddresses = ["localhost:9300"]
-logExceptionsOnly = B"false"
+clusterName="LiferayElasticsearchCluster_LEADER"
+operationMode="REMOTE"
+transportAddresses=["localhost:9300"]
+logExceptionsOnly=B"false"
 ```
 
 File name: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
@@ -118,9 +118,9 @@ File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.in
 File contents:
 
 ```properties
-ccrEnabled = B"true"
-ccrLocalClusterConnectionConfigurations = ["localhost:9080=follower"]
-remoteClusterAlias = "leader"
+ccrEnabled=B"true"
+ccrLocalClusterConnectionConfigurations=["localhost:9080=follower"]
+remoteClusterAlias="leader"
 ```
 
 File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config`
@@ -128,19 +128,19 @@ File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.in
 File contents:
 
 ```properties
-connectionId = "follower"
-clusterName = "LiferayElasticsearchCluster_FOLLOWER"
-transportAddresses = ["localhost:9301"]
-networkHostAddress = "https://localhost:9201"
-authenticationEnabled = B"true"
-username = "elastic"
-password = "liferay"
-sslKeyPath = "/PATH/TO/ES_FOLLOWER_1/config/certs/elastic-certificates.key"
-sslCertificatePath = "/PATH/TO/ES_FOLLOWER_1/config/certs/elastic-certificates.crt"
-certificateFormat = "PEM"
-sslCertificateAuthoritiesPaths = "/PATH/TO/ES_FOLLOWER_1/config/certs/ca.crt"
-transportSSLVerificationMode = "certificate"
-transportSSLEnabled = B"true"
+connectionId="follower"
+clusterName="LiferayElasticsearchCluster_FOLLOWER"
+transportAddresses=["localhost:9301"]
+networkHostAddress="https://localhost:9201"
+authenticationEnabled=B"true"
+username="elastic"
+password="liferay"
+sslKeyPath="/PATH/TO/ES_FOLLOWER_1/config/certs/elastic-certificates.key"
+sslCertificatePath="/PATH/TO/ES_FOLLOWER_1/config/certs/elastic-certificates.crt"
+certificateFormat="PEM"
+sslCertificateAuthoritiesPaths="/PATH/TO/ES_FOLLOWER_1/config/certs/ca.crt"
+transportSSLVerificationMode="certificate"
+transportSSLEnabled=B"true"
 ```
 
 ## Leader Elasticsearch Cluster Node Configurations

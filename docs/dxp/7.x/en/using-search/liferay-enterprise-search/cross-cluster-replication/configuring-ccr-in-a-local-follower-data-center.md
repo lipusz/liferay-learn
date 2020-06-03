@@ -236,9 +236,9 @@ com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguratio
 This file configures the write-enabled connection to the remote Elasticsearch cluster with the leader indexes. Give it these contents:
 
 ```properties
-clusterName = "LiferayElasticsearchCluster_LEADER"
-operationMode = "REMOTE"
-transportAddresses = ["localhost:9300"]
+clusterName="LiferayElasticsearchCluster_LEADER"
+operationMode="REMOTE"
+transportAddresses=["localhost:9300"]
 ```
 
 Now configure the read-only connection to the local Elasticsearch server with the follower indexes. Provide a configuration file named 
@@ -250,27 +250,27 @@ com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.confi
 Give it these contents:
 
 ```properties
-connectionId = "follower"
-clusterName = "LiferayElasticsearchCluster_FOLLOWER"
-networkHostAddress = "http://localhost:9201"
-transportAddresses = ["localhost:9301"]
+connectionId="follower"
+clusterName="LiferayElasticsearchCluster_FOLLOWER"
+networkHostAddress="http://localhost:9201"
+transportAddresses=["localhost:9301"]
 
-#networkHostAddress = "https://localhost:9201"
-#authenticationEnabled = B"true"
-#username = "elastic"
-#password = "liferay"
-#certificateFormat = "PEM"
-#sslKeyPath = "/PATH/TO/elastic-certificates.key"
-#sslCertificatePath = "/PATH/TO/elastic-certificates.crt"
-#sslCertificateAuthoritiesPaths = "/PATH/TO/ca.crt"
-#transportSSLVerificationMode = "certificate"
-#transportSSLEnabled = B"true"
+#networkHostAddress="https://localhost:9201"
+#authenticationEnabled=B"true"
+#username="elastic"
+#password="liferay"
+#certificateFormat="PEM"
+#sslKeyPath="/PATH/TO/elastic-certificates.key"
+#sslCertificatePath="/PATH/TO/elastic-certificates.crt"
+#sslCertificateAuthoritiesPaths="/PATH/TO/ca.crt"
+#transportSSLVerificationMode="certificate"
+#transportSSLEnabled=B"true"
 ```
 
 You can use any suffix (`-follower` in this example) for the configuration file name, but for consistency you should make it identical to the `connectionId` property in the configuration.
 
 ```note::
-   **To enable security**, assuming you've gone through the `prerequisite setup <./configuring-an-example-ccr-installation-replicating-between-data-centers.md#prerequisite-for-security-configure-x-pack-security>`__, uncomment the properties in the above configuration, update the settings to match your environment and remove the ``networkHostAddress = "http://localhost:9201"`` property (the new property is only different in that it uses ``https``). 
+   **To enable security**, assuming you've gone through the `prerequisite setup <./configuring-an-example-ccr-installation-replicating-between-data-centers.md#prerequisite-for-security-configure-x-pack-security>`__, uncomment the properties in the above configuration, update the settings to match your environment and remove the ``networkHostAddress="http://localhost:9201"`` property (the new property is only different in that it uses ``https``). 
 ```
 
 The connection is configured. Next enable CCR by providing a configuration file named
@@ -282,9 +282,9 @@ com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.confi
 Give it the following contents:
 
 ```properties
-ccrEnabled = B"true"
-ccrLocalClusterConnectionConfigurations = ["localhost:9080=follower"]
-remoteClusterAlias = "leader"
+ccrEnabled=B"true"
+ccrLocalClusterConnectionConfigurations=["localhost:9080=follower"]
+remoteClusterAlias="leader"
 ```
 
 ```note::
