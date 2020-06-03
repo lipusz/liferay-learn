@@ -62,13 +62,13 @@ Override three JARs from two LPKG files that are bundled with Liferay DXP 7.2:
 
 1. Edit the `"settings"` snippet and add `"index.soft_deletes.enabled" : true`:
 
-  ```json
+    ```json
 	 "settings": {
 		    "index.auto_expand_replicas": "0-all",
 		    "index.number_of_shards": 1,
 		    "index.soft_deletes.enabled" : true
-  }
-  ```
+     }
+    ```
 1. Save the file and let your archive manager re-package the JAR automatically.  
 
 1. Do the same for `com.liferay.portal.search.tuning.synonyms.web.jar`  

@@ -1,6 +1,6 @@
 # Configuring CCR: Settings Reference
 
-To help with the CCR configuration process, the example configurations from this guide's step-by-step instructions are collected here. These configuration are made as generic as possible, but paths, ports, etc. will likely need to be adjusted to match your environment. In addition, you must perform certain steps manually to complete the installation, so these cannot replcae the step=by-step instructions.
+To help with the CCR configuration process, the example configurations from the step-by-step instructions in this guide are collected here. These configuration are made as generic as possible, but paths, ports, etc. will need to be adjusted to match your environment. In addition, you must perform certain steps manually to complete the installation, so these cannot replace the step-by-step instructions.
 
 The configurations below assume you enable encrypted communications (TLS/SSL) and user authentication through X-Pack Security in your installation.
 
@@ -44,7 +44,7 @@ transportSSLVerificationMode="certificate"
 transportSSLEnabled=B"true"
 ```
 
-### Remote DXP Cluster Node Configs for Elasticsearch 7
+### Remote DXP Cluster Node Configurations for Elasticsearch 7
 
 File name: `com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config`
 
@@ -62,7 +62,7 @@ blacklistBundleSymbolicNames=[ \
 File name: `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config`
 
 File contents:
-<!-- I think this is incomplete? --> 
+
 ```properties
 clusterName = "LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
@@ -71,7 +71,9 @@ logExceptionsOnly = B"false"
 
 File name: `com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config`
 
+
 File contents:
+
 ```properties
 requiresAuthentication=B"true"
 username = "elastic"
@@ -84,15 +86,16 @@ transportSSLVerificationMode="certificate"
 transportSSLEnabled=B"true"
 ```
 
-## Local DXP Cluster Node Configs
+## Local DXP Cluster Node Configurations
 
 Location: `[Liferay Home]/osgi/configs`
 
-### Local DXP Cluster Node Configs for Elasticsearch 6
+### Local DXP Cluster Node Configurations for Elasticsearch 6
 
 File name: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
 
 File contents:
+
 ```properties
 clusterName = "LiferayElasticsearchCluster_LEADER"
 operationMode = "REMOTE"
@@ -102,28 +105,18 @@ logExceptionsOnly = B"false"
 
 File name: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
 
-File contents:
-```properties
-requiresAuthentication=B"true"
-username = "elastic"
-password = "liferay"
-sslKeyPath="/PATH/TO/ES_LEADER_1/config/certs/elastic-certificates.key"
-sslCertificatePath="/PATH/TO/ES_LEADER_1/config/certs/elastic-certificates.crt"
-certificateFormat="PEM"
-sslCertificateAuthoritiesPaths="/PATH/TO/ES_LEADER_1/config/certs/ca.crt"
-transportSSLVerificationMode="certificate"
-transportSSLEnabled=B"true"
-```
+File contents: Identical to the remote DXP cluster node.
 
-### Local DXP Cluster Node Configs for Elasticsearch 7
+### Local DXP Cluster Node Configurations for Elasticsearch 7
 
-Same as the Elasticsearch 7 configs for the Remote DXP node.
+Make sure this is identical to the Elasticsearch 7 configuration on the Remote Liferay DXP node, for both the Elasticsearch 7 configuration and the X-Pack Security configuration.
 
-### Local DXP Cluster Node CCR Module Configs
+### Local DXP Cluster Node CCR Module Configurations
 
 File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config`
 
 File contents:
+
 ```properties
 ccrEnabled = B"true"
 ccrLocalClusterConnectionConfigurations = ["localhost:9080=follower"]
@@ -133,6 +126,7 @@ remoteClusterAlias = "leader"
 File name: `com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config`
 
 File contents:
+
 ```properties
 connectionId = "follower"
 clusterName = "LiferayElasticsearchCluster_FOLLOWER"
@@ -149,7 +143,7 @@ transportSSLVerificationMode = "certificate"
 transportSSLEnabled = B"true"
 ```
 
-## Leader Elasticsearch Cluster Node Configs
+## Leader Elasticsearch Cluster Node Configurations
 
 Location: `ES_LEADER_HOME/config`
 
@@ -184,7 +178,7 @@ node.name: es-leader-node-1
 transport.port: 9300
 ```
 
-## Follower Elasticsearch Cluster Node Configs
+## Follower Elasticsearch Cluster Node Configurations
 
 Location: `ES_FOLLOWER_HOME/config`
 

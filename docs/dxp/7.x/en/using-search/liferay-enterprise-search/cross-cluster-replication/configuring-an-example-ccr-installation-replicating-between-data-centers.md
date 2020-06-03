@@ -20,6 +20,25 @@ The Elasticsearch API calls are provided in a format that allows you to  copy an
    To use Kibana, remember that you have multiple Elasticsearch clusters (two single-node clusters in this example) running. The ``elasticsearch.hosts: [ "http://localhost:<port>" ]`` setting in Kibana's ``kibana.yml`` file must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use ``9200`` while the follower node is using ``9201`` as HTTP port.
 ```
 
+## Cluster Liferay DXP 
+
+For the example here, each Liferay DPX node requires a `Liferay Home/portal-ext.properties` file with the following contents:
+
+```properties
+cluster.link.enabled=true
+```
+
+This is a simplistic clustering configuration. See the [documentation on clustering](../../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/clustering-for-high-availability.md) for information on how clustering works with Liferay DXP.
+
+## Install Required Elasticsearch Plugins
+
+Make sure you install the Elasticsearch [plugins Liferay DXP needs](https://help.liferay.com/hc/en-us/articles/360028711132-Installing-Elasticsearch#step-three-install-elasticsearch-plugins):
+
+- `analysis-icu`
+- `analysis-stempel`
+- `analysis-kuromoji`
+- `analysis-smartcn`
+
 ## Prerequisite for Elasticsearch 6: Enable Soft Deletes
 
 [Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for all existing indexes. This is not done by default on Elasticsearch 6. Before proceeding, read [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to configure soft deletes on your Elasticsearch 6 indexes, then resume reading here to set up CCR.

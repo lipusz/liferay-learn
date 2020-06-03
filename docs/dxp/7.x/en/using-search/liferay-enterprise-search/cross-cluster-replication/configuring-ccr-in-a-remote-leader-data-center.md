@@ -14,6 +14,7 @@ Configure its `elasticsearch.yml` by specifying a sensible cluster name, the `ht
 
 `[Remote Elasticsearch Home]/config/elasticsearch.yml`
 
+<!-- include security settings by default -->
 ```yaml
 cluster.name: LiferayElasticsearchCluster_LEADER
 http.port: 9200
@@ -46,12 +47,7 @@ You'll see a `- valid` message in your log when it installs successfully:
 
 The remote Liferay DXP node talks with the REMOTE mode Elasticsearch server. Even though they're both called _remote_, they're co-located in this setup.
 
-Provide a `portal-ext.properties` file with these contents:
-
-```properties
-cluster.link.enabled=true
-```
-Then configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
+Configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
 
 ```bash
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
@@ -92,4 +88,4 @@ If Kibana is connected to your remote/leader Elasticsearch cluster, navigate to 
 
 ![Inspect the leader indexes in Kibana 7.](./configuring-ccr-in-a-remote-leader-data-center/images/01.png)
 
-Once the data containing the remote/leader Elasticsearch is configured and running, you're ready to move on to the [local/follower data center](./configuring-ccr-in-a-local-follower-data-center.md).
+Once the data center containing the remote/leader Elasticsearch servers up and running, you're ready to set up the [local/follower data center](./configuring-ccr-in-a-local-follower-data-center.md).

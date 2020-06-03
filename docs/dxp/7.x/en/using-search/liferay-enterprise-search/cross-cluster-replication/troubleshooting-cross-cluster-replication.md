@@ -1,5 +1,7 @@
 # Troubleshooting Cross-Cluster Replication
 
+<!--add https://issues.liferay.com/browse/LPS-113128 (company and system indexes occasionally not replicated after reindex, the workaround is to manually replicate again -->
+
 Known common pitfalls encountered during the CCR setup are covered here. For further troubleshooting, look at [Elastic's CCR documentation](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-overview.html) or visit [Elastic's forum](https://discuss.elastic.co/tag/cross-cluster-replication).
 
 ## Exceptions During Reindex: `RetentionLeaseNotFoundException` and `IndexNotFoundException`

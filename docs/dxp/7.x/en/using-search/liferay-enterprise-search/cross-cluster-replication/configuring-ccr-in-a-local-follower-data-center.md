@@ -10,10 +10,18 @@ The example configurations are also provided in full in the [CCR configuration r
 
 The local Elasticsearch cluster must hold follower (replicated; read-only) indexes, and acts as the local search engine co-located Liferay DXP nodes can read from.
 
+To configure [security with CCR](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/cross-cluster-configuring.html), you can add the certificate authority for the follower Elasticsearch cluster as a trusted certificate authority on the remote Elasticsearch cluster. Your remote Elasticsearch cluster's `elasticsearch.yml` would then contain settings like these (depending on the paths you configured):
+
+```yaml 
+xpack.security.http.ssl.certificate_authorities : ["certs/ca/ca.crt","certs/follower/ca/ca.crt"]
+xpack.security.transport.ssl.certificate_authorities : ["certs/ca/ca.crt","certs/follower/ca/ca.crt"]
+```
+
 Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port` that won't collide with the other Elasticsearch server:
 
 `[Follower Elasticsearch Home]/config/elasticsearch.yml`
 
+<!-- include security settings by default -->
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
 http.port: 9201
@@ -116,9 +124,11 @@ Here's the overview:
 The replication of indexes in CCR is a _pull_ type operation: it's executed from the local cluster holding the follower indexes. First you'll need to configure the leader/follower relationship between the clusters, then perform the replication on each index.
 
 ```tip::
-   Restart Kibana after reconfiguring the ``kibana.yml`` to connect to your local/follower Elasticsearch cluster:
+   Reconfigure the ``kibana.yml`` to connect to your local/follower Elasticsearch cluster:
 
    ``elasticsearch.hosts: [ "http://localhost:9201" ]``
+
+   Then restart Kibana.
 ```
 
 Two Elasticsearch API endpoints are called on the local Elasticsearch cluster: `_cluster/settings` and `_ccr/follow`.
