@@ -70,6 +70,8 @@ transportAddresses=["localhost:9300"]
 # additionalIndexConfigurations="index.soft_deletes.enabled: true"
 ```
 
+> If configuring security, you'll also need a `XPackConfiguration.config` file. See the [configuration reference](./ccr-basic-use-case-config-reference.md) for the details.
+
 Though configuration values are propagated throughout the cluster, for transparency you should provide an identical configuration file for each Liferay DXP node. Therefore, make sure all the Liferay DXP nodes in both data centers have identical Elasticsearch connector configurations.
 
 ```tip::

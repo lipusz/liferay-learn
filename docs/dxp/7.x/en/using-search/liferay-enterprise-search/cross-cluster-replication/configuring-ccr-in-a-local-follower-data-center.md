@@ -213,13 +213,7 @@ Now the local/follower Elasticsearch cluster knows how to replicate from the rem
 
 ## Configure the Local Liferay DXP Cluster Node
 
-> Configure Tomcat to use different ports than your remote DXP node. We use `9080` as the HTTP port in this example setup.
-
-Provide a `portal-ext.properties` file with these contents:
-
-```properties
-cluster.link.enabled=true
-```
+> If testing locally configure Tomcat to use different ports than your remote DXP node. We use `9080` as the HTTP port in this example setup (change the server ports in `[Liferay Home]/tomcat-[version]/conf/server.xml`).
 
 Then configure the Liferay Connector to Elasticsearch X [6 or 7] by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
 
@@ -241,13 +235,15 @@ operationMode="REMOTE"
 transportAddresses=["localhost:9300"]
 ```
 
+> If configuring security, you'll also need a `XPackConfiguration.config` file. See the [configuration reference](./ccr-basic-use-case-config-reference.md) for the details.
+
 Now configure the read-only connection to the local Elasticsearch server with the follower indexes. Provide a configuration file named 
 
 ```bash
 com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.ElasticsearchConnectionConfiguration-follower.config
 ```
 
-Give it these contents:
+Give it these contents (security configurations are commented out):
 
 ```properties
 connectionId="follower"
