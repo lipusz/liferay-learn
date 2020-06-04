@@ -2,7 +2,7 @@ Liferay Enterprise Search
 =========================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    liferay-enterprise-search/cross_cluster_replication.rst
 

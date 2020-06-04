@@ -1,17 +1,24 @@
 Liferay Enterprise Search
 =========================
 
-- Liferay Enterprise Search Overview (Coming Soon)
-- Monitoring Elasticsearch from Liferay DXP (Coming Soon)
-- Learning to Rank (Coming Soon)
+Liferay Enterprise Search Overview
+__________________________________
+
+Coming Soon!
 
 Cross-Cluster Replication
-~~~~~~~~~~~~~~~~~~~~~~~~~
+_________________________
 
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/cross-cluster-replication`
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/configuring-an-example-ccr-installation-replicating-between-data-centers`
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/configuring-ccr-in-a-remote-leader-data-center`
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/configuring-ccr-in-a-local-follower-data-center`
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/configuring-ccr-enabling-soft-deletes-on-elasticsearch-6`
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/troubleshooting-cross-cluster-replication`
--  :doc:`/using-search/liferay-enterprise-search/cross-cluster-replication/ccr-basic-use-case-config-reference`
+.. include:: /using-search/liferay-enterprise-search/cross-cluster-replication/README.rst
+   :start-line: 2
+
+Monitoring Elasticsearch from Liferay DXP
+_________________________________________
+
+Coming Soon!
+
+Learning to Rank
+________________
+
+Coming Soon!
+

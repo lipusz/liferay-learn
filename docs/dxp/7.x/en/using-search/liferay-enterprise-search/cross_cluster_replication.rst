@@ -2,7 +2,7 @@ Cross-Cluster Replication
 =========================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    cross-cluster-replication/cross-cluster-replication.md
    cross-cluster-replication/configuring-an-example-ccr-installation-replicating-between-data-centers.md
