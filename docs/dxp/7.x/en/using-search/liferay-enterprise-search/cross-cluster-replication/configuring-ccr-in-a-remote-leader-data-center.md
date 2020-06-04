@@ -14,7 +14,6 @@ Configure its `elasticsearch.yml` by specifying a sensible cluster name, the `ht
 
 `[Remote Elasticsearch Home]/config/elasticsearch.yml`
 
-<!-- include security settings by default -->
 ```yaml
 cluster.name: LiferayElasticsearchCluster_LEADER
 http.port: 9200

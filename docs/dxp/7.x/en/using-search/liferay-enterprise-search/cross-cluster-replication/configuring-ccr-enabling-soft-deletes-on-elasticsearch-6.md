@@ -30,7 +30,6 @@ There are two approaches for enabling soft deletes on App and Custom Indexes: on
 
 ## New Deployments: Overriding LPKG Files to Enable Soft Deletes
 
-<!-- As written I think this introduces confusion. If this approach is preferable for new deployments, we should just state up front, do this if you have a new deployment, otherwise see -->
 You can customize the default index settings of the out-of-the-box Liferay app-driven indexes by leveraging the [overriding LPKG files](https://help.liferay.com/hc/en-us/articles/360028808552-Overriding-lpkg-Files) mechanism. By doing so, you can ensure that when DXP starts up, the leader indexes will be created with the required settings. This can come in handy for new DXP deployments.
 
 ```note::

@@ -10,18 +10,14 @@ The example configurations are also provided in full in the [CCR configuration r
 
 The local Elasticsearch cluster must hold follower (replicated; read-only) indexes, and acts as the local search engine co-located Liferay DXP nodes can read from.
 
-To configure [security with CCR](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/cross-cluster-configuring.html), you can add the certificate authority for the follower Elasticsearch cluster as a trusted certificate authority on the remote Elasticsearch cluster. Your remote Elasticsearch cluster's `elasticsearch.yml` would then contain settings like these (depending on the paths you configured):
-
-```yaml 
-xpack.security.http.ssl.certificate_authorities : ["certs/ca/ca.crt","certs/follower/ca/ca.crt"]
-xpack.security.transport.ssl.certificate_authorities : ["certs/ca/ca.crt","certs/follower/ca/ca.crt"]
+```important::
+   **Securing a CCR Installation:** As `stated earlier <./configuring-an-example-ccr-installation-replicating-between-data-centers.md#prerequisite-for-security-configure-x-pack-security>`__ the Elasticsearch clusters should use node certificates signed by the same CA and the security settings of each cluster should match. For other approaches and details, `see Elastic's documentation <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/cross-cluster-configuring.html>`__.
 ```
 
 Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port` that won't collide with the other Elasticsearch server:
 
 `[Follower Elasticsearch Home]/config/elasticsearch.yml`
 
-<!-- include security settings by default -->
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
 http.port: 9201
