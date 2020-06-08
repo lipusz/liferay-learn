@@ -5,6 +5,7 @@ Installing and Upgrading a Search Engine
    :maxdepth: 2
 
    installing-and-upgrading-a-search-engine/installing-a-search-engine.md
+   installing-and-upgrading-a-search-engine/elasticsearch.rst
 
-.. include:: /using-search/installing-and-upgrading-a-search-engine/README.rst
-   :start-line: 2
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/installing-a-search-engine`
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch`
