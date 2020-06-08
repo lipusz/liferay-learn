@@ -16,7 +16,7 @@ Here is what's required to create an effectively functional DXP cluster.
 
 1. A [File Store](../../../system-administration/file-storage/configuring-file-storage.md) that's accessible to all nodes
 
-1. A [search engine (running outside of DXP) that is optionally clustered](../../../using-search/installing-and-upgrading-a-search-engine/introduction-to-installing-a-search-engine.md)
+1. A [search engine (running outside of DXP) that is optionally clustered](../../../using-search/installing-and-upgrading-a-search-engine/installing-a-search-engine.md)
 
 1. [Cluster Link configured to enable communication and cache replication across all nodes](./configuring-cluster-link.md)
 
