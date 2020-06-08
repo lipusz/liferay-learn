@@ -105,7 +105,7 @@ Your database server is ready for DXP.
 
 ## Prepare a Search Engine
 
-A DXP cluster requires a search engine (running as a separate process) that's accessible to all of the app server nodes. See [Installing a Search Engine](../../../using-search/installing-and-upgrading-a-search-engine/introduction-to-installing-a-search-engine.md) for more information.
+A DXP cluster requires a search engine (running as a separate process) that's accessible to all of the app server nodes. See [Installing a Search Engine](../../../using-search/installing-and-upgrading-a-search-engine/installing-a-search-engine.md) for more information.
 
 Create a search engine container based on an [Elasticsearch Docker image](https://hub.docker.com/_/elasticsearch):
 
