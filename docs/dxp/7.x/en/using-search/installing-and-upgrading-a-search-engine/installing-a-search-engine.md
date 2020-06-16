@@ -4,7 +4,7 @@ A search engine is a critical component of your Liferay DXP installation. The [c
 
 <!-- DIAGRAM -->
 
-Liferay DXP includes an Elasticsearch server that runs in the same JVM. This makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but the bundled server is not supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/installing-elasticsearch.md) instructions for more details.
+When you start Liferay DXP an Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/installing-elasticsearch.md) instructions for more details.
 <!-- Is this the place to introduce sidecar which will replace embedded in GA4? -->
 
 ```note::
