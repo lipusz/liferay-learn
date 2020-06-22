@@ -1,6 +1,6 @@
 # Troubleshooting Elasticsearch Installation
 
-Sometimes things don't go as planned. If you've set up Liferay DXP with Elasticsearch in remote mode, but Liferay DXP can't connect to Elasticsearch, check these things:
+If you've set up [Liferay DXP with Elasticsearch](./installing-elasticsearch.md) in remote mode, but Liferay DXP can't connect to Elasticsearch, check these things:
 
 **Cluster name:** The value of the `cluster.name` property in `elasticsearch.yml` must match
 the `clusterName` property configured in the Liferay DXP Elasticsearch connector.
@@ -9,6 +9,17 @@ the `clusterName` property configured in the Liferay DXP Elasticsearch connector
 
 The following articles cover the Liferay Connector to Elasticsearch's configuration options in more detail.
 
-**Cluster Sniffing (Additional Configurations):**Elasticsearch clusters can have multiple node [types](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-node.html#modules-node).  [Cluster sniffing](https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html), enabled by default in the Liferay DXP connector, looks for `data` nodes configured in the `transportAddresses` property. If none are available, the connector may throw a `NoNodeAvailableException` in the console log. If cluster sniffing is to remain enabled, be sure that your configuration allows for at least one `data` node's transport address to be "sniffable" at all times to avoid this error.
+**Cluster Sniffing (Additional Configurations):** Elasticsearch clusters can have multiple node [types](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-node.html#modules-node).  [Cluster sniffing](https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html), enabled by default in the Liferay DXP connector, looks for `data` nodes configured in the `transportAddresses` property. If none are available, the connector may throw a `NoNodeAvailableException` in the console log. If cluster sniffing is to remain enabled, be sure that your configuration allows for at least one `data` node's transport address to be "sniffable" at all times to avoid this error.
 
 To disable cluster sniffing, add `clientTransportSniff=false` to the `.config` file or un-check the Client Transport Sniff property in System Settings.
+
+**[Docker] Connection Refused:** The Liferay DXP container must recognize the Elasticsearch IP to establish a connection. Add `/etc/hosts/` entries that map the Elasticsearch container name to the Elasticsearch server host IP address. This can be established during the `docker run` phase by passing an argument like this:
+```bash
+--add-host elasticsearch:[IP address]
+```
+
+To obtain the IP addresses of all running containers, run 
+
+```bash
+docker network inspect bridge
+```

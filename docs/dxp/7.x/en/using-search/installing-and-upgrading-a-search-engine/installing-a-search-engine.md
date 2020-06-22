@@ -4,7 +4,7 @@ A search engine is a critical component of your Liferay DXP installation. The [c
 
 <!-- DIAGRAM -->
 
-When you start Liferay DXP an Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/installing-elasticsearch.md) instructions for more details.
+When you start Liferay DXP an Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/installing-elasticsearch.md) instructions for more details, and [Using the Built-In Elasticsearch](./elasticsearch/using-the-built-in-elasticsearch.md) for the features and limitations of the default search engine.
 <!-- Is this the place to introduce sidecar which will replace embedded in GA4? -->
 
 ```note::
@@ -43,6 +43,11 @@ Elasticsearch and Solr are supported, but support for Solr is [deprecated]()<!--
 
 - [Install the latest supported Elasticsearch version](./elasticsearch/installing-elasticsearch.md)
 - [Installing the latest supported Solr version](./solr/installing-solr.md)
+
+```note::
+   If your installation requires a search engine besides Elasticsearch, whether as a replacement or in conjunction, you can write your own client application to provide a custom search engine connection. See the `Writing a Search Engine Adapter <../developer-guide/writing-a-search-engine-adapter.md>`__ for details.
+.. Probably add at least a parenthetical statement about why a search engine might be used in conjunction w/Elasticsearch
+```
 
 <!-- Goes in the Solr section intro article and will need updates
 ## Using Solr
