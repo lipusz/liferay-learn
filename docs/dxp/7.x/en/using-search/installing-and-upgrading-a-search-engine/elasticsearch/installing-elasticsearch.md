@@ -1,7 +1,7 @@
 # Installing Elasticsearch
 
 > Latest Supported Elasticsearch Version: 7.7
-> Available: Liferay DXP 7.2 SP??? and Liferay DXP 7.3
+> Available: Liferay DXP 7.2 SP3+ and Liferay DXP 7.3 GA4+
 
 You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP. Whether installing DXP and Elasticsearch clusters in a local on-premise configuration, installing single-node testing or development servers for each, or setting up a production Docker installation, this guide walks you through the setup procedure for the latest supported version of Elasticsearch.
 
@@ -215,7 +215,7 @@ Take note of this address if you're running Lideray DXP 7.2; you'll need to give
 
 > Stop each Liferay DXP server node before completing these steps.
 
-### DXP 7.2: Disable the Default Connector
+### DXP 7.2: Install the Liferay Connector to Elasticsearch 7
 
 On Liferay DXP 7.2, the bundled connector application and APIs are for Elasticsearch 6 and must be disabled to install the connector for Elasticsearch 7. Create a file called
 
@@ -237,14 +237,13 @@ blacklistBundleSymbolicNames=[ \
 
 Place it in `[Liferay Home]/osgi/configs`. When Liferay DXP is started (not yet) this file is read and the bundles declared will not be started.
 
-### DXP 7.2: Install the Liferay Connector to Elasticsearch 7
-<!-- This will change with GA4 and obviously by the time DXP is released will not apply there. Once released the correct connector will be the default one. This will then only apply to 7.2 -->
-
-Liferay DXP 7,3 includes the Liferay Connector to Elasticsearch 7 in the latest released version, but if you're running Liferay DXP 7.2, you must install the latest connector application, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6:
+Beginning in Liferay DXP 7.3 GA4, the Liferay Connector to Elasticsearch 7 is bundled. If you're running Liferay DXP 7.2 SP3+, you can download and install the latest connector application from Marketplace, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6.
 
 1. Download the Liferay Connector to Elasticsearch 7.
 
    Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.8.0). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
+
+<!-- will these links change or stay the same? --> 
 
    - [CE](https://web.liferay.com/en/marketplace/-/mp/application/170642090)
    - [DXP](https://web.liferay.com/en/marketplace/-/mp/application/170390307)
