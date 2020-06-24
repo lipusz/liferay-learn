@@ -1,11 +1,19 @@
 # Installing Elasticsearch
 
-> Latest Supported Elasticsearch Version: 7.7
 > Available: Liferay DXP 7.2 SP3+ and Liferay DXP 7.3 GA4+
+> Latest Supported Elasticsearch Version: 7.7
+> Latest Liferay Connector to Elasticsearch 7: 3.0.2
+<!-- need to iron out the version stuff: https://liferay.slack.com/archives/CNJBTQNQY/p1592942370027900 -->
 
-You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP. Whether installing DXP and Elasticsearch clusters in a local on-premise configuration, installing single-node testing or development servers for each, or setting up a production Docker installation, this guide walks you through the setup procedure for the latest supported version of Elasticsearch.
+You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP with the latest Liferay Connector to Elasticsearch. A connector application is installed by default on all Liferay DXP installations, but it's not necessarily the newest connector.
+
+Whether installing DXP and Elasticsearch clusters in a local on-premise configuration, installing single-node testing or development servers for each, or setting up a production Docker installation, this guide walks you through the setup procedure for the latest supported version of Elasticsearch.
+
+To set up an example Liferay DXP cluster with a remote Elasticsearch connection, see the [Clustering for High Availability](../../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/example-creating-a-simple-dxp-cluster.md) documentation.
 
 ## Prerequisites
+
+There are some prerequisite details to iron out that aren't specific to the Elasticsearch or Liferay DXP configuration.
 
 ### Production-Like Local Environment: Add Hosts
 
@@ -30,7 +38,7 @@ To obtain the IP addresses of all running containers, run
 docker network inspect bridge
 ```
 
-The example value presented here is `172.17.0.2`:
+The example IP value presented here is `172.17.0.2`:
 
 ```bash
 docker run -it --name dxp-1 --add-host elasticsearch7:172.17.0.2 ...
@@ -86,7 +94,7 @@ These properties should have unique values for each node in the cluster:
 - `network.host`
 - `transport.port`
 
-For example,
+For example, `es-node1` might have these settings:
 
 ```yaml
 node.name: es-node1
@@ -98,14 +106,13 @@ network.host: es-node1
 transport.port: 9300
 ```
 
-Depending on your system's design, every node in the Elasticsearch cluster can have identical values for these settings:
-<!-- hmm, not necessarily so -->
+Depending on your system's design, every node in the Elasticsearch cluster might have identical values for these settings:
 
 - `cluster.initial_master_nodes`
 - `discovery.zen.minimum_master_nodes`
 - `discovery.seed_hosts`
 
-For example, `es-node1`:
+For example, each node of a 3-node cluster might have these settings in the `[Elasticsearch Home]/config/elasticsearch.yml` or the `docker-compose.yml`:
 
 ```yaml
 cluster.initial_master_nodes:
@@ -202,6 +209,7 @@ docker run -p 9200:9200 -p 9300:9300 -e "cluster.name=LiferayElasticsearchCluste
    ```
 
 <!--
+UNNECESSARY NOW, RIGHT?
 Elasticsearch starts, and one of its status messages includes a transport address: 
 
 ```sh
@@ -213,7 +221,7 @@ Take note of this address if you're running Lideray DXP 7.2; you'll need to give
 
 ## Connect Liferay DXP to Elasticsearch
 
-> Stop each Liferay DXP server node before completing these steps.
+Stop each Liferay DXP server node before completing these steps.
 
 ### DXP 7.2: Install the Liferay Connector to Elasticsearch 7
 
@@ -236,6 +244,10 @@ blacklistBundleSymbolicNames=[ \
 ```
 
 Place it in `[Liferay Home]/osgi/configs`. When Liferay DXP is started (not yet) this file is read and the bundles declared will not be started.
+
+```tip::
+   **Docker:** `Liferay Home` and other important folders of a Liferay DXP installation are accessed in a Docker container at `/mnt/liferay` as described `here <../../../installation-and-upgrades/installing-liferay/using-liferay-dxp-docker-images/dxp-container-lifecycle-and-api.md#api>`__. You can use ``docker cp /path/to/local/file [container_name]:/mnt/liferay/files/osgi/configs`` to place configuration files into the container. A similar command can be used to deploy the Liferay Connector to Elasticsearch 7 LPKG file.
+```
 
 Beginning in Liferay DXP 7.3 GA4, the Liferay Connector to Elasticsearch 7 is bundled. If you're running Liferay DXP 7.2 SP3+, you can download and install the latest connector application from Marketplace, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6.
 
