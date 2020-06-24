@@ -41,21 +41,34 @@ Liferay DXP runs an Elasticsearch node in the same JVM so it's easy to test-driv
 
 You wouldn't run an embedded database like HSQL in production, and you shouldn't run Elasticsearch in embedded mode in production either. Instead, run Elasticsearch in [_remote operation mode_](./installing-elasticsearch.md), as a standalone server or cluster of server nodes.
 
-## Default Elasticsearch and App Server Differences
+## How to Use the Default Elasticsearch
 
-While an Elasticsearch sidecar server is pre-installed for Liferay DXP 7.3 GA4+ Tomcat bundles and Docker images, there are some key differences if you're installing a different bundle or installing the Lifery DXP WAR onto WebSphere or Weblogic application servers.
+Common uses for the default Elasticsearch server (embedded or sidecar) include
+
+- Testing your custom [search and indexing code](../../developer-guide/search-and-indexing.md)
+- Developing search queries by running queries directly on Elasticsearch through Kibana
+- Testing the [search tuning](../../search_administration_and_tuning.rst) functionality
+- Exploring and configuring the [search widgets](../../search_pages_and_widgets.rst)
+
+## App Server Differences
+
+While an Elasticsearch sidecar server is pre-installed for Liferay DXP 7.3 GA4+ Tomcat bundles and Docker images, there are some key differences if you're installing the Lifery DXP WAR onto Tomcat or the other supported application servers.
 
 | Liferay DXP Flavor       | Default Elasticsearch | Pre-Installed | Requires Manual Intervention |
 | ------------------------ | ------------------- | ------------- | ---------------------------- |
 | Tomcat bundle: 7.3 GA4+  | Sidecar             | &#10004;      | &#10008;                     |
+| Tomcat: 7.3 GA4+         | Sidecar             | &#10008;      | &#10008; (auto-downloaded)   |
+| Docker tag:    7.3 GA4+  | Sidecar             | &#10004;      | &#10008;                     |
+| JBoss: 7.3 GA4+          | Sidecar             | &#10008;      | &#10008; (auto-downloaded)   |
+| Wildfly: 7.3 GA4+        | Sidecar             | &#10008;      | &#10008; (auto-downloaded)   |
 | WebSphere: 7.3 GA4+      | Sidecar             | &#10008;      | &#10004;                     |
 | Weblogic: 7.3 GA4+       | Sidecar             | &#10008;      | &#10004;                     |
-| Tomcat bundle: 7.2       | Embedded            | &#10004;      | &#10008;                     |
+| _All flavors: 7.2/7.3 GA3-_ | _Embedded_       | &#10004;      | &#10008;                     |
 
+If you downloaded a bundle for an application server besides Tomcat, when you start the server an Elasticsearch distribution is downloaded on-the-fly and started as a sidecar server.
 
-
-  differif you downloaded a bundle for an application server besides Tomcat, when you start the server an Elasticsearch distribution is downloaded on-the-fly and started as a sidecar server.
-<!--Talk briefly about Websphere and Weblogic and link to those docs -->
+Installation instructions for Liferay DXP 7.3 on the [WebSphere](../../../installation-and-upgrades/installing-liferay/installing-liferay-on-an-application-server/installing-on-websphere.md) and [Weblogic](../../../installation-and-upgrades/installing-liferay/installing-liferay-on-an-application-server/installing-on-weblogic.md) application servers include directions for manually providing the Elasticsearch archives required for the sidecar server to be initialized.
+<!-- ongoing work, LRDOCS-8008 -->
 
 ```important::
    The built-in Elasticsearch server is useful for development and testing purposes and must not be used in production. See `Installing Elasticsearch <./installing-elasticsearch.md>`__ to learn about installing a REMOTE mode search engine.
@@ -63,10 +76,9 @@ While an Elasticsearch sidecar server is pre-installed for Liferay DXP 7.3 GA4+ 
 
 ## Embedded versus Sidecar
 
+| EMBEDDED           | SIDECAR           |
+| ------------------ | ----------------- |
+| Runs at <http://localhost:9200> | Runs at <http://localhost:9201> |
+| Pre-Installed on all Liferay DXP distributions  | Not Always Pre-Installed  |
+| Data stored in `[Liferay Home]/data`     | Data stored in `[Liferay Home]` root |
 
-Common activities the default Elasticsearch server can be used for include
-
-- Testing your custom [search and indexing code](../../developer-guide/search-and-indexing.md)
-- Developing search queries by running queries directly on Elasticsearch through Kibana
-- Testing the [search tuning](../../search_administration_and_tuning.rst) functionality
-- Exploring and configuring the [search widgets](../../search_pages_and_widgets.rst)
