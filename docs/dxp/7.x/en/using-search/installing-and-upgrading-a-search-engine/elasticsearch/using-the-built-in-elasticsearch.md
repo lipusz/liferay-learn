@@ -7,21 +7,19 @@ If you obtained Liferay DXP by downloading a Tomcat bundle or pulling a Docker t
 
 You'll see information like this:
 
-<!-- THIS IS MY REMOTE 7.7-REPLACE WITH A SIDECAR SERVER'S OUTPUT-->
-
 ```json
 {
-  "name" : "400ec372f7ca",
+  "name" : "liferay",
   "cluster_name" : "LiferayElasticsearchCluster",
-  "cluster_uuid" : "SpeO6mpHQpiMyKGab2X8Zg",
+  "cluster_uuid" : "pb71L4whRS-PxTHgGdGM-Q",
   "version" : {
-    "number" : "7.7.1",
-    "build_flavor" : "default",
-    "build_type" : "docker",
-    "build_hash" : "ad56dce891c901a492bb1ee393f12dfff473a423",
-    "build_date" : "2020-05-28T16:30:01.040088Z",
+    "number" : "7.3.0",
+    "build_flavor" : "unknown",
+    "build_type" : "unknown",
+    "build_hash" : "de777fa",
+    "build_date" : "2019-07-24T18:30:11.767338Z",
     "build_snapshot" : false,
-    "lucene_version" : "8.5.1",
+    "lucene_version" : "8.1.0",
     "minimum_wire_compatibility_version" : "6.8.0",
     "minimum_index_compatibility_version" : "6.0.0-beta1"
   },

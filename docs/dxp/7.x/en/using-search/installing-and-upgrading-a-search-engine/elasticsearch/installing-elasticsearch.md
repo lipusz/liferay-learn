@@ -3,6 +3,7 @@
 > Available: Liferay DXP 7.2 SP3+ and Liferay DXP 7.3 GA4+
 > Latest Supported Elasticsearch Version: 7.7
 > Latest Liferay Connector to Elasticsearch 7: 3.0.2
+
 <!-- need to iron out the version stuff: https://liferay.slack.com/archives/CNJBTQNQY/p1592942370027900 -->
 
 You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP with the latest Liferay Connector to Elasticsearch. A connector application is installed by default on all Liferay DXP installations, but it's not necessarily the newest connector.
@@ -17,7 +18,7 @@ There are some prerequisite details to iron out that aren't specific to the Elas
 
 ### Production-Like Local Environment: Add Hosts
 
-You can skip this if you'll set up a testing environment using `localhost`. For a production-like setup on your local machine, add the hosts for Liferay DXP and the Elasticsearch cluster. Add this to your operating system's `path/to/etc/hosts` file:
+You can skip this if you'll set up a testing environment using `localhost` or Docker containers. For a production-like setup on your local machine, add the hosts for Liferay DXP and the Elasticsearch cluster. Add this to your operating system's `path/to/etc/hosts` file:
 
 ```properties
 <your IP> es-node1
