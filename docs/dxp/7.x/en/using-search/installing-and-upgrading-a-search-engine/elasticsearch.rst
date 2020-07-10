@@ -4,7 +4,7 @@ Elasticsearch
 Elasticsearch, a highly scalable, full-text search engine, is the default search engine used by Liferay DXP. Elasticsearch almost certainly meets any search and indexing need you have, but you must not use the `built-in version in your production deployment <./elasticsearch/using-the-built-in-elasticsearch.md>`__. 
 
 .. important::
-   Always consult the `compatibility matrix <https://www.liferay.com/documents/10182/246659966/Liferay+DXP+7.2+Compatibility+Matrix.pdf/ed234765-db47-c4ad-7c82-2acb4c73b0f9>`__ to learn which versions of Elasticsearch are supported for your version of Liferay DXP.
+   Always consult the `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ to learn which versions of Elasticsearch are supported for your version of Liferay DXP.
 
 .. figure:: ./elasticsearch/images/01.png
     :alt: A green Elasticsearch connection
