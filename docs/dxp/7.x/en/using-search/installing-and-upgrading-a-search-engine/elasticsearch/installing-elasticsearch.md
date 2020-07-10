@@ -1,8 +1,7 @@
 # Installing Elasticsearch
 
-> Available: Liferay DXP 7.2 SP3+ and Liferay DXP 7.3 GA4+
 > Latest Supported Elasticsearch Version: 7.7
-> Latest Liferay Connector to Elasticsearch 7: 3.0.2
+> Available: Liferay DXP 7.2 SP1+, Liferay DXP 7.3, Liferay Portal CE GA4+
 
 <!-- need to iron out the version stuff: https://liferay.slack.com/archives/CNJBTQNQY/p1592942370027900 -->
 
@@ -31,6 +30,8 @@ Use the real IP address of your system, not the loopback address `127.0.0.1`.
 
 ### Docker Containers: Add Hosts
 
+> Skip this step if your system is not using Docker containers.
+
 The Liferay DXP container(s) must recognize the Elasticsearch IP(s) to establish a connection. Add `/etc/hosts/` entries on the DXP nodes that map the Elasticsearch container name to the Elasticsearch server host IP address. This can be established during the `docker run` phase by passing an `--add-host elasticsearch:[IP address]` argument for each Elasticsearch node.
 
 To obtain the IP addresses of all running containers, run 
@@ -47,6 +48,8 @@ docker run -it --name dxp-1 --add-host elasticsearch7:172.17.0.2 ...
 
 ### Increase the Virtual Memory of Elasticsearch's Host
 
+> Skip this step if your system is not using Docker containers.
+
 You can skip this step if you're setting up a `localhost` testing environment with a downloaded Elasticsearch archive. Elasticsearch requires a higher _mmap count_ (for mapping the directory holding its indexes into memory) than most operating systems are configured for by default. On Linux and as the root user, run
 
 ```bash
@@ -60,7 +63,7 @@ See [Elasticsearch's documentation](https://www.elastic.co/guide/en/elasticsearc
 1. Obtain Elasticsearch. See [Elastic's](https://www.elastic.co) website for a local download or [pull a docker image](https://www.docker.elastic.co/):
 
    ```bash
-   docker pull docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+   docker pull docker.elastic.co/elasticsearch/elasticsearch:7.7.1
    ```
 
 1. If you downloaded Elasticsearch directly, install it by extracting its archive to the system where you want it to run.
@@ -79,7 +82,7 @@ See [Elasticsearch's documentation](https://www.elastic.co/guide/en/elasticsearc
    ```bash
    docker exec -it [container-name] bash -c '/usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-icu && /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji && /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-smartcn && /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-stempel'
    ```
-
+ARTICLE BREAK?
 ## Configure Elasticsearch
 
 To configure an Elasticsearch cluster of Docker containers, use a [`docker-compose.yml` file](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docker.html#docker-compose-file). A local installation is configured via the `Elasticsearch Home/config/elasticsearch.yml` file.
@@ -153,7 +156,7 @@ To configure an Elasticsearch cluster of Docker containers, the `docker-compose.
 version: '2.2'
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
     container_name: es01
     environment:
       - node.name=es01
@@ -219,7 +222,7 @@ Elasticsearch starts, and one of its status messages includes a transport addres
 
 Take note of this address if you're running Lideray DXP 7.2; you'll need to give it to your DXP server(s) so it can find Elasticsearch on the network. 
 -->
-
+ARTICLE BREAK?
 ## Connect Liferay DXP to Elasticsearch
 
 Stop each Liferay DXP server node before completing these steps.
@@ -250,11 +253,15 @@ Place it in `[Liferay Home]/osgi/configs`. When Liferay DXP is started (not yet)
    **Docker:** `Liferay Home` and other important folders of a Liferay DXP installation are accessed in a Docker container at `/mnt/liferay` as described `here <../../../installation-and-upgrades/installing-liferay/using-liferay-dxp-docker-images/dxp-container-lifecycle-and-api.md#api>`__. You can use ``docker cp /path/to/local/file [container_name]:/mnt/liferay/files/osgi/configs`` to place configuration files into the container. A similar command can be used to deploy the Liferay Connector to Elasticsearch 7 LPKG file.
 ```
 
-Beginning in Liferay DXP 7.3 GA4, the Liferay Connector to Elasticsearch 7 is bundled. If you're running Liferay DXP 7.2 SP3+, you can download and install the latest connector application from Marketplace, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6.
+With Liferay DXP 7.3, the latest Liferay Connector to Elasticsearch 7 is bundled. If you're running Liferay DXP 7.2 SP1+, you can download and install the latest connector application from Marketplace, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6.
+
+```important:: 
+   The connectors for 7.2 and 7.3 are different: 7.3 is bundled with a connector application that uses the `High-Level Rest Client <https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/java-rest-high.html>`__ from Elastic, while the 7.2 Elasticsearch connector uses the `Transport Client <https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html>`__. Configurations for both connectors are presented here.
+```
 
 1. Download the Liferay Connector to Elasticsearch 7.
 
-   Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.8.0). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
+   Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.7.1). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
 
 <!-- will these links change or stay the same? --> 
 
