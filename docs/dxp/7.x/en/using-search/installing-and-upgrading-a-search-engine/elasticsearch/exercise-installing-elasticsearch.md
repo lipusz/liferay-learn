@@ -1,8 +1,8 @@
 # Exercise: Install Elasticsearch
 
-> Availability: Liferay DXP 7.3 GA4
+> Availability: Liferay DXP 7.3, Liferay Portal CE 7.3 GA4
 
-Here you can walk through an example setup on your local machine to see how the connection between Elasticsearch and Liferay DXP 7.3 is configured. The example uses two Docker containers: one Elasticsearch container and one Liferay DXP container. For more conceptual information see [Installing Elasticsearch](./installing-elasticsearch.md).
+Here you can walk through an example setup on your local machine to see how the [Rest Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/java-rest-high.html) connection between Elasticsearch and Liferay DXP 7.3 is configured. The example uses two Docker containers: one Elasticsearch container and one Liferay DXP container. For more conceptual and production-like information see [Installing Elasticsearch](./installing-elasticsearch.md).
 
 Subsequent exercises will secure the connection and configure monitoring (Liferay Enterprise Search only).
 
@@ -15,7 +15,7 @@ mkdir -p test-es-install/dxp/files/osgi/configs && mkdir -p test-es-install/elas
 ```
 
 ```tip::
-   The ``cd test-es-install`` at the end will put you in the ``test-es-install`` folder. Make sure you run the remaining commands for both Elasticsearch and Liferay DXP from this folder.
+   The ``cd test-es-install`` command at the end will put you in the ``test-es-install`` folder. Make sure you run the remaining commands for both Elasticsearch and Liferay DXP from this folder.
 ```
 ## Install Elasticsearch
 

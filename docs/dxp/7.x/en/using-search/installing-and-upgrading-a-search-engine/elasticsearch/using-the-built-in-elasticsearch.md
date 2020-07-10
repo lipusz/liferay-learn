@@ -3,7 +3,7 @@
 If you obtained Liferay DXP by downloading a Tomcat bundle or pulling a Docker tag, an Elasticsearch node is started with DXP as either an embedded or sidecar server. To confirm,
 
 - If running Liferay DXP 7.2, access the embedded server at <http://localhost:9200>
-- If running Liferay DXP 7.3 GA4+, access the sidecar server at <http://localhost:9201>
+- If running Liferay DXP 7.3, access the sidecar server at <http://localhost:9201>
 
 You'll see information like this:
 
@@ -50,7 +50,7 @@ Common uses for the default Elasticsearch server (embedded or sidecar) include
 
 ## App Server Differences
 
-While an Elasticsearch sidecar server is pre-installed for Liferay DXP 7.3 GA4+ Tomcat bundles and Docker images, there are some key differences if you're installing the Lifery DXP WAR onto Tomcat or the other supported application servers.
+While an Elasticsearch sidecar server is pre-installed for Liferay DXP 7.3 and Liferay Portal CE 7.3 GA4+ Tomcat bundles and Docker images, there are some key differences if you're installing the Lifery DXP WAR onto Tomcat or the other supported application servers.
 
 | Liferay DXP Flavor       | Default Elasticsearch | Pre-Installed | Requires Manual Intervention |
 | ------------------------ | ------------------- | ------------- | ---------------------------- |

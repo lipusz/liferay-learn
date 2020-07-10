@@ -16,11 +16,13 @@ When you start Liferay DXP a built-in Elasticsearch server is simultaneously sta
 
 - You must set the [`JAVA_HOME` environment variable](https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/).
 
-- Elasticsearch and Liferay DXP must use the same Java version and distribution (e.g., Oracle Open JRE 1.8.0_201). Consult the [Elasticsearch compatibility matrix](https://www.elastic.co/support/matrix#matrix_jvm) and the [Liferay DXP compatibility matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) to learn more about supported JDK distributions and versions. You can specify this in Elasticsearch:
+- If using Liferay DXP 7.2, Elasticsearch and Liferay DXP must use the same Java version and distribution (e.g., Oracle Open JRE 1.8.0_201). Consult the [Elasticsearch compatibility matrix](https://www.elastic.co/support/matrix#matrix_jvm) and the [Liferay DXP compatibility matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) to learn more about supported JDK distributions and versions. You can specify this in Elasticsearch:
 
    ```properties
    [Elasticsearch Home]/bin/elasticsearch.in.sh`: `JAVA_HOME=/path/to/java`
    ```
+
+   The Liferay Connector to Elasticsearch that's bundled with 7.3 relies on the [High-Level REST Client from Elastic](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/java-rest-high.html), so this requirement does not apply.
 
 ```note::
    The same requirement is not applicable to Solr as no JVM level serialization happens between the servers. Rather, all communication occurs at the HTTP level.
@@ -35,10 +37,10 @@ A production environment's search engine should be clustered for load management
 
 ## Selecting a Search Engine Vendor and Version
 
-Elasticsearch and Solr are supported, but support for Solr is [deprecated]()<!-- link to somewhere -->. Therefore, Elasticsearch is the recommended search engine for search and indexing with Liferay DXP.
+Elasticsearch is the recommended search engine for search and indexing with Liferay DXP. Elasticsearch and Solr are supported, but the [Solr integration is less robust](./installing-solr/solr-limitations.md)
 
 ```important::
-   Always refer to the `compatibility matrix <https://www.liferay.com/documents/10182/246659966/Liferay+DXP+7.2+Compatibility+Matrix.pdf/ed234765-db47-c4ad-7c82-2acb4c73b0f9>`__ to find the exact versions supported.
+   Always refer to the `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ to find the exact versions supported.
 ```
 
 - [Install the latest supported Elasticsearch version](./elasticsearch/installing-elasticsearch.md)
