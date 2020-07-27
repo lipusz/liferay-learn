@@ -1,6 +1,6 @@
 # Troubleshooting Elasticsearch Installation
 
-If you've set up [Liferay DXP with Elasticsearch](./installing-elasticsearch.md) in remote mode, but Liferay DXP can't connect to Elasticsearch, check these things:
+If you've set up [Liferay DXP with Elasticsearch](./getting-started-with-elasticsearch.md) in remote mode, but Liferay DXP can't connect to Elasticsearch, check these things:
 
 **Cluster name:** The value of the `cluster.name` property in `elasticsearch.yml` must match
 the `clusterName` property configured in the Liferay DXP Elasticsearch connector.
