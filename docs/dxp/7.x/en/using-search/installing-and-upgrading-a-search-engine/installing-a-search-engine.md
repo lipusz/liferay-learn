@@ -4,7 +4,7 @@ A search engine is a critical component of your Liferay DXP installation. The [c
 
 <!-- MAKE A DIAGRAM SIMILAR TO THe CCR ONE BUT WITH JUST ONE CONNECTION -->
 
-When you start Liferay DXP a built-in Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/installing-elasticsearch.md) instructions for more details, and [Using the Built-In Elasticsearch](./elasticsearch/using-the-built-in-elasticsearch.md) for the features and limitations of the default search engine.
+When you start Liferay DXP a built-in Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/getting-started-with-elasticsearch.md) instructions for more details, and [Using the Built-In Elasticsearch](./elasticsearch/using-the-built-in-elasticsearch.md) for the features and limitations of the default search engine.
 <!-- Is this the place to introduce sidecar which will replace embedded in GA4? -->
 
 ```note::
@@ -31,7 +31,7 @@ When you start Liferay DXP a built-in Elasticsearch server is simultaneously sta
 
 A production environment's search engine should be clustered for load managements and optimal Liferay DXP performance. Both Elasticsearch and Solr can be configured successfully on multiple nodes in the remote environment.
 
-* To configure a remote Elasticsearch server or cluster, see [Installing Elasticsearch](./installing-elasticsearch.md).
+* To configure a remote Elasticsearch server or cluster, see [Installing Elasticsearch](./getting-started-with-elasticsearch.md).
 
 * To configure a remote Solr server or cluster, see the [Installing Solr](./solr/installing-solr.md) article.
 
@@ -43,7 +43,7 @@ Elasticsearch is the recommended search engine for search and indexing with Life
    Always refer to the `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ to find the exact versions supported.
 ```
 
-- [Install the latest supported Elasticsearch version](./elasticsearch/installing-elasticsearch.md)
+- [Install the latest supported Elasticsearch version](./elasticsearch/getting-started-with-elasticsearch.md)
 - [Installing the latest supported Solr version](./solr/installing-solr.md)
 
 ```note::

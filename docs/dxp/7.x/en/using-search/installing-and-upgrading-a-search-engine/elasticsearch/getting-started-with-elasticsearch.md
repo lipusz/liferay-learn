@@ -1,4 +1,4 @@
-# Installing Elasticsearch
+# Getting Started with Elasticsearch
 
 > Latest Supported Elasticsearch Version: 7.7
 > Available: Liferay DXP 7.2 SP1+, Liferay DXP 7.3, Liferay Portal CE GA4+
@@ -320,7 +320,7 @@ With Liferay DXP 7.3, the latest Liferay Connector to Elasticsearch 7 is bundled
 
 1. **Checkpoint:** Start Liferay DXP. Once it's running, verify that the Elasticsearch connection is active in Control Panel &rarr; Configuration &rarr; Search.
 
-   ![An active connection is displayed in the Search administrative panel.](./installing-elasticsearch/images/01.png)
+   ![An active connection is displayed in the Search administrative panel.](./getting-started-with-elasticsearch/images/01.png)
 
    Reindex your search and spell check indexes. Both reindex actions are carried out from the Index Actions tab of Control Panel &rarr; Configuration &rarr; Search.
 

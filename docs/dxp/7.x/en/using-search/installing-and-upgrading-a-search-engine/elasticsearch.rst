@@ -13,7 +13,7 @@ Elasticsearch, a highly scalable, full-text search engine, is the default search
 Installing
 ~~~~~~~~~~
 
--  `Install the Latest Supported Elasticsearch Version <./elasticsearch/installing-elasticsearch.md>`__
+-  `Install the Latest Supported Elasticsearch Version <./elasticsearch/getting-started-with-elasticsearch.md>`__
 
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/exercise-installing-elasticsearch`
 
@@ -49,7 +49,7 @@ Coming Soon!
 .. toctree::
    :maxdepth: 2
 
-   elasticsearch/installing-elasticsearch.md
+   elasticsearch/getting-started-with-elasticsearch.md
    elasticsearch/troubleshooting-elasticsearch-installation.md
    elasticsearch/exercise-installing-elasticsearch.md
    elasticsearch/using-the-built-in-elasticsearch.md
