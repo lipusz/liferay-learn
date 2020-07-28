@@ -13,8 +13,10 @@ Elasticsearch, a highly scalable, full-text search engine, is the default search
 Installing
 ~~~~~~~~~~
 
--  `Install the Latest Supported Elasticsearch Version <./elasticsearch/getting-started-with-elasticsearch.md>`__
+-  `Getting Started <./elasticsearch/getting-started-with-elasticsearch.md>`__
 
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/installing-elasticsearch`
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/connecting-to-elasticsearch`
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/exercise-installing-elasticsearch`
 
 - `[Clustering Liferay DXP]` `Add a Search Engine to a Liferay DXP Cluster <../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/example-creating-a-simple-dxp-cluster.md#prepare-a-search-engine>`__
@@ -50,6 +52,8 @@ Coming Soon!
    :maxdepth: 2
 
    elasticsearch/getting-started-with-elasticsearch.md
+   elasticsearch/installing-elasticsearch.md
+   elasticsearch/connecting-to-elasticsearch.md
    elasticsearch/troubleshooting-elasticsearch-installation.md
    elasticsearch/exercise-installing-elasticsearch.md
    elasticsearch/using-the-built-in-elasticsearch.md
