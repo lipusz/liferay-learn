@@ -1,8 +1,8 @@
 # Installing Elasticsearch
 
-TODO: Add Security
+<!-- TODO: Add Security -->
 
-INTRODUCE
+Once your [system is ready](./getting-started-with-elasticsearch.md), install and configure the Elasticsearch cluster that you'll later [connect to Liferay CE/DXP](./connecting-to-elasticsearch.md).
 
 1. Obtain Elasticsearch. See [Elastic's](https://www.elastic.co) website for a local download or [pull a docker image](https://www.docker.elastic.co/):
 
@@ -136,7 +136,7 @@ networks:
 
 ## Start Elasticsearch
 
-If using the un-packaged Elasticsearch archive, from the `bin` folder, run 
+If using the unpackaged Elasticsearch archive, from the `bin` folder, run 
 
 ```bash
 ./elasticsearch
@@ -150,7 +150,6 @@ docker-compose up
 
 A single-node test cluster can be started and configured at the same time within the `docker run` command:
 
-
 ```bash
 docker run -p 9200:9200 -p 9300:9300 -e "cluster.name=LiferayElasticsearchCluster" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.7.1
    ```
@@ -161,6 +160,13 @@ Elasticsearch starts, and one of its status messages includes a transport addres
 [2019-04-01T16:55:50,127][INFO ][o.e.t.TransportService   ] [HfkqdKv] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}
 ```
 
-Take note of this address if you're running Lideray DXP 7.2; you'll need to give it to your DXP server(s) so it can find Elasticsearch on the network. 
+Take note of this address if you're running Liferay DXP 7.2; you'll need to give it to your DXP server(s) so it can find Elasticsearch on the network. 
 
-CONCLUDE THIS
+Once Elasticsearch is up and running, [connect it to Liferay DXP](./connecting-to-elasticsearch.md).
+
+## Related Topics
+
+[Liferay Enterprise Search](../../liferay_enterprise_search.rst)
+[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md)
+[Administering and Tuning Search](../../search_administration_and_tuning.rst)
+[Search Configuration Reference Guide](../../search-configuration-reference.md)
