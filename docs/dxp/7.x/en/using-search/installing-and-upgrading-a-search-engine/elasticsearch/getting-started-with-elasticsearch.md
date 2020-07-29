@@ -1,17 +1,17 @@
 # Getting Started with Elasticsearch
 
 > Latest Supported Elasticsearch Version: 7.7 \
-> Available: \
->    Liferay DXP 7.2 SP1+ \
->    Liferay CE/DXP 7.3
+> Available:
+> - Liferay DXP 7.2 SP1+
+> - Liferay CE/DXP 7.3
 
-<!-- need to iron out the version stuff: https://liferay.slack.com/archives/CNJBTQNQY/p1592942370027900 -->
+You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP, with the corresponding Liferay Connector to Elasticsearch. A connector application is installed by default on all Liferay DXP installations, but it's not necessarily the newest connector. For example, the bundled connector on Liferay CE/DXP 7.2 is for Elasticsearch 6. To install Elasticsearch 7 on Liferay CE/DXP 7.2, you must install a new connector from Liferay Marketplace.
 
-You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP with the latest Liferay Connector to Elasticsearch. A connector application is installed by default on all Liferay DXP installations, but it's not necessarily the newest connector.
-
-Whether installing DXP and Elasticsearch clusters in a local on-premise configuration, installing single-node testing or development servers for each, or setting up a production Docker installation, this guide walks you through the setup procedure for the latest supported version of Elasticsearch.
+Whether installing DXP and Elasticsearch clusters in a local on-premise configuration, installing single-node testing or development servers for each, or setting up a production Docker installation, this guide walks you through the setup procedure for the latest supported version of Elasticsearch, whether you're using Liferay CE/DXP 7.2 or 7.3.
 
 To set up an example Liferay DXP cluster with a remote Elasticsearch connection, see the [Clustering for High Availability](../../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/example-creating-a-simple-dxp-cluster.md) documentation.
+
+To walk through a quick setup of a single Liferay DXP node remotely connected to a single Elasticsearch 7 node, see the [Exercise](./exercise-installing-elasticsearch.md).
 
 ## Prerequisites
 
@@ -60,7 +60,7 @@ sysctl -w vm.max_map_count=262144
 
 See [Elasticsearch's documentation](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/vm-max-map-count.html) to learn more, including how to set it permanently.
 
-CONCLUDE THIS
+Once the prerequisites are satisfied, it's time to [Install Elasticsearch](./installing-elasticsearch.md).
 
 ## Related Topics
 

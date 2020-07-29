@@ -1,10 +1,12 @@
 ## Connecting to Elasticsearch
 
-TODO: Add Security
+<!-- TODO: Add Security -->
 
-These instructions differ if you're using the REST-based Elasticsearch Client that's bundled with Liferay CE/DXP 7.3, or the client backed by the Java Transport Client available on Liferay Marketplace for Liferay CE/DXP 7.2. Differentiation between the installation procedure is noted. 
+Once [Elasticsearch is running](./installing-elasticsearch.md), it's time to configure Liferay CE/DXP to connect.
 
-Stop each Liferay DXP server node before completing these steps.
+These instructions differ if you're using the [REST-based Elasticsearch Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/java-rest-high.html) that's bundled with Liferay CE/DXP 7.3, or the client backed by the [Java Transport Client](https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html) available on Liferay Marketplace for Liferay CE/DXP 7.2. Notable differences in the installation and configuration procedure are presented here. 
+
+Stop each Liferay CE/DXP server node before completing these steps.
 
 ```important:: 
    The connectors for 7.2 and 7.3 are different: 7.3 is bundled with a connector application that uses the `High-Level Rest Client <https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/java-rest-high.html>`__ from Elastic, while the 7.2 Elasticsearch connector uses the `Transport Client <https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html>`__. Configurations for both connectors are presented here.
@@ -12,9 +14,9 @@ Stop each Liferay DXP server node before completing these steps.
 
 Redundant note above
 
-### Liferay DXP/CE 7.2: Install the Liferay Connector to Elasticsearch 7
+### Liferay CE/DXP 7.2: Install the Liferay Connector to Elasticsearch 7
 
-On Liferay DXP 7.2, the bundled connector application and APIs are for Elasticsearch 6 and must be disabled to install the connector for Elasticsearch 7. Create a file called
+On Liferay CE/DXP 7.2, the bundled connector application and APIs are for Elasticsearch 6 and must be disabled to install the connector for Elasticsearch 7. Create a file called
 
 ```
 com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config
@@ -32,17 +34,17 @@ blacklistBundleSymbolicNames=[ \
 ]
 ```
 
-Place it in `[Liferay Home]/osgi/configs`. When Liferay DXP is started (not yet) this file is read and the bundles declared will not be started.
+Place it in `[Liferay Home]/osgi/configs`. When Liferay CE/DXP is started (not yet) this file is read and the bundles declared will not be started.
 
 ```tip::
    **Docker:** `Liferay Home` and other important folders of a Liferay DXP installation are accessed in a Docker container at `/mnt/liferay` as described `here <../../../installation-and-upgrades/installing-liferay/using-liferay-dxp-docker-images/dxp-container-lifecycle-and-api.md#api>`__. You can use ``docker cp /path/to/local/file [container_name]:/mnt/liferay/files/osgi/configs`` to place configuration files into the container. A similar command can be used to deploy the Liferay Connector to Elasticsearch 7 LPKG file.
 ```
 
-With Liferay DXP 7.3, the latest Liferay Connector to Elasticsearch 7 is bundled. If you're running Liferay DXP 7.2 SP1+, you can download and install the latest connector application from Marketplace, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6.
+With Liferay CE/DXP 7.3, the latest Liferay Connector to Elasticsearch 7 is bundled. If you're running Liferay DXP 7.2 SP1+, you can download and install the latest connector application from Marketplace, which includes Elasticsearch 7 APIs corresponding to the ones you uninstalled for Elasticsearch 6.
 
 1. Download the Liferay Connector to Elasticsearch 7.
 
-   Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.7.1). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
+   Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.7.x). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
 
    - CE: [Liferay CE Connector to Elasticsearch](https://web.liferay.com/en/marketplace/-/mp/application/170642090)
    - DXP: [Liferay Connector to Elasticsearch](https://web.liferay.com/en/marketplace/-/mp/application/170390307)
@@ -138,9 +140,17 @@ Start Liferay CE/DXP. Once it's running, verify that the Elasticsearch connectio
 
 ![An active connection is displayed in the Search administrative panel.](./getting-started-with-elasticsearch/images/01.png)
 
-Reindex your search and spell check indexes. Both reindex actions are carried out from the Index Actions tab of Control Panel &rarr; Configuration &rarr; Search.
+Re-index your search and spell check indexes. Both of these re-index actions are carried out from the Index Actions tab of Control Panel &rarr; Configuration &rarr; Search.
 
-Now the configuring and searching fun can really begin.
+Re-index the [Workflow Metrics](../../../process-automation/workflow/user-guide/using-workflow-metrics.md) indexes from the Workflow Metrics Settings window: 
+
+1. From the Applications Menu ([Applications Menu](../../../images/icon-applications-menu.png)) navigate to Applications &rarr; Workflow Metrics. 
+
+2. Open the _Settings_ window from the App Options menu ([](../../../images/icon-app-options.png)).
+
+3. Click _Reindex All_.
+
+Now Liferay CE/DXP is indexing its content into a remote Elasticsearch 7 installation.
 
 ## Related Topics
 
