@@ -1,14 +1,13 @@
 Elasticsearch
 =============
 
-Elasticsearch, a highly scalable, full-text search engine, is the default search engine used by Liferay DXP. Elasticsearch almost certainly meets any search and indexing need you have, but you must not use the `built-in version in your production deployment <./elasticsearch/using-the-built-in-elasticsearch.md>`__. 
+Elasticsearch, a highly scalable, full-text search engine, is the default search engine used by Liferay DXP. Elasticsearch almost certainly meets any search and indexing need you have, but you must not use the `built-in version in your production deployment <./elasticsearch/using-the-sidecar-or-embedded-elasticsearch.md>`__. 
+
+Always consult the `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ to learn which versions of Elasticsearch are supported for your version of Liferay DXP.
 
 .. important::
-   Always consult the `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ to learn which versions of Elasticsearch are supported for your version of Liferay DXP.
 
-.. figure:: ./elasticsearch/images/01.png
-    :alt: A green Elasticsearch connection
-    :figclass: align-center
+   Liferay CE/DXP 7.2 and 7.3 support for Elasticsearch 7 is included out of the box, including support for securing the Elasticsearch connection with authentication and encryption. Securing the Elasticsearch 6 connector (available on Liferay CE/DXP 7.2) requires an additional module only available with a `Liferay Enterprise Search subscription <./../liferay_enterprise_search.rst>`__
 
 Installing
 ~~~~~~~~~~
@@ -56,4 +55,4 @@ Coming Soon!
    elasticsearch/connecting-to-elasticsearch.md
    elasticsearch/troubleshooting-elasticsearch-installation.md
    elasticsearch/exercise-installing-elasticsearch.md
-   elasticsearch/using-the-built-in-elasticsearch.md
+   elasticsearch/using-the-sidecar-or-embedded-elasticsearch.md

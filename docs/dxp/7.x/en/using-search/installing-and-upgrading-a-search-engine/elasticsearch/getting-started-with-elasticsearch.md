@@ -1,9 +1,7 @@
 # Getting Started with Elasticsearch
 
-> Latest Supported Elasticsearch Version: 7.7 \
-> Available:
-> - Liferay DXP 7.2 SP1+
-> - Liferay CE/DXP 7.3
+> Latest Supported Elasticsearch Version: 7.9 \
+> Available: Liferay DXP 7.2 SP1+ and Liferay CE/DXP 7.3
 
 You should always install the latest [supported version](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix) of Elasticsearch for Liferay DXP, with the corresponding Liferay Connector to Elasticsearch. A connector application is installed by default on all Liferay DXP installations, but it's not necessarily the newest connector. For example, the bundled connector on Liferay CE/DXP 7.2 is for Elasticsearch 6. To install Elasticsearch 7 on Liferay CE/DXP 7.2, you must install a new connector from Liferay Marketplace.
 

@@ -2,9 +2,9 @@
 
 A search engine is a critical component of your Liferay DXP installation. The [creating an example cluster](./../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/example-creating-a-simple-dxp-cluster.md#prepare-a-search-engine) documentation can get you started with the installation, but this section will cover more of the details (though at a high level) you need for setting up a production system.
 
-<!-- MAKE A DIAGRAM SIMILAR TO THe CCR ONE BUT WITH JUST ONE CONNECTION -->
+<!-- MAKE A DIAGRAM SIMILAR TO THE CCR ONE BUT WITH JUST ONE CONNECTION -->
 
-When you start Liferay DXP a built-in Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/getting-started-with-elasticsearch.md) instructions for more details, and [Using the Built-In Elasticsearch](./elasticsearch/using-the-built-in-elasticsearch.md) for the features and limitations of the default search engine.
+When you start Liferay DXP a built-in Elasticsearch server is simultaneously started. This default search engine makes local testing convenient since lots of Liferay DXP's functionality depends on a search engine, but it isn't supported for use in production environments. See the [Installing Elasticsearch](./elasticsearch/getting-started-with-elasticsearch.md) instructions for more details, and [Using the Sidecar or Embedded Elasticsearch](./elasticsearch/using-the-sidecar-or-embedded-elasticsearch.md) for the features and limitations of the default search engine.
 <!-- Is this the place to introduce sidecar which will replace embedded in GA4? -->
 
 ```note::

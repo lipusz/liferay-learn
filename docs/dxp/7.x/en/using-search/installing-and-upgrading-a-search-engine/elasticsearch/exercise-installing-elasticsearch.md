@@ -19,10 +19,10 @@ mkdir -p test-es-install/dxp/files/osgi/configs && mkdir -p test-es-install/elas
 ```
 ## Install Elasticsearch
 
-1. Configure and start an Elasticsearch 7.7.1 container named `elasticsearch771`:
+1. Configure and start an Elasticsearch 7.9.0 container named `elasticsearch771`:
 
    ```bash
-   docker run -it --name elasticsearch771 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "node.name=es-node1" -v $(pwd)/elasticsearch:/usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+   docker run -it --name elasticsearch771 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "node.name=es-node1" -v $(pwd)/elasticsearch:/usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:7.9.0
    ```
 
 1. Install the required Elasticsearch plugins. Use `docker exec -it` to access an interactive bash shell:

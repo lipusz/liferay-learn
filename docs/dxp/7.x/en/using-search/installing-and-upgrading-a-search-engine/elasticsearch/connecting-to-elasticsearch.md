@@ -44,7 +44,7 @@ With Liferay CE/DXP 7.3, the latest Liferay Connector to Elasticsearch 7 is bund
 
 1. Download the Liferay Connector to Elasticsearch 7.
 
-   Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.7.x). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
+   Make sure the connector you download corresponds to your Elasticsearch version. Note that the client libraries in the connector can be for an older version of Elasticsearch (e.g., 7.3) even though the Connector application supports a newer version (e.g., 7.9.x). Testing is done with the connector when a new minor version of Elasticsearch is released to ensure no updates to the client are required. As always, consult the [Compatibility Matrix](https://help.liferay.com/hc/sections/360002103292-Compatibility-Matrix).
 
    - CE: [Liferay CE Connector to Elasticsearch](https://web.liferay.com/en/marketplace/-/mp/application/170642090)
    - DXP: [Liferay Connector to Elasticsearch](https://web.liferay.com/en/marketplace/-/mp/application/170390307)
@@ -87,9 +87,19 @@ Alternatively, make the same configurations from the user interface: in the Appl
 
 #### Configuring the Connector for 7.3
 
-A simple configuration of the 7.3 connector enables production mode, sets the URL to each Elasticsearch node in the network host addresses property, and identifies the connection you're configuring. The properties in the configuration file might look like this:
+A simple configuration of the 7.3 connector enables production mode, sets the URL to each Elasticsearch node in the network host addresses property, and identifies the connection you're configuring.
+
+
+Create the following file in `[Liferay Home]/osgi/configs`:
+
+```bash
+com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
+```
+
+The properties in the configuration file might look like this:
 
 ```properties
+# In CE/DXP7.3, productionModeEnabled replaces operationMode (deprecated):
 productionModeEnabled="true"
 networkHostAddresses=["http://es-node1:9200","http://es-node3:9200","http://es-node3:9200"]
 remoteClusterConnectionId="remote"

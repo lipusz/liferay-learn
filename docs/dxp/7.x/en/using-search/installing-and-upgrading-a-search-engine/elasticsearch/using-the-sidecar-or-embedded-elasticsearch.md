@@ -1,4 +1,4 @@
-# Using the Built-In Elasticsearch
+# Using the Sidecar or Embedded Elasticsearch
 
 If you obtained Liferay DXP by downloading a Tomcat bundle or pulling a Docker tag, an Elasticsearch node is started with DXP as either an embedded or sidecar server. To confirm,
 
@@ -78,5 +78,5 @@ Installation instructions for Liferay DXP 7.3 on the [WebSphere](../../../instal
 | ------------------ | ----------------- |
 | Runs at <http://localhost:9200> | Runs at <http://localhost:9201> |
 | Pre-Installed on all Liferay DXP distributions  | Not Always Pre-Installed  |
-| Data stored in `[Liferay Home]/data`     | Data stored in `[Liferay Home]` root |
-
+| Not supported for production  | Not supported for production |
+| No special steps required for any app server | [Some app servers](#app-server-differences) require additional steps |

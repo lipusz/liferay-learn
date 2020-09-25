@@ -7,7 +7,7 @@ Once your [system is ready](./getting-started-with-elasticsearch.md), install an
 1. Obtain Elasticsearch. See [Elastic's](https://www.elastic.co) website for a local download or [pull a docker image](https://www.docker.elastic.co/):
 
    ```bash
-   docker pull docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+   docker pull docker.elastic.co/elasticsearch/elasticsearch:7.9.0
    ```
 
 1. If you downloaded Elasticsearch directly, install it by extracting its archive to the system where you want it to run.
@@ -99,7 +99,7 @@ To configure an Elasticsearch cluster of Docker containers, the `docker-compose.
 version: '2.2'
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
     container_name: es01
     environment:
       - node.name=es01
@@ -151,7 +151,7 @@ docker-compose up
 A single-node test cluster can be started and configured at the same time within the `docker run` command:
 
 ```bash
-docker run -p 9200:9200 -p 9300:9300 -e "cluster.name=LiferayElasticsearchCluster" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+docker run -p 9200:9200 -p 9300:9300 -e "cluster.name=LiferayElasticsearchCluster" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.9.0
    ```
 
 Elasticsearch starts, and one of its status messages includes a transport address: 
