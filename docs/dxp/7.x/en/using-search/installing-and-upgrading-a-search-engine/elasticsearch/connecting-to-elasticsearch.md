@@ -1,4 +1,4 @@
-## Connecting to Elasticsearch
+# Connecting to Elasticsearch
 
 <!-- TODO: Add Security -->
 
@@ -14,7 +14,7 @@ Stop each Liferay CE/DXP server node before completing these steps.
 
 Redundant note above
 
-### Liferay CE/DXP 7.2: Install the Liferay Connector to Elasticsearch 7
+## Liferay CE/DXP 7.2: Install the Liferay Connector to Elasticsearch 7
 
 On Liferay CE/DXP 7.2, the bundled connector application and APIs are for Elasticsearch 6 and must be disabled to install the connector for Elasticsearch 7. Create a file called
 
@@ -65,7 +65,7 @@ With Liferay CE/DXP 7.3, the latest Liferay Connector to Elasticsearch 7 is bund
 
 Now the connector must be configured to connect to the remote Elasticsearch 7 node(s).
 
-### Configuring the Connector
+## Configuring the Connector
 
 The Elasticsearch 7 connector is configured via a configuration file named
 
@@ -85,7 +85,7 @@ Alternatively, make the same configurations from the user interface: in the Appl
 
 > Liferay CE/DXP 7.2: The Control Panel is in the Product Menu (![Product Menu](../../../images/icon-product-menu.png)).
 
-#### Configuring the Connector for 7.3
+### Configuring the Connector for 7.3
 
 A simple configuration of the 7.3 connector enables production mode, sets the URL to each Elasticsearch node in the network host addresses property, and identifies the connection you're configuring.
 
@@ -133,7 +133,7 @@ Using a Remote Cluster Connection Id value different than "remote" will require 
    link to reference docs when written
 -->
 
-#### Configuring the Connector for 7.2
+### Configuring the Connector for 7.2
 
 A simple configuration of the 7.2 connector enables REMOTE operation mode, sets the transport address for each Elasticsearch node, and identifies the connection you're configuring:
 
@@ -144,7 +144,7 @@ transportAddresses="ip.of.elasticsearch.node:9300"
 #logExceptionsOnly="false"
 ```
 
-#### Checkpoint: Start Liferay CE/DXP and Re-Index
+### Checkpoint: Start Liferay CE/DXP and Re-Index
 
 Start Liferay CE/DXP. Once it's running, verify that the Elasticsearch connection is active in Control Panel &rarr; Configuration &rarr; Search.
 
@@ -154,18 +154,29 @@ Re-index your search and spell check indexes. Both of these re-index actions are
 
 Re-index the [Workflow Metrics](../../../process-automation/workflow/user-guide/using-workflow-metrics.md) indexes from the Workflow Metrics Settings window: 
 
-1. From the Applications Menu ([Applications Menu](../../../images/icon-applications-menu.png)) navigate to Applications &rarr; Workflow Metrics. 
+1. From the Applications Menu (![Applications Menu](../../../images/icon-applications-menu.png)) navigate to Applications &rarr; Workflow Metrics. 
 
-2. Open the _Settings_ window from the App Options menu ([](../../../images/icon-app-options.png)).
+2. Open the _Settings_ window from the App Options menu (![App Options](../../../images/icon-app-options.png)).
 
 3. Click _Reindex All_.
 
 Now Liferay CE/DXP is indexing its content into a remote Elasticsearch 7 installation.
 
+## Available Liferay Connector Applications
+
+The bundled connector to Elasticsearch is not always the best choice for your installation. It's important to understand the differences between the connectors you can use to communicate with Elasticsearch:
+
+| Liferay CE/DXP Version | Name | Availability | Communication Protocol | Supports Secure Connection | Elasticsearch Version | Operation Modes |
+| ---------------------- | ---- | ------------ | ---------------------- | -------------------------- | ---------------------- | --------------- |
+| CE 7.3 GA4+ <br /><br /> DXP 7.3 GA1+ | Liferay Connector to Elasticsearch 7 | Bundled | [HTTP](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/java-rest-overview.html) | &#10004; | 7.9+ | Sidecar <br /> Remote |
+| 7.2, all patch levels  | Liferay Connector to Elasticsearch 6 | Bundled | [Transport](https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html) | &#10004; (requires [LES](https://www.liferay.com/products/dxp/enterprise-search)) | 6.1.x-6.8.x | Embedded <br /> Remote |
+| DXP 7.2 SP3/FP8+ | Liferay Connector to Elasticsearch 7 (3.1.0) | [Marketplace](https://web.liferay.com/marketplace/-/mp/application/170390307) | [Transport](https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html) | &#10004; | 7.3.x -7.9.x | Embedded <br /> Remote |
+| CE 7.2 GA2+ | Liferay CE Connector to Elasticsearch 7 (3.0.0) | [Marketplace](https://web.liferay.com/marketplace/-/mp/application/170642090) | [Transport](https://www.elastic.co/guide/en/elasticsearch/client/java-api/7.x/transport-client.html) | &#10004; | 7.3.x -7.6.x | Embedded <br /> Remote |
+
 ## Related Topics
 
-[Liferay Enterprise Search](../../liferay_enterprise_search.rst)
-[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md)
-[Administering and Tuning Search](../../search_administration_and_tuning.rst)
+[Liferay Enterprise Search](../../liferay_enterprise_search.rst) \
+[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md) \
+[Administering and Tuning Search](../../search_administration_and_tuning.rst) \
 [Search Configuration Reference Guide](../../search-configuration-reference.md)
 
