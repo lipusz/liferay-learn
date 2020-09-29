@@ -27,17 +27,17 @@ You'll see information like this:
 }
 ```
 
-<!-- nope, not sidecar from what i am hearing -->
-Liferay DXP runs an Elasticsearch node in the same JVM so it's easy to test-drive with minimal configuration. Running both servers in the same process has drawbacks:
-
-- Elasticsearch must use the same JVM options as Liferay DXP.
-- Liferay DXP and Elasticsearch compete for the same system resources. 
+Liferay DXP starts with an embedded (Liferay DXP 7.2) or sidecar (Liferay DXP 7.3) Elasticsearch node. While convenient for development and testing, neither is suitable for proiduction.
 
 ```note::
    While it's not a supported production configuration, installing Kibana to monitor the embedded Elasticsearch server is useful during development and testing. Just be aware that you must install the `OSS only Kibana build <https://www.elastic.co/downloads/kibana-oss>`__.
 ```
 
 You wouldn't run an embedded database like HSQL in production, and you shouldn't run Elasticsearch in embedded mode in production either. Instead, run Elasticsearch in [_remote operation mode_](./getting-started-with-elasticsearch.md), as a standalone server or cluster of server nodes.
+
+```important::
+   Synonym Sets and Result Rankings are applications that use the search index for primary data storage. No data is stored in the Liferay DXP database. Therefore, if you have Synonym Sets or Result Rankings configured while sidecar or embedded mode are in use, switching to remote mode and reindexing will `not` restore those confiugurations. Instead you must manually bring the Synonym Sets and Result Rankings into the remote cluster. See the `Upgrade Guide <../upgrading_elasticsearch.rst>`__ for details on using Elastic's `Snapshot and Restore <>https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshot-restore.html`__ feature to preserve these indexes.
+```
 
 ## How to Use the Default Elasticsearch
 
