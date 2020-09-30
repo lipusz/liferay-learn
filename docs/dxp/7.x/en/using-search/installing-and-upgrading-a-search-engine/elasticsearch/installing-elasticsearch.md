@@ -26,13 +26,65 @@ Once your [system is ready](./getting-started-with-elasticsearch.md), install an
    ```bash
    docker exec -it [container-name] bash -c '/usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-icu && /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji && /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-smartcn && /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-stempel'
    ```
+
+1. Generate the certificates and keys needed to securely connect to Elasticsearch. Using the [elasticsearch-util](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/certutil.html) command simplifies the process.
+
+   If you'll be running a Docker container, follow Elastic's [Encrypting communications in an Elasticsearch Docker Container](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/configuring-tls-docker.html).
+<!-- not about cert format here; pem needed for kibana -->
+<!-- provide the commands here too-->
+
 ## Configure Elasticsearch
 
-To configure an Elasticsearch cluster of Docker containers, use a [`docker-compose.yml` file](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docker.html#docker-compose-file). A local installation is configured via the `Elasticsearch Home/config/elasticsearch.yml` file.
+The Elasticsearch configuration is an important step in setting up Elasticsearch for Liferay DXP. Before configuring anything, consider these important points:
 
-```tip::
-   **Docker:** For a simple single-node test cluster, you can specify the cluster name (and any other configuration options) when first creating and starting the container (see below for an example ``docker run ...`` directive).
+- Security (authentication and encryption of the Elasticsearch communication between nodes, and to clients) should always be enabled in production.
+- PEM certificates are required if you also want to use Kibana with Liferay DXP and Elasticsearch.
+<!-- Anything else to point out here? -->
+
+### An Example On-Premise Configuration File
+
+An on-premise Elasticsearch cluster is primarily configured in the `Elasticsearch Home/config/elasticsearch.yml` files of each node.  
+
+The `elasticsearch.yml` for a node `es-node3` that's part of a three-node cluster called `LiferayElasticsearchCluster` might have these settings:
+
+```yaml
+cluster.name: LiferayElasticsearchCluster
+
+# X-Pack Security
+xpack.security.enabled: true
+
+## TLS/SSL settings for Transport layer
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.key: certs/elastic-certificates.key
+xpack.security.transport.ssl.certificate: certs/elastic-certificates.crt
+xpack.security.transport.ssl.certificate_authorities : ["certs/ca.crt"]
+
+# TLS/SSL settings for HTTP layer
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.verification_mode: certificate
+xpack.security.http.ssl.key: certs/elastic-certificates.key
+xpack.security.http.ssl.certificate: certs/elastic-certificates.crt
+xpack.security.http.ssl.certificate_authorities : ["certs/ca.crt"]
+
+# Remote prod
+cluster.initial_master_nodes:
+  - es-node1
+  - es-node2
+  - es-node3
+discovery.seed_hosts:
+  - es-node1:9300
+  - es-node2:9301
+  - es-node3:9302
+http.port: 9202
+network.host: es-node3
+node.name: es-node3
+transport.port: 9302
 ```
+
+> **Related Elasticsearch Documentation:** 
+> - [Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/important-settings.html)
+> - [Security settings in Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/security-settings.html)
 
 These properties should have unique values for each node in the cluster:
 
@@ -41,7 +93,7 @@ These properties should have unique values for each node in the cluster:
 - `network.host`
 - `transport.port`
 
-For example, `es-node1` might have these settings:
+For example, the first node, `es-node1` might have these settings:
 
 ```yaml
 node.name: es-node1
@@ -51,26 +103,7 @@ http.port: 9200
 network.host: es-node1
 # The transport port you configure is used for discovery
 transport.port: 9300
-```
-
-Depending on your system's design, every node in the Elasticsearch cluster might have identical values for these settings:
-
-- `cluster.initial_master_nodes`
-- `discovery.zen.minimum_master_nodes`
-- `discovery.seed_hosts`
-
-For example, each node of a 3-node cluster might have these settings in the `[Elasticsearch Home]/config/elasticsearch.yml` or the `docker-compose.yml`:
-
-```yaml
-cluster.initial_master_nodes:
-  - es-node1
-  - es-node2
-  - es-node3
-discovery.zen.minimum_master_nodes: 2
-discovery.seed_hosts:
-  - es-node1:9300
-  - es-node2:9301
-  - es-node3:9302
+...
 ```
 
 The `elasticsearch.yml` configuration is simpler for a single-node cluster:
@@ -86,14 +119,32 @@ node.name: es-node1
 transport.port: 9300
 ```
 
-However, make sure you [force the bootstrap checks](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/bootstrap-checks.html#_forcing_the_bootstrap_checks) if you're running a single-node production server by setting a property at the end of `ES_HOME/config/jvm.options`:
+This is a fine configuration for development and testing that relies on a remote Elasticsearch server. For production, you should [force the bootstrap checks](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/bootstrap-checks.html#_forcing_the_bootstrap_checks) and always configure security (authentication and encryption).
+
+To force the bootstrap check, add a property to the end of `ES_HOME/config/jvm.options`:
 
 ```properties
 # For a single node production cluster
 -Des.enforce.bootstrap.checks=true
 ```
+### Configuring Elasticsearch for Docker
 
-To configure an Elasticsearch cluster of Docker containers, the `docker-compose.yml` will contain `services` entries for each node and some common `volume` and `network` properties:
+To configure an Elasticsearch cluster of Docker containers, use these files:
+
+- `instances.yml`
+- `.env`
+- `docker-compose.yml`
+- `create-certs.yml`
+
+> **Related Elasticsearch Documentation:** 
+> [Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docker.html)
+> [Encrypt Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/configuring-tls-docker.html)
+
+```tip::
+   **Docker:** For a simple single-node test cluster, you can specify the cluster name (and any other configuration options) when first creating and starting the container (see `Start Elasticsearch`_ for an example ``docker run ...`` directive).
+```
+
+The `docker-compose.yml` will contain `services` entries for each node and some common `volume` and `network` properties:
 
 ```yaml
 version: '2.2'
@@ -108,6 +159,7 @@ services:
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      # include any additional settings, like ssl and http security
     ulimits:
       memlock:
         soft: -1
@@ -133,6 +185,7 @@ networks:
   elastic:
     driver: bridge
 ```
+<!-- add security settings-->
 
 ## Start Elasticsearch
 
