@@ -87,7 +87,7 @@ Alternatively, make the same configurations from the user interface: in the Appl
 
 ### Configuring the Connector for 7.3
 
-A simple configuration of the 7.3 connector enables production mode, sets the URL to each Elasticsearch node in the network host addresses property, and identifies the connection you're configuring.
+A simple configuration of the 7.3 connector enables production mode (`productionModeEnabled="true"`), sets the URL to each Elasticsearch node (`networkHostAddresses=["es-node:9200"]`), and identifies the connection you're configuring (`remoteClusterConnectionId="remote"`).
 
 
 Create the following file in `[Liferay Home]/osgi/configs`:
@@ -96,19 +96,32 @@ Create the following file in `[Liferay Home]/osgi/configs`:
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
 ```
 
-The properties in the configuration file might look like this:
+The properties in the configuration file might look like this, including the important configuration for securing the connection:
 
 ```properties
 # In CE/DXP7.3, productionModeEnabled replaces operationMode (deprecated):
 productionModeEnabled="true"
 networkHostAddresses=["http://es-node1:9200","http://es-node3:9200","http://es-node3:9200"]
 remoteClusterConnectionId="remote"
+# In CE/DXP 7.3 the HTTP security settings are included in the ElasticsearchConfiguration
+# In CE/DXP 7.2 the Transport security settings go in com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.comfig
+# authentication
+authenticationEnabled="true"
+username="elastic"
+password="liferay"
+
+# TLS/SSL
+httpSSLEnabled="true"
+truststoreType="pkcs12"
+trustStorePath="/PATH/TO/truststore.p12"
+trustStorePassword="secret"
+
 # Highly recommended for all non-prodcution usage (e.g., practice, tests, diagnostics):
 #logExceptionsOnly="false"
 ```
 
 ```tip::
-   The connectors contain a lot of configuration settings. See the `Configuration Reference <./../../configuration-reference.md>`__ for definitions. Most of the configurations correspond to settings available in `Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/index.html>`__ itself.
+   The connectors contain a lot more configuration settings than those invluded above. See the `Configuration Reference <./../../configuration-reference.md>`__ for definitions. Most of the configurations correspond to settings available in `Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/index.html>`__ itself.
 ```
 
 Using a Remote Cluster Connection Id value different than "remote" will require you to add a connection via the `ElasticsearchConnectionsConfiguration` entry.
@@ -118,36 +131,42 @@ Using a Remote Cluster Connection Id value different than "remote" will require 
   The network host address format is ``http[s]://[hostname]:[port]``. If using a Docker container, the hostname was mapped to the Elasticsearch container's IP address, declared in the DXP container's ``/etc/hosts`` file. Sometimes this is done as part of the DXP container's ``docker run ...`` command, using the ``--add-host`` option. The port was defined in the Elasticsearch container's docker run command as the first value of the ``-p 1234:5678`` option (it's ``1234`` in that case). If running a local test environment without HTTPS enabled, all the addresses can be ``http://localhost:port``.
 ```
 
-<!-- obsolete?
-1. Create a configuration file to turn on REMOTE mode and point at your newly configured connection: 
-
-   ```bash
-   [Liferay Home]/osgi/configs/com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
-   ```
-
-   Declared the operation mode and the connection ID to use:
-
-   ```properties
-   operationMode="REMOTE"
-   remoteClusterConnectionId="remote"
-   ```
--->
-
-<!--
-   default to security https:// 
-   link to reference docs when written
--->
-
 ### Configuring the Connector for 7.2
 
 A simple configuration of the 7.2 connector enables REMOTE operation mode, sets the transport address for each Elasticsearch node, and identifies the connection you're configuring:
 
 ```properties
+# com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
 operationMode="REMOTE"
 transportAddresses="ip.of.elasticsearch.node:9300"
 # Highly recommended for all non-prodcution usage (e.g., practice, tests, diagnostics):
 #logExceptionsOnly="false"
 ```
+
+A production cluster should provide security configurations that correspond to those configured in [Elasticsearch](./installing-elasticsearch.md) itself:
+
+```properties
+#com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config
+# authentication
+requiresAuthentication="true"
+username="elastic"
+password="liferay"
+# TLS/SSL
+sslKeyPath="/PATH/TO/elastic-certificates.key"
+sslCertificatePath="/PATH/TO/elastic-certificates.crt"
+certificateFormat="PEM"
+sslCertificateAuthoritiesPaths="/PATH/TO/ca.crt"
+transportSSLVerificationMode="certificate"
+transportSSLEnabled="true"
+```
+
+Add these settings to a file named 
+
+```bash
+com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config
+```
+
+Place it in `[Liferay Home]/osgi/configs`.
 
 ### Start Liferay CE/DXP and Re-Index
 
