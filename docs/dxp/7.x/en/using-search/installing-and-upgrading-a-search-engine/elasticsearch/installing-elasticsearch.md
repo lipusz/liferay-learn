@@ -137,8 +137,8 @@ To configure an Elasticsearch cluster of Docker containers, use these files:
 - `create-certs.yml`
 
 > **Related Elasticsearch Documentation:** 
-> [Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docker.html)
-> [Encrypt Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/configuring-tls-docker.html)
+> - [Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docker.html)
+> - [Encrypt Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/configuring-tls-docker.html)
 
 ```tip::
    **Docker:** For a simple single-node test cluster, you can specify the cluster name (and any other configuration options) when first creating and starting the container (see `Start Elasticsearch`_ for an example ``docker run ...`` directive).
@@ -219,7 +219,7 @@ Once Elasticsearch is up and running, [connect it to Liferay DXP](./connecting-t
 
 ## Related Topics
 
-[Liferay Enterprise Search](../../liferay_enterprise_search.rst)
-[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md)
-[Administering and Tuning Search](../../search_administration_and_tuning.rst)
-[Search Configuration Reference Guide](../../search-configuration-reference.md)
+[Liferay Enterprise Search](../../liferay_enterprise_search.rst) \
+[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md) \
+[Administering and Tuning Search](../../search_administration_and_tuning.rst) \
+[Search Configuration Reference Guide](../../search-configuration-reference.md) \

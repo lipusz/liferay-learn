@@ -62,8 +62,8 @@ Once the prerequisites are satisfied, it's time to [Install Elasticsearch](./ins
 
 ## Related Topics
 
-[Liferay Enterprise Search](../../liferay_enterprise_search.rst)
-[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md)
-[Administering and Tuning Search](../../search_administration_and_tuning.rst)
+[Liferay Enterprise Search](../../liferay_enterprise_search.rst) \
+[Search Pages](../../search-pages-and-widgets/working-with-search-pages/search-pages.md) \
+[Administering and Tuning Search](../../search_administration_and_tuning.rst) \
 [Search Configuration Reference Guide](../../search-configuration-reference.md)
 
