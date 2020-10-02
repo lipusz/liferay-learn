@@ -33,9 +33,11 @@ If you're just trying this out and don't yet have the proper license, start an [
 POST /_license/start_trial?acknowledge=true
 ```
 
+<!--
 > On Elasticsearch 6, use
 > 
 > `POST _xpack/license/start_trial?acknowledge=true`
+-->
 
 You'll see a `- valid` message in your log when it installs successfully: 
 
@@ -52,6 +54,7 @@ Configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a conf
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
 ```
 
+<!--
 If using Elasticsearch 6, the configuration file is named
 
 ```bash
@@ -78,6 +81,7 @@ Though configuration values are propagated throughout the cluster, for transpare
 ```
 
 Soft deletes are enabled by default in Elasticsearch 7, but must be enabled manually for Elasticsearch 6 as described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
+-->
 
 Start the Liferay DXP server.
 

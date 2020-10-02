@@ -39,14 +39,14 @@ The default Liferay DXP indexes in your installation approximate the list below 
 | liferay-0                                     | System Index  | Searching in the System Settings application |
 | liferay-20101                                 | Company Index | Searching the indexed assets of the Liferay DXP Virtual Instance |
 | liferay-20101-search-tuning-rankings          | App Index     | Primary data storage for the Result Rankings application (per virtual instance as of Liferay DXP 7.3) |
-| liferay-search-tuning-synonyms-liferay-20101  | App Index     | Primary data storage for the Synonym Sets application for the given virtual instance |
-| workflow-metrics-instances-20101              | App Index     | Store data about Workflow Instances for the Workflow Metrics application |
-| workflow-metrics-nodes-20101                  | App Index     | Store data about Workflow Nodes for the Workflow Metrics application |
-| workflow-metrics-processes-20101              | App Index     | Store data about Workflow Processes for the Workflow Metrics application |
-| workflow-metrics-sla-instance-results-20101   | App Index     | Primary storage for SLA results per Workflow Instance for the Workflow Metrics application |
-| workflow-metrics-sla-task-results-20101       | App Index     | Primary storage for SLA results per Workflow Task for the Workflow Metrics application |
-| workflow-metrics-tokens-20101                 | App Index     | Store data about Workflow Tokens for the Workflow Metrics application |
-| your-custom-index-[companyId]                 | Custom Index  | Your own storage and searching needs |
+| liferay-20101-search-tuning-synonyms-liferay  | App Index     | Primary data storage for the Synonym Sets application for the given virtual instance |
+| liferay-20101-workflow-metrics-instances              | App Index     | Store data about Workflow Instances for the Workflow Metrics application |
+| liferay-20101-workflow-metrics-nodes                  | App Index     | Store data about Workflow Nodes for the Workflow Metrics application |
+| liferay-20101-workflow-metrics-processes              | App Index     | Store data about Workflow Processes for the Workflow Metrics application |
+| liferay-20101-workflow-metrics-sla-instance-results   | App Index     | Primary storage for SLA results per Workflow Instance for the Workflow Metrics application |
+| liferay-20101-workflow-metrics-sla-task-results       | App Index     | Primary storage for SLA results per Workflow Task for the Workflow Metrics application |
+| liferay-20101-workflow-metrics-tokens                 | App Index     | Store data about Workflow Tokens for the Workflow Metrics application |
+| liferay-20101-your-custom-index                 | Custom Index  | Your own storage and searching needs |
 
 ```note::
    Liferay DXP provides APIs for creating and using (writing to and reading from) Elasticsearch indexes that remain completely under your control. See the `Developer Guide <../../developer_guide.rst>`__ for information on using these APIs.
@@ -56,9 +56,7 @@ Unless your setup reveals a very compelling reason not to, you should replicate 
 
 ## Configure the Elasticsearch Clusters
 
-> **Elasticsearch 6 Only:** [Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for any indexes you want to replicate. This extra hurdle can be avoided by using Elasticsearch 7, as it enables soft deletes by default. If Elasticsearch 6 is not a hard requirement, you should [upgrade to Elasticsearch 7](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7) before configuring CCR. If you must use Elasticsearch 6, read [Configuring CCR: Enabling Soft Deletes on Elasticsearch 6](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to learn about manually enabling soft deletes.
-
-Set up the Elasticsearch clusters, using versions supported with Liferay DXP that also support Cross-Cluster Replications (Elasticsearch 6.7+ and 7.0+). See the [LES compatibility matrix](https://help.liferay.com/hc/en-us/articles/360016511651-Liferay-Enterprise-Search-Compatibility-Matrix) for details.
+Set up the Elasticsearch clusters, using versions supported with Liferay DXP that also support Cross-Cluster Replications. See the [LES compatibility matrix](https://help.liferay.com/hc/en-us/articles/360016511651-Liferay-Enterprise-Search-Compatibility-Matrix) for details.
 
 Make sure you Install the Elasticsearch [plugins Liferay DXP needs](https://help.liferay.com/hc/en-us/articles/360028711132-Installing-Elasticsearch#step-three-install-elasticsearch-plugins) and [provide cluster names](https://help.liferay.com/hc/en-us/articles/360028711132-Installing-Elasticsearch#step-four-name-your-elasticsearch-cluster) to differentiate your follower and leader clusters.
 

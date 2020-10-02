@@ -14,6 +14,7 @@ The configurations below assume you enable encrypted communications (TLS/SSL) an
 
 These configuration files are deployed to `[Remote Liferay Home]/osgi/configs`.
 
+<!--
 ### Remote DXP Cluster Node Configurations for Elasticsearch 6
 
 File name: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
@@ -43,8 +44,11 @@ sslCertificateAuthoritiesPaths="/PATH/TO/ES_LEADER_1/config/certs/ca.crt"
 transportSSLVerificationMode="certificate"
 transportSSLEnabled=B"true"
 ```
+-->
 
 ### Remote DXP Cluster Node Configurations for Elasticsearch 7
+
+The bundle blacklist configuration is not required on Liferay DXP 7.3.
 
 File name: `com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config`
 
@@ -55,7 +59,7 @@ blacklistBundleSymbolicNames=[ \
 	"com.liferay.portal.search.elasticsearch6.impl", \
 	"com.liferay.portal.search.elasticsearch6.spi", \
 	"com.liferay.portal.search.elasticsearch6.xpack.security.impl", \
-	"Liferay Connector to X-Pack Security [Elastic Stack 6.x] - Impl" \
+	"Liferay Enterprise Search Security - Impl" \
 ]
 ```
 
@@ -68,6 +72,8 @@ clusterName="LiferayElasticsearchCluster_LEADER"
 operationMode="REMOTE"
 logExceptionsOnly=B"false"
 ```
+
+The X-Pack security configuration file is not required on Liferay DXP 7.3. Security is configured in the `ElasticsearchConfiguration.config` (for the remote/leader connection) and in each local/follower connection's configuration file.
 
 File name: `com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config`
 
@@ -90,6 +96,7 @@ transportSSLEnabled=B"true"
 
 Location: `[Liferay Home]/osgi/configs`
 
+<!--
 ### Local DXP Cluster Node Configurations for Elasticsearch 6
 
 File name: `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config`
@@ -106,6 +113,7 @@ logExceptionsOnly=B"false"
 File name: `com.liferay.portal.search.elasticsearch6.xpack.security.internal.configuration.XPackSecurityConfiguration.config`
 
 File contents: Identical to the remote DXP cluster node.
+-->
 
 ### Local DXP Cluster Node Configurations for Elasticsearch 7
 
