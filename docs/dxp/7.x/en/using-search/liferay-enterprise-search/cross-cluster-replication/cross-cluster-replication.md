@@ -32,7 +32,7 @@ If configuring Liferay DXP cluster nodes to read and write from the same Elastic
 
 ##  Liferay DXP: Decide Which Indexes to Replicate from the Remote Cluster
 
-The default Liferay DXP indexes in your installation approximate the list below (subject to change):
+The default Liferay DXP 7.3 indexes in your installation approximate the list below (subject to change):
 
 | Index ID                                      | Index Type    | Index Purpose |
 | --------------------------------------------- | ------------- | ------------- |
@@ -82,6 +82,7 @@ From the local cluster containing the follower indexes, declare the cluster that
 
 - Call the `/_cluster/settings` [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/cluster-update-settings.html) to define the cluster that acts as the remote cluster containing leader indexes.
 
+<!-- Not after LPS-109204 -->
 ## Replicate the Leader Indexes
 
 Perform the initial index replication from the leader into the follower: 

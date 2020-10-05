@@ -54,6 +54,13 @@ Configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a conf
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
 ```
 
+Give it these contents:
+
+```properties
+clusterName="LiferayElasticsearchCluster_LEADER"
+operationMode="REMOTE"
+transportAddresses=["localhost:9300"]
+```
 <!--
 If using Elasticsearch 6, the configuration file is named
 
@@ -71,6 +78,7 @@ transportAddresses=["localhost:9300"]
 # Uncomment the below setting for Elasticsearch 6:
 # additionalIndexConfigurations="index.soft_deletes.enabled: true"
 ```
+-->
 
 > If configuring security, you'll also need a `XPackConfiguration.config` file. See the [configuration reference](./ccr-basic-use-case-config-reference.md) for the details.
 
@@ -80,6 +88,7 @@ Though configuration values are propagated throughout the cluster, for transpare
    During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration files as well.
 ```
 
+<!--
 Soft deletes are enabled by default in Elasticsearch 7, but must be enabled manually for Elasticsearch 6 as described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
 -->
 

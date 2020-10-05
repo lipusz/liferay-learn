@@ -193,16 +193,16 @@ Messages indicating that the shard has started and that the leader is being trac
 
 Repeat the above PUT call for all the indexes you see listed at Control Panel &rarr; Configuration &rarr; Search &rarr; Field Mappings. For example, these indexes are present in most systems:
 
-- liferay-0
-- liferay-20101
-- liferay-search-tuning-rankings
-- liferay-search-tuning-synonyms-liferay-20101
-- workflow-metrics-instances
-- workflow-metrics-nodes
-- workflow-metrics-processes
-- workflow-metrics-sla-instance-results
-- workflow-metrics-sla-task-results
-- workflow-metrics-tokens
+- liferay-0                                   
+- liferay-20101                               
+- liferay-20101-search-tuning-rankings        
+- liferay-20101-search-tuning-synonyms-liferay
+- liferay-20101-workflow-metrics-instances    
+- liferay-20101-workflow-metrics-nodes        
+- liferay-20101-workflow-metrics-processes    
+- liferay-20101-workflow-metrics-sla-instance-results
+- liferay-20101-workflow-metrics-sla-task-results
+- liferay-20101-workflow-metrics-tokens       
 
 > Checkpoint---Navigate to Management &rarr; Cross Cluster Replication in Kibana and you see something like this:
 

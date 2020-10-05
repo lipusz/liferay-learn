@@ -48,6 +48,7 @@ transportSSLEnabled=B"true"
 
 ### Remote DXP Cluster Node Configurations for Elasticsearch 7
 
+<!--
 The bundle blacklist configuration is not required on Liferay DXP 7.3.
 
 File name: `com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config`
@@ -62,6 +63,7 @@ blacklistBundleSymbolicNames=[ \
 	"Liferay Enterprise Search Security - Impl" \
 ]
 ```
+-->
 
 File name: `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config`
 
@@ -75,6 +77,7 @@ logExceptionsOnly=B"false"
 
 The X-Pack security configuration file is not required on Liferay DXP 7.3. Security is configured in the `ElasticsearchConfiguration.config` (for the remote/leader connection) and in each local/follower connection's configuration file.
 
+<!--
 File name: `com.liferay.portal.search.elasticsearch7.configuration.XPackSecurityConfiguration.config`
 
 
@@ -91,6 +94,7 @@ sslCertificateAuthoritiesPaths="/PATH/TO/ES_LEADER_1/config/certs/ca.crt"
 transportSSLVerificationMode="certificate"
 transportSSLEnabled=B"true"
 ```
+-->
 
 ## Local DXP Cluster Node Configurations
 

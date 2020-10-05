@@ -4,9 +4,11 @@
 
 Configure Liferay DXP's Cross-Cluster Replication module and Elasticsearch to set up a read-write connection from one Elasticsearch server to one Liferay DXP cluster node, and a read connection from another Elasticsearch server to a second Liferay DXP cluster node:
 
+<!-- 
 ```important::
    To use CCR, all of your DXP cluster nodes must be running Liferay DXP 7.2 Fix Pack 5+ / Service Pack 2+.
 ```
+-->
 
 ![With Cross-Cluster Replication, disparate data centers can hold synchronized Elasticsearch clusters with Liferay DXP indexes.](./configuring-an-example-ccr-installation-replicating-between-data-centers/images/01.png)
 
@@ -14,7 +16,7 @@ This example uses two single-node Elasticsearch clusters on `localhost`, each wi
 
 A vanilla Liferay DXP 7.2 installation contains the indexes presented in the introductory [Cross Cluster Replication](./cross-cluster-replication.md#liferay-dxp-decide-which-indexes-to-replicate-from-the-remote-cluster) article. All the Elasticsearch clusters being used by Liferay DXP (2 clusters in this example) need these indexes.
 
-The Elasticsearch API calls are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console, which can be accessed via a separate Kibana installation or through the [LES Monitoring (X-Pack Monitoring on Liferay DXP 7.2) widget](./monitoring-elasticsearch.md).
+The Elasticsearch API calls are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console, which can be accessed via a separate Kibana installation or through the [LES Monitoring widget](./monitoring-elasticsearch.md).
 
 ```note::
    To use Kibana, remember that you have multiple Elasticsearch clusters (two single-node clusters in this example) running. The ``elasticsearch.hosts: [ "http://localhost:<port>" ]`` setting in Kibana's ``kibana.yml`` file must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use ``9200`` while the follower node is using ``9201`` as HTTP port.
@@ -46,10 +48,11 @@ Make sure you install the Elasticsearch [plugins Liferay DXP needs](https://help
 
 If Elasticsearch 6 is not a hard requirement for your system, you should upgrade to Elasticsearch 7 before configuring CCR. 
 -->
-
+<!--
 ## Prerequisite for Liferay DXP 7.2: Install the Liferay Connector to Elasticsearch 7
 
 If you are using Elasticsearch 7 on Liferay DXP 7.2, you have to install the [Elasticsearch 7 connector](https://web.liferay.com/marketplace/-/mp/application/170390307) from Marketplace **version `3.0.1+`** (requires DXP 7.2 FP5+/SP2+) on all DXP cluster nodes.
+-->
 
 ## Prerequisite for Security: Configure Authentication and Encryption
 
