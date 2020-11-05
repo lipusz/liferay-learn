@@ -3,17 +3,9 @@ Elasticsearch
 
 .. toctree::
    :maxdepth: 2
+   :glob:
 
-   elasticsearch/getting-started-with-elasticsearch.md
-   elasticsearch/installing-elasticsearch.md
-   elasticsearch/connecting-to-elasticsearch.md
-   elasticsearch/securing-elasticsearch.md
-   elasticsearch/troubleshooting-elasticsearch-installation.md
-   elasticsearch/exercise-installing-elasticsearch.md
-   elasticsearch/using-the-sidecar-or-embedded-elasticsearch.md
-   elasticsearch/upgrading-elasticsearch.md
-   elasticsearch/elasticsearch-connector-settings.md
-   elasticsearch/backing-up-elasticsearch.md
+   elasticsearch/*
 
 Elasticsearch is the highly scalable, full-text search engine Liferay uses by default. Elasticsearch is bundled with Liferay for non-production purposes. In production, Liferay requires Elasticsearch running on separate remote server.
 
@@ -33,24 +25,26 @@ Installing
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/exercise-installing-elasticsearch`
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/troubleshooting-elasticsearch-installation`
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/using-the-sidecar-or-embedded-elasticsearch`
--  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/backing-up-elasticsearch`
 
 - `[Clustering Liferay]` `Add a Search Engine to a Liferay Cluster <../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/example-creating-a-simple-dxp-cluster.md#start-a-search-engine-server>`__
 
-Install an Older Elasticsearch Version
-______________________________________
+Upgrading
+~~~~~~~~~
 
-- Elasticsearch 6 for Liferay 7.2 (Coming Soon!)
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/backing-up-elasticsearch`
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/search-upgrade-paths`
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/upgrading-search`
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading_elasticsearch`
 
 Securing
 ~~~~~~~~
 
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/securing-elasticsearch`
 
-Upgrading
-~~~~~~~~~
+Install an Older Elasticsearch Version
+______________________________________
 
--  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch`
+- Elasticsearch 6 for Liferay 7.2 (Coming Soon!)
 
 Configuring
 ~~~~~~~~~~~
