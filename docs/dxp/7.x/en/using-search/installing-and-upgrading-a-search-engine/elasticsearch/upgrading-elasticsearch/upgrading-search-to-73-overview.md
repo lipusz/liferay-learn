@@ -1,4 +1,4 @@
-# Search Upgrade Paths 
+# Upgrading Search to 7.3 Overview 
 
 The following table provides the steps for upgrading from your current Liferay installation to Liferay 7.3 and a supported search engine stacks. 
 
