@@ -1,3 +1,0 @@
-# Upgrading Elasticsearch 
-
-Coming soon!
