@@ -174,9 +174,8 @@ The out-of-the-box Search Tuning index names depend on your Liferay version and 
 
 | Liferay Version and Patch | Search Tuning Indexes |
 | ------------------------- | --------------------- |
-| Liferay DXP 7.2 SP1 and SP2 | `liferay-search-tuning-rankings`<br />  |
-| Liferay DXP 7.2 SP2 | `liferay-search-tuning-rankings`<br />`liferay-search-tuning-synonyms-liferay-<companyId>` |
-| Liferay DXP 7.2 SP3+/FP8+ | `liferay-<companyId>-search-tuning-rankings`<br />`liferay-<companyId>-search-tuning-synonyms` |
+| Liferay DXP 7.2 SP2/FP5 and below| `liferay-search-tuning-rankings`<br />`liferay-search-tuning-synonyms-liferay-<companyId>` |
+| Liferay DXP 7.2 SP3/FP8 and above | `liferay-<companyId>-search-tuning-rankings`<br />`liferay-<companyId>-search-tuning-synonyms` |
 | Liferay DXP 7.3, all patches  | `liferay-<companyId>-search-tuning-rankings`<br />`liferay-<companyId>-search-tuning-synonyms` |
 
 The `<companyId>` (e.g., `20101`) belongs to a given `Company` record in the database. It is displayed as _Instance ID_ in the UI and represents a [Virtual Instance](../../../../system-administration/configuring-liferay/virtual-instances/understanding-virtual-instances.md).
