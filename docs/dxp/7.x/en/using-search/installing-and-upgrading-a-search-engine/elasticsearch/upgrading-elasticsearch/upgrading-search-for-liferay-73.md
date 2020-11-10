@@ -1,8 +1,14 @@
-# Upgrading Search to 7.3 Overview
+# Upgrading Search for Liferay 7.3
 
-Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Connector to Elasticsearch. The matrix of pre-upgrade stacks you are migrating from is more numerous, and it's important to understand the high-level steps required to safely navigate from your existing stack to the Liferay 7.3 stack. 
+Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Connector to Elasticsearch. The matrix of pre-upgrade stacks you are migrating from is more numerous, and it's important to understand the high-level steps required to safely navigate from your existing stack to the Liferay 7.3 stack.  The most basic scenario includes
 
-Find the scenario that matches your Liferay version and Liferay Enterprise Search (LES) version (if you're using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide your upgrade.
+- Backing up your indexes
+- Installing Elasticsearch 7.9 
+- Connecting Liferay to Elasticsearch
+- Re-indexing the Workflow Metrics, Company, and System indexes from their dedicated user interfaces
+- Restoring the search tuning indexes from the backed up version
+
+That's an overview of the search picture, and doesn't cover any more complicated scenarios (like if you have Liferay Enterprise Search modules to upgrade as well). Find the scenario that matches your Liferay version, LES version (if using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide the upgrade.
 
 | Pre-Upgrade Liferay Version [+ LES Version] | Pre-Upgrade Search Engine | Upgrade Steps |
 | :-------- | :---------------- | :-------------- |
@@ -23,6 +29,8 @@ Find the scenario that matches your Liferay version and Liferay Enterprise Searc
 ## Common Upgrade Steps
 
 Upgrade scenarios for systems not including LES apps will include these steps:
+
+1. [Back up the search indexes.](./backing-up-elasticsearch.md)
 
 1. [Connect Liferay to Elasticsearch 7.](../connecting-to-elasticsearch.md)
 
@@ -46,7 +54,7 @@ Systems using LES apps will use these steps to upgrade:
 
 1. Install and deploy LES Monitoring if you are currently using Kibana and Elasticsearch Monitoring/X-Pack Monitoring.
 
-1. Configure the *Elasticsearch Monitoring* connector if you are using LES Monitoring or the Connector to X-Pack Monitoring.
+1. Configure the Elasticsearch Monitoring connector if you are using LES Monitoring or the Connector to X-Pack Monitoring.
 
 1. [Upgrade Liferay.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrade-overview.md)
 
@@ -54,7 +62,7 @@ Systems using LES apps will use these steps to upgrade:
 
 ## What's Next 
 
-Now that you know your upgrade path, start upgrading to use Liferay 7.3 with the latest [Elasticsearch](./elasticsearch/upgrading-elasticsearch.md) (*recommended*) or [Solr](./solr.md) (now deprecated as of Liferay 7.3) search engine.
+Now that you know your upgrade path, start upgrading to use Liferay 7.3 with the latest [Elasticsearch](./elasticsearch/upgrading-elasticsearch.md) (recommended) or [Solr](./solr.md) (now deprecated as of Liferay 7.3) search engine.
 
 ## Additional Information 
 
