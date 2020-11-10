@@ -19,7 +19,7 @@ Here are the general upgrade steps:
 1. Upgrade the Liferay database.
 1. Re-index search indexes.
 
-Examine [Upgrading Search to 7.3 Overview](./upgrading-search-to-73-overview.md) first because it summarizes upgrading from search stacks on previous Liferay versions to the latest supported search stack. Then [back up your search indexes]((./elasticsearch/backing-up-elasticsearch.md)) before [upgrading search](./elasticsearch/upgrading-elasticsearch.md).
+Examine [Upgrading Search to 7.3 Overview](./upgrading-search-for-liferay-73.md) first because it summarizes upgrading from search stacks on previous Liferay versions to the latest supported search stack. Then [back up your search indexes]((./elasticsearch/backing-up-elasticsearch.md)) before [upgrading search](./elasticsearch/upgrading-elasticsearch.md).
 
 ## Additional information
 
