@@ -224,11 +224,6 @@ You can use Elasticsearch's [snapshot and restore](https://www.elastic.co/guide/
 
 If you've added Synonym Sets or Results Rankings while running in Sidecar/Embedded mode, you'll see these search tunings disappear once you configure a Remote mode connection to Elasticsearch 7 and perform a full reindex.
 
-Restoring the _Search Tuning_ indexes from a snapshot using new index names is important if you've set up a new Elasticsearch 7 cluster, configured a remote connection to it, and performed a full reindex. Any 
-Restoring the _Search Tuning_ indexes from a snapshot using new index names is important comes in handy if you did not upgrade your Elasticsearch 6 cluster, but rather, you just set-up your new Elasticsearch 7 cluster, configured Elasticsearch 7 in @product-ver@ and performed a full reindex from @product@.
-
-In this case, existing _Search Tuning_ entries will be missing, because whose indexes will be empty.
-
 To restore your existing _Search Tuning_ index documents, you can use the [Reindex API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html#docs-reindex) of Elasticsearch, like this:
 
 ```json
@@ -265,4 +260,4 @@ If you are [upgrading Elasticsearch](./upgrading-to-elasticsearch-79.md), you ca
 
 ## Additional Information
 
-[Search Administration and Tuning](../../search_administration_and_tuning.md)
+[Search Administration and Tuning](../../../search_administration_and_tuning.md)
