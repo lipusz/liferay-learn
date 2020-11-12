@@ -8,7 +8,7 @@ Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Co
 - Re-indexing the Workflow Metrics, Company, and System indexes from their dedicated user interfaces
 - Restoring the search tuning indexes from the backed up version
 
-That's an overview of the search picture, and doesn't cover any more complicated scenarios (like if you have Liferay Enterprise Search modules to upgrade as well). Find the scenario that matches your Liferay version, LES version (if using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide the upgrade.
+That's an overview of the search upgrade picture, and doesn't cover any more complicated scenarios (like if you have Liferay Enterprise Search modules to upgrade as well). Find the scenario that matches your Liferay version, LES version (if using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide the upgrade.
 
 | Pre-Upgrade Liferay Version [+ LES Version] | Pre-Upgrade Search Engine | Upgrade Steps |
 | :-------- | :---------------- | :-------------- |
@@ -28,9 +28,11 @@ That's an overview of the search picture, and doesn't cover any more complicated
 
 ## Common Upgrade Steps
 
-Upgrade scenarios for systems not including LES apps will include these steps:
+```important::
+   `Back up the search indexes <./backing-up-elasticsearch.md>`__ before proceeding with these steps.
+```
 
-1. [Back up the search indexes.](./backing-up-elasticsearch.md)
+Upgrade scenarios for systems not including LES apps will include these steps:
 
 1. [Connect Liferay to Elasticsearch 7.](../connecting-to-elasticsearch.md)
 
@@ -43,6 +45,10 @@ Upgrade scenarios for systems not including LES apps will include these steps:
 1. [Re-index the Workflow Metrics indexes.](../../../../process-automation/workflow/user-guide/workflow-metrics-reports.md#re-indexing-workflow-metrics)
 
 ## LES Upgrade Steps
+
+```important::
+   `Back up the search indexes <./backing-up-elasticsearch.md>`__ before proceeding with these steps.
+```
 
 Systems using LES apps will use these steps to upgrade:
 

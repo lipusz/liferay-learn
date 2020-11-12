@@ -30,7 +30,7 @@ To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7.9+,
 
 1. Re-index all search and spell check indexes.
 
-1. Verify that Search Tuning entries have been carried over
+1. Verify that Search Tuning entries have been carried over.
 
 **Known Issue:** See [LPS-103938](https://issues.liferay.com/browse/LPS-103938). The Liferay Connector to Elasticsearch 7 throws an exception in the log when the LPKG file is deployed. There are no known functional impacts. If unexpected errors occur, re-start the @product@ server.
 
@@ -62,7 +62,6 @@ To blacklist Elasticsearch 6,
         "Liferay Enterprise Search Security  - Impl" \
     ]
     ```
-<!--Does it make sense to blacklist the LES Security app?-->
 
 ## Re-index
 
@@ -72,9 +71,12 @@ Once Liferay is connected with the Elasticsearch cluster, re-index the applicabl
 
 1. Re-index the [Workflow Metrics indexes](../../../../process-automation/workflow/user-guide/workflow-metrics-reports.html#re-indexing-workflow-metrics): from the Global Menu (![Global Menu](../../../../images/icon-applications-menu.png)), navigate to *Applications* &rarr; *Workflow---Metrics*. Open the Settings menu (![Options](../../../../images/icon-options.png) and Click *Reindex All*.
 
-## Reverting to Elasticsearch 6
+This restores the indexes that are built from data stored in the Liferay databse. To restore indexes that are used as primary storage, see [Backing Up Elasticsearch](./backing-up-elasticsearch.md).
 
-Stuff happens. If that stuff involves an unrecoverable failure during the upgrade to Elasticsearch 7, roll back to Elasticsearch 6 and regroup.
+## Liferay 7.2: Reverting to Elasticsearch 6
+<!-- Is this still useful to maintain? Would it be better, now that we could have people upgrading from Elasticsearch 7.3-7.9, to genericize these steps to be version agnostic? -->
+
+Stuff happens. If you're on Liferay 7.2 and that stuff involves an unrecoverable failure during the upgrade to Elasticsearch 7, roll back to Elasticsearch 6 and regroup.
 
 Since your Elasticsearch 6 and 7 are currently two separate installations, this procedure takes only a few steps:
 
@@ -82,5 +84,6 @@ Since your Elasticsearch 6 and 7 are currently two separate installations, this 
 
 1.  Stop Elasticsearch 7 and make sure that the Elasticsearch 6 `elasticsearch.yml` and the connector app are configured to use the same port (9200 by default).
 
-1.  Start the Elasticsearch server, and then restart the Liferay Connector to Elasticsearch 7.
+1.  Start the Elasticsearch server, and then restart the Liferay Connector to Elasticsearch 6.
 
+Once your upgrade is completed, see the [new search feautres available in Liferay 7.3](../../../getting-started/whats-new-in-search-for-73.md). 
