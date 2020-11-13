@@ -10,7 +10,7 @@ To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7.9+,
 
 1. [Back up the Liferay Company and System Indexes](./backing-up-elasticsearch.md).
 
-1. [Back up the application specific indexes for Search Tuning](#backing-up-and-restoring-search-tuning-indexes) (Synonym Sets and Result Rankings).
+1. [Back up the application specific indexes for Search Tuning](./backing-up-elasticsearch.md#backing-up-and-restoring-search-tuning-indexes) (Synonym Sets and Result Rankings).
 
 1. [Install and configure Elasticsearch 7.9](../installing-elasticsearch.md).
 
