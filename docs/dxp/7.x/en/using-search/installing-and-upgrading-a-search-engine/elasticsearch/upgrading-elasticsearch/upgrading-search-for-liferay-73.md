@@ -8,9 +8,11 @@ Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Co
 - Re-indexing the Workflow Metrics, Company, and System indexes from their dedicated user interfaces
 - Restoring the search tuning indexes from the backed up version
 
+## Overview
+
 That's an overview of the search upgrade picture, and doesn't cover any more complicated scenarios (like if you have Liferay Enterprise Search modules to upgrade as well). Find the scenario that matches your Liferay version, LES version (if using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide the upgrade.
 
-| Pre-Upgrade Liferay Version [+ LES Version] | Pre-Upgrade Search Engine | Upgrade Steps |
+| Upgrading from Liferay Version [+ LES Version] | Upgrading From Search Engine Version | Upgrade Steps |
 | :-------- | :---------------- | :-------------- |
 | **Liferay 7.2** | Elasticsearch 7.9+ | 1. [Connect Liferay to Elasticsearch 7.](../connecting-to-elasticsearch.md)<br><br>2. [Configure security.](../securing-elasticsearch.md)<br><br>3. [Upgrade Liferay.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrade-overview.md)<br><br>4. [Re-index search & spell check indexes.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/post-upgrade-considerations.md) |
 | **Liferay 7.2 + LES 3.0** (*Monitoring*, *Learning to Rank*) | Elasticsearch 7.9+ | 1. Connect Liferay to Elasticsearch 7.<br><br>2. Configure security.<br><br>3. Install Kibana 7.9+ if you are currently using *Kibana and Monitoring*.<br><br>4. Install and deploy LES Monitoring if you are currently using Kibana and *Elasticsearch Monitoring/X-Pack Monitoring*.<br><br>5. Configure the *Elasticsearch Monitoring* connector if you are using *LES Monitoring* or *Connector to X-Pack Monitoring*.<br><br>6. [Upgrade Liferay.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrade-overview.md)<br><br>7. [Re-index search & spell check indexes.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/post-upgrade-considerations.md) |
