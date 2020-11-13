@@ -1,6 +1,6 @@
 # Upgrading to Elasticsearch 7.9
 
-Elasticsearch 7.9+ is supported for Liferay 7.3 out of the box. For Liferay 7.2 it's supported via the [Liferay Connector to Elasticsearch 7](https://web.liferay.com/marketplace/-/mp/application/170390307) (version 3.1.0+). If you're upgrading to Liferay 7.3 or wanting to bring your existing 7.2 search engine to Elasticsearch 7.9+, you must upgrade your Elasticsearch servers. If you're setting up a new Liferay 7.2 system, install Elasticsearch 7.9 and follow the [installation guide](../getting-started-with-elasticsearch.md).
+Elasticsearch 7.9+ is supported for Liferay 7.3 out of the box. For Liferay 7.2 it's supported via the [Liferay Connector to Elasticsearch 7](https://web.liferay.com/marketplace/-/mp/application/170390307) (version `3.x`). If you're upgrading to Liferay 7.3 or wanting to bring your existing 7.2 search engine to Elasticsearch 7.9+, you must upgrade your Elasticsearch servers. If you're setting up a new Liferay 7.2 system, install Elasticsearch 7.9 and follow the [installation guide](../getting-started-with-elasticsearch.md).
 
 ```important::
    Before upgrading Elasticsearch, back up your existing data. If something goes wrong during or after the upgrade, roll back to the previous version using the uncorrupted index snapshots. Follow the steps in `Backing up Elasticsearch <./backing-up-elasticsearch.md>`__.
@@ -24,15 +24,13 @@ To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7.9+,
 
    See [Securing Elasticsearch](../securing-elasticsearch.md) for detailed coverage of the security configuration.
 
-1. \[7.2 only\] [Blacklist the bundled Liferay Connector to Elasticsearch 6](#blacklisting-elasticsearch-6).
+1. \[7.2 only\] [Blacklist the bundled Liferay Connector to Elasticsearch 6](#blacklisting-elasticsearch-6) and [install](../connecting-to-elasticsearch.md#install-the-elasticsearch-7-connector) the Connector to Elasticsearch 7.
 
-1. [Install](../connecting-to-elasticsearch.md#install-the-elasticsearch-7-connector) and configure the Liferay Connector to Elasticsearch 7.
+1. Configure the Connector to Elasticsearch 7 to connect to Elasticsearch 7.9+.
 
 1. Re-index all search and spell check indexes.
 
 1. Verify that Search Tuning entries have been carried over.
-
-**Known Issue:** See [LPS-103938](https://issues.liferay.com/browse/LPS-103938). The Liferay Connector to Elasticsearch 7 throws an exception in the log when the LPKG file is deployed. There are no known functional impacts. If unexpected errors occur, re-start the @product@ server.
 
 ## Upgrading Elasticsearch
 
@@ -42,7 +40,7 @@ If you are using a rolling-restart eligible version (`6.8.x`), doing a [rolling 
 
 ## Blacklisting Elasticsearch 6
 
-To blacklist Elasticsearch 6,
+To blacklist the bundled Elasticsearch 6 connector on 7.2,
 
 1.  Create a configuration file named
 
