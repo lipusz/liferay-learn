@@ -8,9 +8,9 @@ Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Co
 - Re-indexing the Workflow Metrics, Company, and System indexes from their dedicated user interfaces
 - Restoring the search tuning indexes from the backed up version
 
-## Overview
+## Search Upgrade Overview
 
-That's an overview of the search upgrade picture, and doesn't cover any more complicated scenarios (like if you have Liferay Enterprise Search modules to upgrade as well). Find the scenario that matches your Liferay version, LES version (if using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide the upgrade.
+The list above just scratches the surface of the search upgrade picture: it doesn't cover any more complicated scenarios (like if you have Liferay Enterprise Search modules to upgrade as well). Find the scenario that matches your Liferay version, LES version (if using LES), and your current search engine stack. Use the *Upgrade Steps* column to guide the upgrade.
 
 | Upgrading from Liferay Version [+ LES Version] | Upgrading From Search Engine Version | Upgrade Steps |
 | :-------- | :---------------- | :-------------- |
@@ -68,9 +68,11 @@ Systems using LES apps will use these steps to upgrade:
 
 1. Re-index the search and spell check indexes.
 
+1. Re-index the workflow metrics indexes.
+
 ## What's Next 
 
-Now that you know your upgrade path, start upgrading to use Liferay 7.3 with the latest [Elasticsearch](./elasticsearch/upgrading-elasticsearch.md) (recommended) or [Solr](./solr.md) (now deprecated as of Liferay 7.3) search engine.
+Now that you know your upgrade path, start upgrading to use Liferay 7.3 with the latest [Elasticsearch](./upgrading-to-elasticsearch-79.md) (recommended) or [Solr](../../solr.rst) (now deprecated as of Liferay 7.3) search engine.
 
 ## Additional Information 
 
