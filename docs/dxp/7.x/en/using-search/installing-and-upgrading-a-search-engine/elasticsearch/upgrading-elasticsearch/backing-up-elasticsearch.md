@@ -256,7 +256,7 @@ The `<companyId>` (e.g., `20101`) belongs to a given `Company` record in the dat
 
 ## What's Next
 
-If you are [upgrading Elasticsearch](./upgrading-to-elasticsearch-79.md), you can do that now. 
+If you are [upgrading Elasticsearch](./upgrading-to-elasticsearch-7.md), you can do that now. 
 
 ## Additional Information
 

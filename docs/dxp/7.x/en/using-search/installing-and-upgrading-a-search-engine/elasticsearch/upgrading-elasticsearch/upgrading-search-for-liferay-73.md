@@ -1,7 +1,5 @@
 # Upgrading Search for Liferay 7.3
 
-Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Connector to Elasticsearch. The matrix of pre-upgrade stacks you are migrating from is more numerous, and it's important to understand the high-level steps required to safely navigate from your existing stack to the Liferay 7.3 stack.  The most basic scenario includes
-
 - Backing up your indexes
 - Installing Elasticsearch 7.9 
 - Connecting Liferay to Elasticsearch
@@ -46,6 +44,8 @@ Upgrade scenarios for systems not including LES apps will include these steps:
 
 1. [Re-index the Workflow Metrics indexes.](../../../../process-automation/workflow/user-guide/workflow-metrics-reports.md#re-indexing-workflow-metrics)
 
+1. Test the search experience in the upgraded system to ensure everything is working as expected.
+
 ## LES Upgrade Steps
 
 ```important::
@@ -70,9 +70,53 @@ Systems using LES apps will use these steps to upgrade:
 
 1. Re-index the workflow metrics indexes.
 
+## Test the Upgraded Search Experience
+
+Manually test the upgraded search experience to ensure the features you depend on work as expected. If something is not working or behaving differently than you expect, review [Liferay's Breaking Changes](./../../../../liferay-internals/reference/7-3-breaking-changes.md).
+
+## LES Applications Renamed
+
+> **LES Subscribers**
+
+Though not explicitly linked to the Liferay CE/DXP 7.3 release, these apps were renamed to better reflect their functionality and to emphasize their identity as LES apps:
+
+| Functionality | Old App Name | New App Name | 7.2 Configuration File | 7.3 Configuration File |
+| ------------- | ------------ | ------------ |------------ | ------------ |
+| Monitoring the Elasticsearch cluster | Liferay Connector to X-Pack Monitoring [Elastic Stack 6.x] | Liferay Enterprise Search Monitoring | `com.liferay.portal.search.elasticsearch6.xpack.monitoring.web.internal.configuration.XPackMonitoringConfiguration.config` | |
+| Securing the Elasticsearch cluster | Liferay Connector to X-Pack Security [Elastic Stack 6.x] | Liferay Enterprise Search Security |
+| Using machine learning to optimize the search algorithm | Liferay Connector to Elasticsearch Learning to Rank | Liferay Enterprise Search Learning to Rank |
+| Replicating indexes across remote data centers | NA (new app) | Liferay Enterprise Search Cross-Cluster Replication |
+
+For Liferay 7.2 widget and configuration names were unchanged. In Liferay 7.3 the monitoring widget and the configurations were renamed.
+
+It has the following upgrade impacts:
+1. The name of the widget has changed to just ***Elasticsearch Monitoring***. This is taken care of during the startup by a module upgrade step when _Liferay Enterprise Search Monitoring_ for DXP 7.3 is deployed, doesn't require actions from admins.
+1. The name of configuration file has changed from `com.liferay.portal.search.elasticsearch6.xpack.monitoring.web.internal.configuration.XPackMonitoringConfiguration.config` to **`com.liferay.portal.search.elasticsearch.monitoring.web.internal.configuration.MonitoringConfiguration`**. (The properties are the same as before.). This is taken care of at startup by a module upgrade step, doesn't require actions from admins.
+1. The Kibana base path that the monitoring widget is using has changed. **Administrators will have to change** this in `kibana.yml`:
+
+from
+
+```yaml
+server.basePath: "/o/portal-search-elasticsearch-xpack-monitoring/xpack-monitoring-proxy"
+```
+
+to
+
+```yaml
+server.basePath: "/o/portal-search-elasticsearch-monitoring/monitoring-proxy"
+```
+The new names are as follows:
+
+|Old App Name|New App Name|Upgrade Action|
+|:--:|:--:|
+| Liferay Connector to X-Pack Security [Elastic Stack 6.x] | Liferay Enterprise Search Security | No action required, this app is not available for DXP 7.3, features are integrated into the Elasticsearch 7 connector bundled with DXP 7.3. |
+| Liferay Connector to X-Pack Monitoring [Elastic Stack 6.x] |Liferay Enterprise Search Monitoring | See above |
+| Liferay Connector to Elasticsearch Learning to Rank | Liferay Enterprise Search Learning to Rank | No action required |
+Liferay 7.3 supports only Elasticsearch 7.9.0+ via the out-of-the-box Liferay Connector to Elasticsearch. The matrix of pre-upgrade stacks you are migrating from is more numerous, and it's important to understand the high-level steps required to safely navigate from your existing stack to the Liferay 7.3 stack.  The most basic scenario includes
+
 ## What's Next 
 
-Now that you know your upgrade path, start upgrading to use Liferay 7.3 with the latest [Elasticsearch](./upgrading-to-elasticsearch-79.md) (recommended) or [Solr](../../solr.rst) (now deprecated as of Liferay 7.3) search engine.
+Now that you know your upgrade path, start upgrading to use Liferay 7.3 with the latest [Elasticsearch](./upgrading-to-elasticsearch-7.md) (recommended) or [Solr](../../solr.rst) (now deprecated as of Liferay 7.3) search engine.
 
 ## Additional Information 
 

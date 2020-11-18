@@ -16,8 +16,8 @@ Liferay 7.3 brings `new improvements <../getting-started/whats-new-in-search-for
 .. important::
    Elasticsearch 6.x is not supported on Liferay 7.3.
 
-Read `Upgrading Search for Liferay 7.3 <./upgrading-search-for-liferay-73.md>`__ first. It summarizes upgrading from search stacks on previous Liferay versions to the latest supported search stack. Then `back up your search indexes <./backing-up-elasticsearch.md>`__ before `upgrading Elasticsearch <./upgrading-to-elasticsearch-79.md>`__.
+Read `Upgrading Search for Liferay 7.3 <./upgrading-search-for-liferay-73.md>`__ first. It summarizes upgrading from search stacks on previous Liferay versions to the latest supported search stack. Then `back up your search indexes <./backing-up-elasticsearch.md>`__ before `upgrading Elasticsearch <./upgrading-to-elasticsearch-7.md>`__.
 
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/upgrading-search-for-liferay-73`
--  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/upgrading-to-elasticsearch-79`
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/upgrading-to-elasticsearch-7`
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/upgrading-elasticsearch/backing-up-elasticsearch`

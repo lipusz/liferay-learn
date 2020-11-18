@@ -34,7 +34,6 @@ To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7.9+,
 
 ## Upgrading Elasticsearch
 
-<!-- does this make sense here? Does it apply when going from 6.x to 7.9+ -->
 If you are using a rolling-restart eligible version (`6.8.x`), doing a [rolling upgrade](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/rolling-upgrades.html) is the recommended way to ugprade your Elasticsearch cluster. Otherwise, follow the [full cluster restart upgrade
 ](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/restart-upgrade.html) guide.
 
@@ -72,7 +71,6 @@ Once Liferay is connected with the Elasticsearch cluster, re-index the applicabl
 This restores the indexes that are built from data stored in the Liferay databse. To restore indexes that are used as primary storage, see [Backing Up Elasticsearch](./backing-up-elasticsearch.md).
 
 ## Liferay 7.2: Reverting to Elasticsearch 6
-<!-- Is this still useful to maintain? Would it be better, now that we could have people upgrading from Elasticsearch 7.3-7.9, to genericize these steps to be version agnostic? -->
 
 Stuff happens. If you're on Liferay 7.2 and that stuff involves an unrecoverable failure during the upgrade to Elasticsearch 7, roll back to Elasticsearch 6 and regroup.
 
