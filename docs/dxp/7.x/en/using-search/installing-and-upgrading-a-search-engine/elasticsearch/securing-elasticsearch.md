@@ -1,12 +1,12 @@
 # Securing Elasticsearch 
 
-## Securing Elasticsearch on Liferay DXP 7.2
-
-The very first thing you must do to secure Elasticsearch is [enable X-Pack Security](#enable-x-pack-security). After that you can begin configuring authentication and Transport Layer Security.
-
 ```note::
    **Elasticsearch 6.x:** If you're using Elasticsearch 6, you'll need a Liferay Enterprise Search (LES) subscription and the Liferay Enterprise Search Security application to use Elastic's X-Pack Security. Starting with the Liferay Connector to Elasticsearch 7 (available on `the Customer Downloads portal <https://customer.liferay.com/downloads>`_ and bundled in Liferay 7.3), support for Elastic's X-Pack security is included by default. To integrate with Elastic's X-Pack monitoring, LES is required.
 ```
+
+## Securing Elasticsearch on Liferay DXP 7.2
+
+The very first thing you must do to secure Elasticsearch is [enable X-Pack Security](#enable-x-pack-security). After that you can begin configuring authentication and Transport Layer Security.
 
 ### Enable X-Pack Security
 
