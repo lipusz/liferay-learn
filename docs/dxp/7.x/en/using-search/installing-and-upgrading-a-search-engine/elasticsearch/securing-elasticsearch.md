@@ -33,9 +33,7 @@ On your Elasticsearch server, use the [`setup-passwords` command](https://www.el
 
 ```note::
   The configurations shown below assume all passwords are set to *liferay*. Use your own passwords for your installation.
-```
 
-```note::
   To update a built-in user's password, use Kibana's UI or the `Change Password API <https://www.elastic.co/guide/en/elasticsearch/reference/7.x/security-api-change-password.html>`_.
 ```
 
