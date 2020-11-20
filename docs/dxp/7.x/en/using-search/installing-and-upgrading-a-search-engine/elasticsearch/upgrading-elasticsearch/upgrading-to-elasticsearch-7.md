@@ -1,18 +1,20 @@
-# Upgrading to Elasticsearch 7.9
+# Upgrading to Elasticsearch 7
 
-Elasticsearch 7.9+ is supported for Liferay 7.3 out of the box. For Liferay 7.2 it's supported via the [Liferay Connector to Elasticsearch 7](https://web.liferay.com/marketplace/-/mp/application/170390307) (version `3.x`). If you're upgrading to Liferay 7.3 or wanting to bring your existing 7.2 search engine to Elasticsearch 7.9+, you must upgrade your Elasticsearch servers. If you're setting up a new Liferay 7.2 system, install Elasticsearch 7.9 and follow the [installation guide](../getting-started-with-elasticsearch.md).
+Elasticsearch 7 is supported for Liferay 7.3 out of the box. For specific version compatibility details, refer to the [Compatibility Matrix](https://help.liferay.com/hc/en-us/articles/360049238151).
+
+For Liferay 7.2 Elasticsearch 7 is supported via the [Liferay Connector to Elasticsearch 7](https://web.liferay.com/marketplace/-/mp/application/170390307) (version `3.x`). If you're upgrading to Liferay 7.3 or wanting to bring your existing 7.2 search engine to Elasticsearch 7, you must also upgrade your Elasticsearch servers. To set up a new Liferay 7.2 system, install Elasticsearch 7 and follow the [installation guide](../getting-started-with-elasticsearch.md).
 
 ```important::
    Before upgrading Elasticsearch, back up your existing data. If something goes wrong during or after the upgrade, roll back to the previous version using the uncorrupted index snapshots. Follow the steps in `Backing up Elasticsearch <./backing-up-elasticsearch.md>`__.
 ```
 
-To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7.9+,
+To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7,
 
 1. [Back up the Liferay Company and System Indexes](./backing-up-elasticsearch.md).
 
 1. [Back up the application specific indexes for Search Tuning](./backing-up-elasticsearch.md#backing-up-and-restoring-search-tuning-indexes) (Synonym Sets and Result Rankings).
 
-1. [Install and configure Elasticsearch 7.9](../installing-elasticsearch.md).
+1. [Install and configure Elasticsearch](../installing-elasticsearch.md).
 
 1. [Upgrade Elasticsearch](#upgrading-elasticsearch)
 
@@ -26,7 +28,7 @@ To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7.9+,
 
 1. \[7.2 only\] [Blacklist the bundled Liferay Connector to Elasticsearch 6](#blacklisting-elasticsearch-6) and [install](../connecting-to-elasticsearch.md#install-the-elasticsearch-7-connector) the Connector to Elasticsearch 7.
 
-1. Configure the Connector to Elasticsearch 7 to connect to Elasticsearch 7.9+.
+1. Configure the Connector to Elasticsearch 7 to connect to Elasticsearch.
 
 1. Re-index all search and spell check indexes.
 

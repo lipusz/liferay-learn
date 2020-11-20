@@ -1,7 +1,7 @@
 # Upgrading Search for Liferay 7.3
 
 - Backing up your indexes
-- Installing Elasticsearch 7.9 
+- Installing Elasticsearch 7 
 - Connecting Liferay to Elasticsearch
 - Re-indexing the Workflow Metrics, Company, and System indexes from their dedicated user interfaces
 - Restoring the search tuning indexes from the backed up version
@@ -58,7 +58,7 @@ Systems using LES apps will use these steps to upgrade:
 
 1. Configure security.
 
-1. Install Kibana 7.9+ if you are currently using Kibana and Monitoring.
+1. Install Kibana 7 if you are currently using Kibana and Monitoring.
 
 1. Install and deploy LES Monitoring if you are currently using Kibana and Elasticsearch Monitoring/X-Pack Monitoring.
 

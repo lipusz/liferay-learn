@@ -8,7 +8,7 @@ Upgrading Elasticsearch
    upgrading-elasticsearch/*
 
 
-Liferay 7.3 brings `new improvements <../getting-started/whats-new-in-search-for-73.md>`__ for search. Upgrading to Liferay 7.3 requires upgrading the search engine to Elasticsearch 7.9, the minimum required version. The `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ provides the latest support details.
+Liferay 7.3 brings `new improvements <../getting-started/whats-new-in-search-for-73.md>`__ for search,including built-in support for Elasticsearch 7. The `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ provides the latest support details.
 
 .. important::
    Solr integration is now deprecated as of Liferay 7.3. Elasticsearch integration replaces it. Migrating to Elasticsearch requires `setting up Elasticsearch `<./elasticsearch/getting-started-with-elasticsearch.md>`_ and `connecting Liferay <./elasticsearch/connecting-to-elasticsearch.md`_ to it.
