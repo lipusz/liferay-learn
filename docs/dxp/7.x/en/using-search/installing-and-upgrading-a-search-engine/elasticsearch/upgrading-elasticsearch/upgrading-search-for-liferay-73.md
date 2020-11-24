@@ -1,8 +1,10 @@
 # Upgrading Search for Liferay 7.3
 
+Upgrading Liferay requires some additional steps to upgrade the search experience:
+
 - Backing up your indexes
-- Installing Elasticsearch 7 
-- Connecting Liferay to Elasticsearch
+- Installing Elasticsearch 7 (and the plugins Liferay requires)
+- Connecting Liferay to Elasticsearch (may require a new connector)
 - Re-indexing the Workflow Metrics, Company, and System indexes from their dedicated user interfaces
 - Restoring the search tuning indexes from the backed up version
 
@@ -54,9 +56,9 @@ Upgrade scenarios for systems not including LES apps will include these steps:
 
 Systems using LES apps will use these steps to upgrade:
 
-1. Connect Liferay to Elasticsearch 7.
+1. [Connect Liferay to Elasticsearch 7.](../connecting-to-elasticsearch.md)
 
-1. Configure security.
+1. [Configure security.](../securing-elasticsearch.md)
 
 1. Install Kibana 7 if you are currently using Kibana and Monitoring.
 
@@ -66,9 +68,11 @@ Systems using LES apps will use these steps to upgrade:
 
 1. [Upgrade Liferay.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrade-overview.md)
 
-1. Re-index the search and spell check indexes.
+1. [Re-index the search and spell check indexes.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/post-upgrade-considerations.md)
 
-1. Re-index the workflow metrics indexes.
+1. [Re-index the Workflow Metrics indexes.](../../../../process-automation/workflow/user-guide/workflow-metrics-reports.md#re-indexing-workflow-metrics)
+
+1. Test the search experience in the upgraded system to ensure everything is working as expected.
 
 ## Test the Upgraded Search Experience
 
