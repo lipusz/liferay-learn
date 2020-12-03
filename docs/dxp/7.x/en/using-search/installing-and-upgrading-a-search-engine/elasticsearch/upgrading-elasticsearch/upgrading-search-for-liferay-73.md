@@ -19,11 +19,11 @@ The list above just scratches the surface of the search upgrade picture: it does
 | **Liferay 7.2** | Elasticsearch 7.3.x-7.8.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [Common Upgrade Steps](#common-upgrade-steps) |
 | **Liferay 7.2 + LES 2.0** (*Monitoring*, *Learning to Rank*) | Elasticsearch 7.3.x-7.8.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
 | **Liferay 7.2** | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [Common Upgrade Steps](#common-upgrade-steps) |
-| **Liferay 7.2 + LES 2.0** (*Monitoring*, *Learning to Rank*) | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
+| **Liferay 7.2 + LES 2.0** (*Security*, *Monitoring*, *Learning to Rank*) | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
 | **Liferay 7.1** | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [Common Upgrade Steps](#common-upgrade-steps) |
-| **Liferay 7.1 + LES 2.0** (*Monitoring*, *Learning to Rank*) | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
+| **Liferay 7.1 + LES 2.0** (*Security*, *Monitoring*, *Learning to Rank*) | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
 | **Liferay 7.0** | Elasticsearch 6.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [Common Upgrade Steps](#common-upgrade-steps) |
-| **Liferay 7.0 + LES 2.0** (*Monitoring*, *Learning to Rank*) | Elasticsearch 5.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
+| **Liferay 7.0 + LES 2.0** (*Security*, *Monitoring*, *Learning to Rank*) | Elasticsearch 5.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [LES Upgrade Steps](#les-upgrade-steps) |
 | **Liferay 7.0** | Elasticsearch 2.x | 1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [Common Upgrade Steps](#common-upgrade-steps) |
 | **Liferay 7.2, 7.1** | Solr 7.x | **Switch to Elasticsearch:**<br><br>1. [Install Elasticsearch 7.9+.](../installing-elasticsearch.md)<br><br>2. Follow [Common Upgrade Steps](#common-upgrade-steps) for configuring Liferay 7.3 with Elasticsearch<br> or follow [LES Upgrade Steps](#les-upgrade-steps) for Liferay 7.3 + Liferay Enterprise Search (LES) 3.0<br><br>**or**<br><br><br>**Upgrade Solr (deprecated):**<br><br>1. [Set up Solr 8.x.](../../solr.rst)<br><br>2. [Upgrade Liferay.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrade-overview.md)<br><br>3. [Re-index search & spell check indexes.](../../../../installation-and-upgrades/upgrading-liferay/upgrade-basics/post-upgrade-considerations.md) |
 | **Liferay 7.0** | Solr 5.x | Use steps for Solr 7.x above. |
@@ -93,22 +93,20 @@ Though not explicitly linked to the Liferay CE/DXP 7.3 release, these apps were 
 
 For Liferay 7.2 widget and configuration names were unchanged. In Liferay 7.3 the monitoring widget and the configurations were renamed.
 
-It has the following upgrade impacts:
-1. The name of the widget has changed to just ***Elasticsearch Monitoring***. This is taken care of during the startup by a module upgrade step when _Liferay Enterprise Search Monitoring_ for DXP 7.3 is deployed, doesn't require actions from admins.
-1. The name of configuration file has changed from `com.liferay.portal.search.elasticsearch6.xpack.monitoring.web.internal.configuration.XPackMonitoringConfiguration.config` to **`com.liferay.portal.search.elasticsearch.monitoring.web.internal.configuration.MonitoringConfiguration`**. (The properties are the same as before.). This is taken care of at startup by a module upgrade step, doesn't require actions from admins.
-1. The Kibana base path that the monitoring widget is using has changed. **Administrators will have to change** this in `kibana.yml`:
+The renaming of apps and configurations has the following upgrade impacts:
+1. The LES Monitoring widget is now named  *Elasticsearch Monitoring*. During portal startup, a module upgrade step runs, renaming the app when _Liferay Enterprise Search Monitoring_ for DXP 7.3 is deployed. No action is required.
+1. The name of configuration file changed from `com.liferay.portal.search.elasticsearch6.xpack.monitoring.web.internal.configuration.XPackMonitoringConfiguration.config` to `com.liferay.portal.search.elasticsearch.monitoring.web.internal.configuration.MonitoringConfiguration`. The properties are the same as before. During portal startup, a module upgrade step runs, renaming the configuration. No action is required.
+1. The Kibana base path to the monitoring widget has changed. You must change the original setting in `kibana.yml`:
 
-from
+   ```yaml
+   server.basePath: "/o/portal-search-elasticsearch-xpack-monitoring/xpack-monitoring-proxy"
+   ```
 
-```yaml
-server.basePath: "/o/portal-search-elasticsearch-xpack-monitoring/xpack-monitoring-proxy"
-```
+   to
 
-to
-
-```yaml
-server.basePath: "/o/portal-search-elasticsearch-monitoring/monitoring-proxy"
-```
+   ```yaml
+   server.basePath: "/o/portal-search-elasticsearch-monitoring/monitoring-proxy"
+   ```
 The new names are as follows:
 
 |Old App Name|New App Name|Upgrade Action|

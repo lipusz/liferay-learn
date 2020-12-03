@@ -2,6 +2,8 @@
 
 [Elasticsearch replicas](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/index-modules.html#index-modules-settings) protect against a node going down, but they won't help you with a catastrophic failure. Only good backup practices can help you then.
 
+Before you [upgrade](./upgrading-search-for-liferay-73.md) is one good occasion to back up and test restoring your Elasticsearch indexes. In fact, the snapshot [search tuning indexes](#backing-up-and-restoring-search-tuning-indexes) can be used to reindex your previous Synonym Sets and Result Rankings when you set up a new Elasticsearch server. Make sure to read the Elasticsearch documentation on [snapshot and restore version compatibility](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshot-restore.html#snapshot-restore-version-compatibility) before attempting this approach.
+
 Back up your Elasticsearch cluster and test restoring the backup in three steps: 
 
 1. Create a repository
@@ -81,10 +83,17 @@ curl -X GET "localhost:9200/_cat/indices?v"
 Example index metrics,
 
 ```bash
-health status index         uuid                   pri rep docs.count docs.deleted store.size pri.store.size
-green  open   liferay-20099 obqiNE1_SDqfuz7rincrGQ   1   0        195            0    303.1kb        303.1kb
-green  open   liferay-47206 3YEjtye1S9OVT0i0EZcXcw   1   0          7            0     69.7kb         69.7kb
-green  open   liferay-0     shBWwpkXRxuAmGEaE475ug   1   0        147            1    390.9kb        390.9kb
+health status index                                              uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   liferay-20101-search-tuning-rankings               ykbNqPjkRkq7aCYnc7G20w   1   0          7            0      7.7kb          7.7kb
+green  open   liferay-20101-workflow-metrics-tokens              DF-1vq8IRDmFAqUy4MHHPQ   1   0          4            0       26kb           26kb
+green  open   liferay-20101                                      QKXQZeV5RHKfCsZ-TYU-iA   1   0     253015          392     43.1mb         43.1mb
+green  open   liferay-20101-workflow-metrics-sla-task-results    SrWzmeLuSKGaIvKrv4WmuA   1   0          4           72     30.6kb         30.6kb
+green  open   liferay-20101-workflow-metrics-processes           Ras8CH0PSDGgWSyO3zEBhg   1   0          1            0     49.3kb         49.3kb
+green  open   liferay-20101-workflow-metrics-nodes               bcdKKgDySeWf4BJnmMzk6A   1   0          4            0     10.5kb         10.5kb
+green  open   liferay-20101-workflow-metrics-sla-process-results VJrNOpJWRoeTaJ-sBGs_vA   1   0          3           91     47.4kb         47.4kb
+green  open   liferay-20101-workflow-metrics-instances           OgJMyD5ZQIi2h0xUTSjezg   1   0          3            0     62.4kb         62.4kb
+green  open   liferay-0                                          jPIEOfZhSCKZSWnY0L65RQ   1   0     253114          491     50.1mb         50.1mb
+green  open   liferay-20101-search-tuning-synonyms               pAUN8st1RmaV1NxXtj-Sig   1   0          1            0      4.1kb          4.1kb
 ```
 
 ```note::
@@ -169,7 +178,7 @@ Creating a snapshot of your Elasticsearch indexes is highly recommended, especia
 
 You can use Elasticsearch's [snapshot and restore](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshot-restore.html) feature to back up and restore the Search Tuning indexes.
 
-1. Create a folder called `elasticsearch_local_backup` somewhere in the system. Make sure Elasticsearch has read and write access tothe folder (e.g., `/path/to/elasticsearch_local_backup`).
+1. Create a folder called `elasticsearch_local_backup` somewhere in the system. Make sure Elasticsearch has read and write access to the folder (e.g., `/path/to/elasticsearch_local_backup`).
 
 1. Add 
 
@@ -177,7 +186,7 @@ You can use Elasticsearch's [snapshot and restore](https://www.elastic.co/guide/
     path.repo: [ "/path/to/elasticsearch_local_backup" ]
     ```
 
-   to the `elasticsearch.yml` for [all master and data nodes](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-register-repository.html#snapshots-filesystem-repository) in the Elasticsearch cluster.
+   to the `elasticsearch.yml` for [all master and data nodes](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-register-repository.html#snapshots-filesystem-repository) in the Elasticsearch cluster. If you're upgrading Elasticsearch, make sure the path to the snapshot repository is the same in the pre-upgrade and post-upgrade Elasticsearch configurations.
 
 1. Restart all Elasticsearch nodes.
 
@@ -191,20 +200,23 @@ You can use Elasticsearch's [snapshot and restore](https://www.elastic.co/guide/
         "location": "/path/to/elasticsearch_local_backup"
       }
     }
+
     ```
+
+   If you're upgrading to a new Elasticsearch version, you can use this same command on the post-upgrade Elasticsearch to register the snapshot repository.
 
 1. [Create a snapshot](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-take-snapshot.html):
 
     ```json
     PUT /_snapshot/elasticsearch_local_backup/snapshot1?wait_for_completion=true
     {
-      "indices": "liferay-search-tuning*",
+      "indices": "liferay-20101-search-tuning*",
       "ignore_unavailable": true,
       "include_global_state": false
     }
     ```
 
-    If you want to create a snapshot for all Liferay indexes, you can use `"indices": "liferay*,workflow-metrics*"` instead.
+   If you want to create a snapshot for all Liferay indexes, you can use `"indices": "liferay*,workflow-metrics*"` instead. If you're in an upgrade scenario, it can make sense to take a snapshot of just the indexes that can't be recreated form the database, like the Synonym Sets and Result Rankings indexes.
 
 1. To [restore](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-restore-snapshot.html) specific indexes from a snapshot using a different name, run a `restore` API call similar to this:
 
@@ -222,21 +234,23 @@ You can use Elasticsearch's [snapshot and restore](https://www.elastic.co/guide/
 
    where `indices` sets the snapshotted index names to restore from. The indexes from the above call would be restored as `restored_liferay-20101-search-tuning-rankings` and `restored_liferay-20101-search-tuning-synonyms`, following the `rename_pattern` and `rename_replacement` regular expressions.
 
-If you've added Synonym Sets or Results Rankings while running in Sidecar/Embedded mode, you'll see these search tunings disappear once you configure a Remote mode connection to Elasticsearch 7 and perform a full reindex.
+If you've added Synonym Sets or Results Rankings while running in Sidecar/Embedded mode, you'll see these search tunings disappear once you configure a Remote mode connection to Elasticsearch 7 and perform a full re-index.
 
 To restore your existing _Search Tuning_ index documents, you can use the [Reindex API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html#docs-reindex) of Elasticsearch, like this:
 
 ```json
-   POST _reindex/
-   {
-     "dest": {
-       "index": "liferay-20101-search-tuning-synonyms"
-     },
-     "source": {
-       "index": "restored_liferay-20101-search-tuning-synonyms"
-     }
-   }
+POST _reindex/
+{
+ "dest": {
+   "index": "liferay-20101-search-tuning-synonyms"
+ },
+ "source": {
+   "index": "restored_liferay-20101-search-tuning-synonyms"
+ }
+}
 ```
+
+Run the same command for the `liferay-20101-search-tuning-rankings` index. If you run both requests in a post-upgrade Elasticsearch installation, the Synonym Sets and Result Rankings data from the pre-upgrade system is now restored.
 
 ```tip::
    It's convenient to create and manage snapshots via the `Kibana 7.x UI <https://www.elastic.co/guide/en/kibana/7.x/snapshot-repositories.html>`__.

@@ -36,8 +36,7 @@ To upgrade an existing Elasticsearch server (or cluster) to Elasticsearch 7,
 
 ## Upgrading Elasticsearch
 
-If you are using a rolling-restart eligible version (`6.8.x`), doing a [rolling upgrade](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/rolling-upgrades.html) is the recommended way to ugprade your Elasticsearch cluster. Otherwise, follow the [full cluster restart upgrade
-](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/restart-upgrade.html) guide.
+If you are using a rolling-restart eligible version (`6.8.x`), doing a [rolling upgrade](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/rolling-upgrades.html) is the recommended way to ugprade your Elasticsearch cluster. Otherwise, follow the [full cluster restart upgrade ](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/restart-upgrade.html) guide.
 
 ## Blacklisting Elasticsearch 6
 
