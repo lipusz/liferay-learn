@@ -18,7 +18,6 @@ Configure its `elasticsearch.yml` by specifying a sensible cluster name, the `ht
 cluster.name: LiferayElasticsearchCluster_LEADER
 http.port: 9200
 node.name: es-leader-node-1
-transport.port: 9300
 ```
 
 Start the server. If you're in the root of the server directory, execute
@@ -32,12 +31,6 @@ If you're just trying this out and don't yet have the proper license, start an [
 ```json
 POST /_license/start_trial?acknowledge=true
 ```
-
-<!--
-> On Elasticsearch 6, use
-> 
-> `POST _xpack/license/start_trial?acknowledge=true`
--->
 
 You'll see a `- valid` message in your log when it installs successfully: 
 
@@ -57,40 +50,15 @@ com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguratio
 Give it these contents:
 
 ```properties
-clusterName="LiferayElasticsearchCluster_LEADER"
-operationMode="REMOTE"
-transportAddresses=["localhost:9300"]
+productionModeEnabled="true"
+networkHostAddresses=["http://localhost:9200"]
+logExceptionsOnly="false"
 ```
-<!--
-If using Elasticsearch 6, the configuration file is named
-
-```bash
-com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config
-```
-
-Give it these contents:
-
-```properties
-clusterName="LiferayElasticsearchCluster_LEADER"
-operationMode="REMOTE"
-transportAddresses=["localhost:9300"]
-
-# Uncomment the below setting for Elasticsearch 6:
-# additionalIndexConfigurations="index.soft_deletes.enabled: true"
-```
--->
-
-> If configuring security, you'll also need a `XPackConfiguration.config` file. See the [configuration reference](./ccr-basic-use-case-config-reference.md) for the details.
-
 Though configuration values are propagated throughout the cluster, for transparency you should provide an identical configuration file for each Liferay DXP node. Therefore, make sure all the Liferay DXP nodes in both data centers have identical Elasticsearch connector configurations.
 
 ```tip::
    During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration files as well.
 ```
-
-<!--
-Soft deletes are enabled by default in Elasticsearch 7, but must be enabled manually for Elasticsearch 6 as described [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md).
--->
 
 Start the Liferay DXP server.
 

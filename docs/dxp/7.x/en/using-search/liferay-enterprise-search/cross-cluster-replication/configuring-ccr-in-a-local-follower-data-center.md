@@ -20,9 +20,8 @@ Configure its `elasticsearch.yml`, specifying a `http.port` and `transport.port`
 
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
-http.port: 9201
+http.port: 9202
 node.name: es-follower-node-1
-transport.port: 9301
 ```
 
 Start the server. If you're in the root of the server directory, execute
@@ -37,13 +36,6 @@ If you're just trying this out and don't yet have the proper license, start an E
 POST /_license/start_trial?acknowledge=true
 ```
 
-<!--
-> On Elasticsearch 6, use
-> 
-> `POST _xpack/license/start_trial?acknowledge=true`
--->
-
-<!-- LPS-109204 was completed so this below changes -->
 ## Replicate the Leader Indexes
 
 If you're configuring a new installation with CCR, you can [auto-follow](#configuring-auto-follow) the leader's indexes from the local/follower Elasticsearch cluster. For an existing installation you must [manually replicate](#manually-replicating-the-leader-indexes) the leader's indexes.
@@ -220,25 +212,13 @@ Then configure the Liferay Connector to Elasticsearch 7 by providing a configura
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
 ```
 
-<!--
-If using Elasticsearch 6, the configuration file is named
-
-```bash
-com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config
-```
--->
-
-This file configures the write-enabled connection to the remote Elasticsearch cluster with the leader indexes. Give it these contents:
+This file configures the write-enabled connection to the remote Elasticsearch cluster with the leader indexes, including the XPack security settings. Give it these contents:
 
 ```properties
-clusterName="LiferayElasticsearchCluster_LEADER"
-operationMode="REMOTE"
-transportAddresses=["localhost:9300"]
+productionModeEnabled="true"
+networkHostAddresses=["http://localhost:9200"]
+logExceptionsOnly="false"
 ```
-
-<!-- no, it's now part of the ESConfig file; but double-check
-> If configuring security, you'll also need a `XPackConfiguration.config` file. See the [configuration reference](./ccr-basic-use-case-config-reference.md) for the details.
--->
 
 Now configure the read-only connection to the local Elasticsearch server with the follower indexes. Provide a configuration file named 
 
@@ -297,16 +277,6 @@ Now start the local Liferay DXP Cluster node.
 On the follower DXP cluster node, navigate to Control Panel &rarr; Configuration &rarr; Search and select the _Connections_ tab. Your connections look like this:
 
 ![Verify the Elasticsearch 7 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
-
-<!--
-```note::
-   On Elasticsearch 6 the Connections tab only appears in the Search administrative console if the CCR module is installed and running. Therefore, it's only available in the local Liferay DXP nodes.
-```
-
-If you are using Elasticsearch 6, the Connections page looks a little different:
-
-![Verifying the Elasticsearch 6 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/ccr-verify-setup-elasticsearch-6-connections-on-the-follower-dxp-cluster-node.png)
--->
 
 > Don't forget to delete the *auto-follow* pattern from the Follower Elasticsearch cluster to avoid exceptions being reported during a reindex operation.
 

@@ -22,7 +22,7 @@ To set up Cross-Cluster Replication you must
 - Define the Leader and Follower
 - Replicate the Leader Indexes
 
-Read this article to better understand the steps, then see the next article, [which introduces a use case](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) and gets you started setting up a local example.
+Once youe fully understand the steps, [see a basic, specific use case](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) and get started setting up a local example.
 
 ## Liferay DXP: Install the LES Cross-Cluster Replication Module
 

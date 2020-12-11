@@ -41,19 +41,6 @@ Make sure you install the Elasticsearch [plugins Liferay DXP needs](https://help
 - `analysis-kuromoji`
 - `analysis-smartcn`
 
-<!-- 
-## Prerequisite for Elasticsearch 6: Enable Soft Deletes
-
-[Soft deletes](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/ccr-requirements.html) must be enabled for all existing indexes. This is not done by default on Elasticsearch 6. Before proceeding, read [here](./configuring-ccr-enabling-soft-deletes-on-elasticsearch-6.md) to configure soft deletes on your Elasticsearch 6 indexes, then resume reading here to set up CCR.
-
-If Elasticsearch 6 is not a hard requirement for your system, you should upgrade to Elasticsearch 7 before configuring CCR. 
--->
-<!--
-## Prerequisite for Liferay DXP 7.2: Install the Liferay Connector to Elasticsearch 7
-
-If you are using Elasticsearch 7 on Liferay DXP 7.2, you have to install the [Elasticsearch 7 connector](https://web.liferay.com/marketplace/-/mp/application/170390307) from Marketplace **version `3.0.1+`** (requires DXP 7.2 FP5+/SP2+) on all DXP cluster nodes.
--->
-
 ## Prerequisite for Security: Configure Authentication and Encryption
 
 To encrypt communication (TLS/SSL) and enable user authentication between the Liferay DXP and the Elasticsearch nodes, you must [configure X-Pack security](https://help.liferay.com/hc/en-us/articles/360028711172-Installing-Liferay-Enterprise-Search-Security).
@@ -67,10 +54,6 @@ The high level steps are,
    ```
 
 1. Configure the DXP nodes. Configuration for the remote/write connection that all the Liferay DXP nodes will use is configured via the `ElasticsearchConfiguration.config` file, as covered in the [security article](https://help.liferay.com/hc/en-us/articles/360035444872-Upgrading-to-Elasticsearch-7). The [Configuring CCR in a Local Follower Data Center](./configuring-ccr-in-a-local-follower-data-center.md) article covers configuring security for the CCR ("read-only") connection on the local/follower DXP node.
-
-<!--
-3. If your Elastic Stack is 6.x, you must deploy Liferay's [X-Pack Security Connector](https://web.liferay.com/marketplace/-/mp/application/106163963) on all DXP nodes.
--->
 
 The example configurations are provided in full [here](./ccr-basic-use-case-config-reference.md).
 
