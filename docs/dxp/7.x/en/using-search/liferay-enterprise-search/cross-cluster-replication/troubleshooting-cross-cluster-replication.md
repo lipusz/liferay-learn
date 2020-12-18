@@ -1,6 +1,12 @@
 # Troubleshooting Cross-Cluster Replication
 
-Known common pitfalls encountered during the CCR setup are covered here. For further troubleshooting, look at [Elastic's CCR documentation](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-overview.html) or visit [Elastic's forum](https://discuss.elastic.co/tag/cross-cluster-replication).
+Known common pitfalls encountered during the CCR setup are covered here, as well as general troubleshooting techniques. For further troubleshooting, look at [Elastic's CCR documentation](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-overview.html) or visit [Elastic's forum](https://discuss.elastic.co/tag/cross-cluster-replication).
+
+## Investigating Index Replication Issues
+
+Successful read operations to the follower Elasticsearch cluster depend on replication of the leader's indexes.
+
+To aid diagnosing replication problems, add an INFO log level for `com.liferay.portal.search.elasticsearch7.internal.ccr.CrossClusterReplicationHelperImpl`. Log Levels are added in Control Panel &rarr; Server Administration &rarr; Log Levels.
 
 ## Exceptions During Reindex: `RetentionLeaseNotFoundException` and `IndexNotFoundException`
 
@@ -60,3 +66,10 @@ portal.instance.protocol=http
 portal.instance.inet.socket.address=myhostname:9080
 ```
 
+## Follower Cluster with Status Red Indexes
+
+After you successfully set up a CCR connection and your leader indexes are replicated successfully into the follower cluster, you can see some indexes go to the [red status](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/cluster-health.html). This may happen if you've been configuring, restarting, and re-indexing repeatedly throughout the setting up procedure. If you see this happen and you are confident your connections are configured properly, delete the follower indexes, then re-enable the LES Cross-Cluster-Replication configuration to trigger a fresh replication and following of the leader indexes. 
+
+1. Delete all the follower indexes. This is most conveniently carried out in Kibana's Index Management UI.
+
+2. To re-enable the CCR configuration, go to System Settings &rarr; Search &rarr; Cross-Cluster Replication. De-select _Enabled_ and click _Update_ to disable the module, then select _Enabled_ and click _Update_ again to re-enable it. 

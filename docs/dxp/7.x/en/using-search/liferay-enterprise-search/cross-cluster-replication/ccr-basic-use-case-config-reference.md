@@ -24,20 +24,12 @@ File contents:
 
 ```properties
 productionModeEnabled="true"
-networkHostAddresses=["http://localhost:9200"]
+remoteClusterConnectionId="remote"
 logExceptionsOnly="false"
-authenticationEnabled="true"
-username="elastic"
-password="liferay"
-httpSSLEnabled="true"
-networkHostAddresses=["https://localhost:9200"]
-truststorePassword="liferay"
-truststorePath="/PATH/TO/elastic-nodes.p12"
-truststoreType="pkcs12"
 ```
 
 ```tip::
-   The X-Pack security configuration file is not required on Liferay DXP 7.3. Security is configured in the ``ElasticsearchConfiguration.config`` and in each connection's ``.config`` file. The values should be identical on the remote/leader nodes and the local/follower nodes.
+   The X-Pack security configuration file is not required on Liferay DXP 7.3. Security is configured in each connection's ``.config`` file. The values should be identical on all Liferay nodes.
 ```
 
 File name: `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration-remote.config`
@@ -47,13 +39,13 @@ File contents:
 ```properties
 active="true"
 connectionId="remote"
-networkHostAddresses=["http://localhost:9200"]
-authenticationEnabled="true"
+networkHostAddresses=["https://localhost:9200"]
 username="elastic"
 password="liferay"
-httpSSLEnabled="true"
+authenticationEnabled=B"true"
+httpSSLEnabled=B"true"
 truststorePassword="liferay"
-truststorePath="/PATH/TO/elastic-nodes.p12"
+truststorePath="/PATH/to/elastic-nodes.p12"
 truststoreType="pkcs12"
 ```
 
@@ -64,13 +56,13 @@ File contents:
 ```properties
 active="true"
 connectionId="ccr"
-networkHostAddresses=["http://localhost:9202"]
-authenticationEnabled="true"
+networkHostAddresses=["https://localhost:9202"]
 username="elastic"
 password="liferay"
-httpSSLEnabled="true"
+authenticationEnabled=B"true"
+httpSSLEnabled=B"true"
 truststorePassword="liferay"
-truststorePath="/PATH/TO/elastic-nodes.p12"
+truststorePath="/PATH/to/elastic-nodes.p12"
 truststoreType="pkcs12"
 ```
 
@@ -84,16 +76,15 @@ Provide identical Elasticsearch 7 configurations (including the connection confi
 
 ### Local DXP Cluster Node CCR Module Configurations
 
-File name: ` com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration.config`
+Configure the LES Cross-Cluster Configuration application from the System Settings UI. If the LPKD is deployed, the configuration entry is in System Settings &rarr; Search &rarr; Cross-Cluster Replication.
 
-File contents:
+Enter these values:
 
-```properties
-ccrEnabled="true"
-ccrLocalClusterConnectionConfigurations=[ \
-  "localhost:8080,ccr", \
-  "localhost:9080,ccr", \
-  ]
+
+SCREENSHOT
+
+```note::
+   This is where you set the read-only connections. In human language, each entry here is saying "the Liferay server at this address (``localhost:9080``) reads from the Elasticsearch connection with this name (``ccr`` in this example)." 
 ```
 
 ## Leader Elasticsearch Cluster Node Configurations
@@ -111,21 +102,25 @@ http.port: 9200
 
 xpack.security.enabled: true
 
-## TLS/SSL settings for Transport layer
+### TLS/SSL settings for Transport layer
 xpack.security.transport.ssl.enabled: true
-xpack.security.transport.ssl.verification_mode: certificate
+
+# PKCS#12
 xpack.security.transport.ssl.keystore.path: certs/elastic-nodes.p12
 xpack.security.transport.ssl.keystore.password: liferay
 xpack.security.transport.ssl.truststore.path: certs/elastic-nodes.p12
 xpack.security.transport.ssl.truststore.password: liferay
+xpack.security.transport.ssl.verification_mode: certificate
 
-# TLS/SSL settings for HTTP layer
+## TLS/SSL settings for HTTP layer
 xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.verification_mode: certificate
+
+# PKCS#12
 xpack.security.http.ssl.keystore.path: certs/elastic-nodes.p12
 xpack.security.http.ssl.keystore.password: liferay
 xpack.security.http.ssl.truststore.path: certs/elastic-nodes.p12
 xpack.security.http.ssl.truststore.password: liferay
+xpack.security.http.ssl.verification_mode: certificate
 
 # For Kibana
 xpack.monitoring.collection.enabled: true
@@ -138,29 +133,35 @@ Location: `ES_FOLLOWER_HOME/config`
 File name: `elasticsearch.yml`
 
 File contents:
+
 ```yaml
 cluster.name: LiferayElasticsearchCluster_FOLLOWER
 node.name: es-follower-node-1
 
 http.port: 9202
+transport.port: 9301
 
 xpack.security.enabled: true
 
-## TLS/SSL settings for Transport layer
+### TLS/SSL settings for Transport layer
 xpack.security.transport.ssl.enabled: true
-xpack.security.transport.ssl.verification_mode: certificate
+
+# PKCS#12
 xpack.security.transport.ssl.keystore.path: certs/elastic-nodes.p12
 xpack.security.transport.ssl.keystore.password: liferay
 xpack.security.transport.ssl.truststore.path: certs/elastic-nodes.p12
 xpack.security.transport.ssl.truststore.password: liferay
+xpack.security.transport.ssl.verification_mode: certificate
 
-# TLS/SSL settings for HTTP layer
+## TLS/SSL settings for HTTP layer
 xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.verification_mode: certificate
+
+# PKCS#12
 xpack.security.http.ssl.keystore.path: certs/elastic-nodes.p12
 xpack.security.http.ssl.keystore.password: liferay
 xpack.security.http.ssl.truststore.path: certs/elastic-nodes.p12
 xpack.security.http.ssl.truststore.password: liferay
+xpack.security.http.ssl.verification_mode: certificate
 
 # For Kibana
 xpack.monitoring.collection.enabled: true
