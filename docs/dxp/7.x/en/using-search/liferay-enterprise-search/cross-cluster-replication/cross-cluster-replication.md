@@ -75,3 +75,5 @@ Start the nodes and if you haven't yet, install the LES app only on the nodes th
 ## Enable and Configure Cross-Cluster Replication
 
 Liferay DXP contains logic to complete the CCR setup for you, but it relies on enabling the CCR functionality in the System Settings UI, and not via configuration file (`.config`). At a minimum, the `enabled` property must be triggered from the UI. Once CCR is configured, all that's left is to verify the index replication and start searching.
+
+<!-- Add B Engler's details on how this works, see https://liferay.slack.com/archives/CNJBT01ME/p1608319290037900 -->

@@ -8,17 +8,45 @@ The example configured here consists of a single Liferay DXP node and a single E
 
 ### Configure the Remote Leader Elasticsearch Cluster
 
-In our example setup, the first Elasticsearch cluster is a REMOTE mode cluster with no CCR-specific configuration required: it accepts reads and writes from it's local Liferay DXP node, and write requests from the Liferay DXP nodes that are in a separate data center.
+In the example setup, the first Elasticsearch cluster to configure is a production-mode cluster with no CCR-specific configuration: it accepts reads and writes from it's local Liferay DXP node, and write requests from the Liferay DXP nodes that are in a separate data center.
 
-Configure its `elasticsearch.yml` by specifying a sensible cluster name, the `http.port`, and the `transport.port`, at a minimum:
+Configure its `elasticsearch.yml`:
 
 `[Remote Elasticsearch Home]/config/elasticsearch.yml`
 
 ```yaml
 cluster.name: LiferayElasticsearchCluster_LEADER
-http.port: 9200
 node.name: es-leader-node-1
+
+http.port: 9200
+
+xpack.security.enabled: true
+
+### TLS/SSL settings for Transport layer
+xpack.security.transport.ssl.enabled: true
+
+# PKCS#12
+xpack.security.transport.ssl.keystore.path: certs/elastic-nodes.p12
+xpack.security.transport.ssl.keystore.password: liferay
+xpack.security.transport.ssl.truststore.path: certs/elastic-nodes.p12
+xpack.security.transport.ssl.truststore.password: liferay
+xpack.security.transport.ssl.verification_mode: certificate
+
+## TLS/SSL settings for HTTP layer
+xpack.security.http.ssl.enabled: true
+
+# PKCS#12
+xpack.security.http.ssl.keystore.path: certs/elastic-nodes.p12
+xpack.security.http.ssl.keystore.password: liferay
+xpack.security.http.ssl.truststore.path: certs/elastic-nodes.p12
+xpack.security.http.ssl.truststore.password: liferay
+xpack.security.http.ssl.verification_mode: certificate
+
+# For Kibana
+xpack.monitoring.collection.enabled: true
 ```
+
+To use the security settings (`xpack.security...`) you'll need to set up passwords and obtain node certificates.
 
 Start the server. If you're in the root of the server directory, execute
 
@@ -39,9 +67,9 @@ You'll see a `- valid` message in your log when it installs successfully:
 ```
 ### Configure the Remote Liferay DXP Cluster Node
 
-The remote Liferay DXP node talks with the REMOTE mode Elasticsearch server. Even though they're both called _remote_, they're co-located in this setup.
+One of the Liferay DXP nodes in this setup is configure to read and write to/from the leader/remote Elasticsearch server.
 
-Configure the Liferay Connector to Elasticsearch X [6 or 7], by providing a configuration file in the `Liferay Home/osgi/configs` folder. If using Elasticsearch 7, name it
+Configure the Liferay Connector to Elasticsearch 7 by providing a configuration file in the `Liferay Home/osgi/configs` folder. Name it
 
 ```bash
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
@@ -51,14 +79,36 @@ Give it these contents:
 
 ```properties
 productionModeEnabled="true"
-networkHostAddresses=["http://localhost:9200"]
+remoteClusterConnectionId="remote"
 logExceptionsOnly="false"
 ```
-Though configuration values are propagated throughout the cluster, for transparency you should provide an identical configuration file for each Liferay DXP node. Therefore, make sure all the Liferay DXP nodes in both data centers have identical Elasticsearch connector configurations.
 
 ```tip::
    During development and testing, it's useful to set ``logExceptionsOnly="false"`` in the configuration files as well.
 ```
+
+Now configure the remote connection. Provide a configuration file in the `Liferay Home/osgi/configs` folder. Name it 
+
+```bash
+com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration-remote.config
+```
+
+Give it these contents:
+
+```properties
+active=B"true"
+connectionId="remote"
+username="elastic"
+password="liferay"
+authenticationEnabled=B"true"
+httpSSLEnabled=B"true"
+networkHostAddresses=["https://localhost:9200"]
+truststorePassword="liferay"
+truststorePath="/PATH/TO/elastic-nodes.p12"
+truststoreType="pkcs12"
+```
+
+For conceptual purposes, you'll configure the read-only follower connection in [Configuring CCR in a Local/Follower Data Center](./configuring-ccr-in-a-local-follower-data-center.md). For transparency, all `.config` files should be provided to each DXP node.
 
 Start the Liferay DXP server.
 
@@ -68,6 +118,7 @@ Start the Liferay DXP server.
 
 If Kibana is connected to your remote/leader Elasticsearch cluster, navigate to Management &rarr; Index Management to see the available Liferay indexes:
 
+<!--NEW SCREENSHOT-->
 ![Inspect the leader indexes in Kibana 7.](./configuring-ccr-in-a-remote-leader-data-center/images/01.png)
 
 Once the data center containing the remote/leader Elasticsearch servers up and running, you're ready to set up the [local/follower data center](./configuring-ccr-in-a-local-follower-data-center.md).

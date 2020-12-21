@@ -38,7 +38,9 @@ You may run into the following error when configuring CCR:
 ElasticsearchSecurityException security_exception current license is non-compliant for [ccr]
 ```
 
-[CCR requires](https://www.elastic.co/subscriptions#scalability-&-resiliency) a Platinum Elasticsearch license. As a LES subscriber you are allowed to use CCR.
+[CCR requires](https://www.elastic.co/subscriptions#scalability-&-resiliency) a Platinum Elasticsearch license. As a LES subscriber you have access to CCR with the license provided to you by Liferay.
+
+<!-- verify that this the above is accurate -->
 
 ## `SnapshotRestoreException` on the Follower Elasticsearch Node During Reindex
 
@@ -53,10 +55,11 @@ This is happening because system and company indexes (`liferay-0` and `liferay-<
 
 ## Clustered DXP Nodes Won't Read from Multiple Local/Follower Elasticsearch Clusters
 
-In a DXP cluster using Cross-Cluster Replication, each node can be mapped to read from a dedicated local Elasticsearch cluster. To match each DXP node with an Elasticsearch cluster, the `ccrLocalClusterConnectionConfigurations` property is configured with values like this:
+In a DXP cluster using Cross-Cluster Replication, each node can be mapped to read from a dedicated local Elasticsearch cluster. To match each DXP node with an Elasticsearch cluster, the CCR Local Cluster Connection Configurations property is configured with values like this:
 
 ```properties
-ccrLocalClusterConnectionConfigurations=["localhost:9080=follower1","localhost:9180=follower2"]
+localhost:9080,follower1
+localhost:9180,follower2
 ```
 
 Even if you're not binding the DXP nodes to `localhost`, the internal clustering code continues to identify each node using it; so `localhost` should be the hostname in this property. If you want to use a hostname other than `localhost` to identify DXP nodes internally (including in the CCR configuration) you must set the following [portal properties](./../../../installation-and-upgrades/reference/portal-properties.md) on each DXP node:
