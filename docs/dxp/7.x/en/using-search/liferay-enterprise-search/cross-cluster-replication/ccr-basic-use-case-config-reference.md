@@ -2,19 +2,17 @@
 
 To help with the CCR configuration process, the example configurations from the step-by-step instructions in this guide are collected here. These configuration are made as generic as possible, but paths, ports, etc. will need to be adjusted to match your environment. In addition, you must perform certain steps manually to complete the installation, so these cannot replace the step-by-step instructions.
 
-The configurations below assume you enable encrypted communications (TLS/SSL) and user authentication through X-Pack Security in your installation.
+The configurations below assume you enable encrypted communications (TLS/SSL) and user authentication through X-Pack Security in your installation. See [Securing Elasticsearch](../../installing-and-upgrading-a-search-engine/elasticsearch/securing-elasticsearch.md) for more information.
 
 ```tip::
    `Configuration values provided by .config files <../../../system-administration/system-settings/using-configuration-files.md>`__ are propagated throughout a DXP cluster as soon as the file is deployed to a single node. However, it's a best practice to provide identical configurations for each cluster node. 
 
-   You might notice that the instructions in this guide appear to violate the above statement. The CCR specific configuration files are not provided to the remote/leader Liferay DXP nodes. Because the CCR module is not deployed to these nodes, the configurations are inert and can be disregarded.
+   You might notice that the instructions in this guide appear to violate the above statement. The CCR specific configurations (made in the System Setting UI in this case) are not provided to the Liferay DXP nodes that read and write from the remote/leader Elasticsearch. Because the CCR module itself is not deployed to these nodes, the configurations are inert and can be disregarded.
 ```
 
 ## Remote DXP Cluster Node Configurations
 
 These configuration files are deployed to `[Remote Liferay Home]/osgi/configs`.
-
-### Remote DXP Cluster Node Configurations for Elasticsearch 7
 
 The Remote DXP cluster needs three configuration files.
 
@@ -70,21 +68,22 @@ truststoreType="pkcs12"
 
 These configuration files are deployed to `[Local Liferay Home]/osgi/configs`.
 
-### Local DXP Cluster Node Configurations for Elasticsearch 7
-
 Provide identical Elasticsearch 7 configurations (including the connection configuration files) to the local DXP nodes that you provided to the remote DXP nodes.
 
 ### Local DXP Cluster Node CCR Module Configurations
 
-Configure the LES Cross-Cluster Configuration application from the System Settings UI. If the LPKD is deployed, the configuration entry is in System Settings &rarr; Search &rarr; Cross-Cluster Replication.
+Configure the LES Cross-Cluster Configuration application from the System Settings UI. If the LPKG is deployed, the configuration entry is in System Settings &rarr; Search &rarr; Cross-Cluster Replication.
 
-Enter these values:
+Set these values:
+
+* The _Enabled_ checkbox is checked
+* The Cross-Cluster Replication Local Cluster Connection Configuration has the value _localhost:9080,ccr_
 
 
-SCREENSHOT
+<!-- SCREENSHOT -->
 
-```note::
-   This is where you set the read-only connections. In human language, each entry here is saying "the Liferay server at this address (``localhost:9080``) reads from the Elasticsearch connection with this name (``ccr`` in this example)." 
+```important::
+   Never set the value to the remote data center here (in the example, it would be ``localhost:8080,remote``). Setting this would cause follower indexes to be created in the remote cluster, where leader indexes of the same name already reside.
 ```
 
 ## Leader Elasticsearch Cluster Node Configurations
