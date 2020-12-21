@@ -15,12 +15,11 @@ Liferay DXP has long supported the idea of a distributed cluster, with nodes in 
 To set up Cross-Cluster Replication you must
 
 - [Purchase a LES subscription](https://www.liferay.com/products/dxp/enterprise-search)
-- Install the CCR Module on all Liferay DXP nodes in the local/follower data center
+- Install the CCR Module on all Liferay DXP nodes that read from the follower Elasticsearch indexes
 - Decide which indexes to replicate from the leader cluster
 - Configure the Elasticsearch Clusters
-- Configure the Liferay DXP Cluster
-- Define the Leader and Follower
-- Replicate the Leader Indexes
+- Configure the Liferay DXP Cluster's Elasticsearch connections
+- Enable and Configure Cross-Cluster Replication on the Liferay DXP nodes that read from the follower indexes
 
 Once youe fully understand the steps, [see a basic, specific use case](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) and get started setting up a local example.
 
@@ -62,32 +61,17 @@ Make sure you Install the Elasticsearch [plugins Liferay DXP needs](https://help
 
 CCR requires an Elasticsearch Platinum level license, but [LES customers](./introduction-to-les.md) already have this. If you're testing locally, start a [trial license](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/start-trial.html) on each cluster.
 
-## Configure the Liferay DXP Cluster
+## Connect Liferay DXP to Elasticsearch
 
-Configure the Liferay Clustering behavior first. In the example provided in the tutorial, some configuration will be provided for testing purposes. See the [clustering documentation](../../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/clustering-for-high-availability.md) for more information on setting up a production cluster.
+```important::
+   Configure the Liferay Clustering behavior first. In the example provided in the tutorial, some configuration will be provided for testing purposes. See the `clustering documentation <../../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/clustering-for-high-availability.md>`__ for more information on setting up a production cluster.
+```
 
-### Configure the DXP Nodes that Reside with the Leader Indexes
+All Liferay DXP nodes must have production mode enabled and the remote Elasticsearch connection declared in their general Elasticsearch configuration. In addition, two connections must be added and configured: the remote connection to the leader Elasticsearch, and the local connection to the follower Elasticsearch. Provide the proper Elasticsearch Configuration values (via a `.config` file), then start the DXP nodes. Make sure the nodes that read and write to the leader indexes are functioning properly.
 
-Configure the DXP nodes located in the same data center with the remote Elasticsearch cluster containing the leader indexes. Provide the proper Elasticsearch Configuration values (via a `.config` file), then start the DXP nodes that will write to the leader indexes, to make sure they're reading and writing properly.
+Start the nodes and if you haven't yet, install the LES app only on the nodes that should read via the local connection.
 
-### Configure the DXP Nodes that Reside with the Follower Indexes
 
-Any DXP nodes that are going to read from local follower Elasticsearch indexes and write to remote leader indexes must have the CCR module deployed and configured (use a `.config` file).
+## Enable and Configure Cross-Cluster Replication
 
-Start the nodes and install the LES app.
-
-## Make the Running Elasticsearch Clusters Know Their Respective Roles
-
-From the local cluster containing the follower indexes, declare the cluster that contains the leader indexes:
-
-- Call the `/_cluster/settings` [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/cluster-update-settings.html) to define the cluster that acts as the remote cluster containing leader indexes.
-
-<!-- Not after LPS-109204 -->
-## Replicate the Leader Indexes
-
-Perform the initial index replication from the leader into the follower: 
-
-- Call the `[indexName]/_ccr/follow` [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/ccr-put-follow.html) to configure the follower indexes on the appropriate cluster.
-
-Ready to get a local example up and running? Proceed to the [Configuring CCR: A Basic Use Case article](./configuring-an-example-ccr-installation-replicating-between-data-centers.md).
-
+Liferay DXP contains logic to complete the CCR setup for you, but it relies on enabling the CCR functionality in the System Settings UI, and not via configuration file (`.config`). At a minimum, the `enabled` property must be triggered from the UI. Once CCR is configured, all that's left is to verify the index replication and start searching.
