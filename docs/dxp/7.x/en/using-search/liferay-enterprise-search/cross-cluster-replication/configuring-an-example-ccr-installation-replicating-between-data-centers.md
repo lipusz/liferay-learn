@@ -10,8 +10,7 @@ This example uses two single-node Elasticsearch clusters on `localhost`, each wi
 
 A vanilla Liferay DXP installation contains the indexes presented in the introductory [Cross Cluster Replication](./cross-cluster-replication.md#liferay-dxp-decide-which-indexes-to-replicate-from-the-remote-cluster) article. All the Elasticsearch clusters being used by Liferay DXP (2 clusters in this example) need these indexes.
 
-<!--
-The Elasticsearch API calls are provided in a format that allows you to  copy and paste them directly into Kibana's Dev Tools console, which can be accessed via a separate Kibana installation or through the [LES Monitoring widget](./monitoring-elasticsearch.md).-->
+Any Elasticsearch API calls provided here are in a format that allows you to copy and paste them directly into Kibana's Dev Tools console, which can be accessed via a separate Kibana installation or through the [LES Monitoring widget](../monitoring-elasticsearch.md).
 
 ```note::
    To use Kibana, remember that you have multiple Elasticsearch clusters (two single-node clusters in this example) running. The ``elasticsearch.hosts: [ "http://localhost:<port>" ]`` setting in Kibana's ``kibana.yml`` file must point to the correct port when managing the indexes and other configurations described below to avoid mixing the leader and the follower clusters. In this article, we assume that your leader Elasticserach cluster node is configured to use ``9200`` while the follower node is using ``9202`` as HTTP port.
