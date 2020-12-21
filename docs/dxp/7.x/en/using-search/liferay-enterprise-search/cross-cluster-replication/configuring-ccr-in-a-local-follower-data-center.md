@@ -132,9 +132,7 @@ The LES Cross-Cluster Replication module triggers the following of the leader cl
 
 1. Click _Update_.
 
-The other configuration fields can be blank or fall back to the defaults if suitable for your use case. If you need to set a different transport port for the remote Elasticsearch cluster (the example here uses the default, `9300`), or exclude some indexes from bing replicated to the follower Elasticsearch, there are configuration fields for those purposes.
-
-<!-- Provide some checkpoint here? log messages? -->
+The other configuration fields can be blank or fall back to the defaults if suitable for your use case. If you need to set a different transport port for the remote Elasticsearch cluster (the example here uses the default, `9300`), or exclude some indexes from being replicated to the follower Elasticsearch, there are configuration fields for those purposes.
 
 Once the connections are configured and the indexes replicated, verify the system is working properly.
 
@@ -142,7 +140,6 @@ Once the connections are configured and the indexes replicated, verify the syste
 
 On the follower DXP cluster node, navigate to Control Panel &rarr; Configuration &rarr; Search. Your connections look like this:
 
-<!-- replace screenshot? -->
-![Verify the Elasticsearch 7 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/ccr-verify-setup-elasticsearch-7-connections-on-the-follower-dxp-cluster-node.png)
+![Verify the Elasticsearch 7 connections in the Search administration panel.](./configuring-ccr-in-a-local-follower-data-center/images/01.png)
 
 Now CCR is configured. If you run into trouble with your configuration, check out the [troubleshooting guide](./troubleshooting-cross-cluster-replication.md).

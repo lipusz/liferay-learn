@@ -79,8 +79,7 @@ Set these values:
 * The _Enabled_ checkbox is checked
 * The Cross-Cluster Replication Local Cluster Connection Configuration has the value _localhost:9080,ccr_
 
-
-<!-- SCREENSHOT -->
+![Configure CCR from System Settings.](./ccr-basic-use-case-config-reference/images/01.png)
 
 ```important::
    Never set the value to the remote data center here (in the example, it would be ``localhost:8080,remote``). Setting this would cause follower indexes to be created in the remote cluster, where leader indexes of the same name already reside.
