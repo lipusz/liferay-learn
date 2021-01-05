@@ -110,7 +110,7 @@ After this step you can access Kibana at `https://localhost:5601` and sign in wi
 
 Download the LES Monitoring app and install the LPKG file by copying it into the `Liferay Home/deploy` folder. 
 
-1.  Once the connector is installed and Kibana and Elasticsearch are securely configured, create a [configuration file](../../system-administration/configuring-liferay/configuration-files-and-factories/using-configuration-files.md) named
+1. Once the connector is installed and Kibana and Elasticsearch are securely configured, create a [configuration file](../../system-administration/configuring-liferay/configuration-files-and-factories/using-configuration-files.md) named
 
    ```bash
    com.liferay.portal.search.elasticsearch.monitoring.web.internal.configuration.MonitoringConfiguration.config
