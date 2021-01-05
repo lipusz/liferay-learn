@@ -20,7 +20,7 @@ Now you can set up X-Pack users.
 
 In a system using X-Pack, these [built-in X-Pack users](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/built-in-users.html) are important:
 
-* `kibana`
+* `kibana_system`
 * `elastic`
 
 On your Elasticsearch server, use the [`setup-passwords` command](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/setup-passwords.html) to set passwords for them:

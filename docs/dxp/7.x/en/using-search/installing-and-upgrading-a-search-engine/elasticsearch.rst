@@ -7,7 +7,7 @@ Elasticsearch
 
    elasticsearch/*
 
-Elasticsearch is the highly scalable, full-text search engine Liferay uses by default. Elasticsearch is bundled with Liferay for non-production purposes. In production, Liferay requires Elasticsearch running on separate remote server.
+Elasticsearch is the highly scalable, full-text search engine Liferay uses by default. Elasticsearch is bundled with Liferay for non-production purposes. In production, Liferay requires Elasticsearch running on a separate remote server.
 
 .. important::
    Always check the `compatibility matrix <https://help.liferay.com/hc/en-us/sections/360002103292-Compatibility-Matrix>`__ for the Elasticsearch version and server configuration compatible with your Liferay version.
