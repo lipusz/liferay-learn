@@ -2,7 +2,9 @@
 
 > LES Subscribers
 
-You must have a Liferay Enterprise Search (LES) [subscription](https://www.liferay.com/products/dxp/enterprise-search) to use Liferay's intergration with Elastic's [Kibana monitoring UI](https://www.elastic.co/guide/en/kibana/7.x/introduction.html).
+If you have a Liferay Enterprise Search (LES) [subscription](https://www.liferay.com/products/dxp/enterprise-search), you can integrate Elastic's [Kibana monitoring UI](https://www.elastic.co/guide/en/kibana/7.x/introduction.html) with Liferay DXP, so that your monitoring activities can be done within Liferay itself.
+
+![With LES Monitoring, you can monitor Liferay's indexes from Liferay's UI.](./monitoring-elasticsearch/images/01.png)
 
 To monitor the [secured](../installing-and-upgrading-a-search-engine/elasticsearch/securing-elasticsearch.md) Elasticsearch cluster where Liferay's data is indexed,
 
@@ -12,7 +14,7 @@ To monitor the [secured](../installing-and-upgrading-a-search-engine/elasticsear
 
 1. Configure Kibana with the proper security settings.
 
-1. Install the Liferay Enterprise Search Monitoring app.
+1. Install the LES Monitoring app.
 
 1. Configure the LES Monitoring app to communicate with Elasticsearch.
 
@@ -38,11 +40,16 @@ Make sure to install the correct version of Kibana. Check the [Liferay Enterpris
    elasticsearch.hosts: [ "https://localhost:9200" ]
    ```
 
+   On 6.5 and below, use
+
+   ```yaml
+   elasticsearch.url: "https://localhost:9200"
+   ```
    If TLS/SSL is not enabled on Elasticsearch, this is an `http` URL, otherwise use `https`.
 
    If you're not configuring security, start Kibana.
 
-1. Now configure authentication. Set the password for the built-in `kibana` user in `[Kibana Home]/config/kibana.yml`:
+1. Now configure authentication. Set the password for the built-in `kibana_system` user in `[Kibana Home]/config/kibana.yml`:
 
    ```yaml
    elasticsearch.username: "kibana_system"
@@ -50,6 +57,8 @@ Make sure to install the correct version of Kibana. Check the [Liferay Enterpris
    ```
 
    Use the `kibana_system` user password from your [security configuration](../installing-and-upgrading-a-search-engine/elasticsearch/securing-elasticsearch.md). Once Kibana is installed, you can change the built-in user passwords from the *Management* user interface.
+
+   On Elasticsearch 6.x, the Kibana system user's `username` is `kibana`.
 
 1. Begin configuring encryption by providing certificate files. See [Elastic's guide](https://www.elastic.co/guide/en/kibana/7.x/using-kibana-with-security.html#using-kibana-with-security) for more details.
 
@@ -76,16 +85,23 @@ Make sure to install the correct version of Kibana. Check the [Liferay Enterpris
    xpack.security.session.idleTimeout: "1h"
    xpack.security.session.lifespan: "30d"
 
+   # If using PEM-encoded certificates and keys, comment out the trust/keystore
+   # paths and passwords above and instead use:
+
+   #elasticsearch.ssl.certificateAuthorities: [ "config/certs/ca.crt" ]
+   #elasticsearch.ssl.certificate: config/certs/elastic-nodes.crt
+   #elasticsearch.ssl.key: config/certs/elastic-nodes.key
+
+   #server.ssl.certificateAuthorities: [ "config/certs/ca.crt" ]
+   #server.ssl.certificate: config/certs/elastic-nodes.crt
+   #server.ssl.key: config/certs/elastic-nodes.key
    ```
 
 <!-- questions about these settings: 
 
 1. the elastic docs don't say to use the password setting in the kibana.yml, but to use the command "./bin/kibana-keystore add server.ssl.keystore.password". Should we do the same?
 
-2. This usage of PKCS#12 can work on Elasticsearch 7.x, but 6.x needs PEM certs. How should we handle this mix? We show both ways in the securing article, therefore we'll need to assume they could have either situation. I vote to default to PKCS#12 and treat PEM as the "if you need it" (like if on 7.2 with ES 6) scenario.
-
-
-3. According to the docs, you'll also need to set this in elasticsearch.yml: xpack.security.http.ssl.client_authentication: "optional" OR "required. However, I didn't need it when setting up my local test. What do we do?"
+2. According to the docs, you'll also need to set this in elasticsearch.yml: xpack.security.http.ssl.client_authentication: "optional" OR "required. However, I didn't need it when setting up my local test. What do we do?"
 -->
 
 After this step you can access Kibana at `https://localhost:5601` and sign in with a Kibana user. The last step is to connect Kibana to Liferay.
@@ -98,6 +114,12 @@ Download the LES Monitoring app and install the LPKG file by copying it into the
 
    ```bash
    com.liferay.portal.search.elasticsearch.monitoring.web.internal.configuration.MonitoringConfiguration.config
+   ```
+
+   If running Elasticsearch 6.x with Liferay 7.2, the file is named
+
+   ```bash
+   com.liferay.portal.search.elasticsearch6.xpack.monitoring.web.internal.configuration.XPackMonitoringConfiguration.config
    ```
 
 1. Place these settings in the `.config` file:
@@ -133,7 +155,13 @@ Download the LES Monitoring app and install the LPKG file by copying it into the
 
 1. Because you're using the Monitoring portlet in Liferay as a proxy to Kibana's UI, if you are using TLS, you must configure the application server's startup JVM parameters to recognize a valid *truststore* and *password*.
 
-   Use the `keytool` command to generate a truststore from your existing Elasticsearch node certificate (`elastic-nodes.p12` if you reuse the certificate generated in the security example):
+   If you're currently using PEM-encoded node certificates, generate a PKCS#12 certificate, from which you'll generate a truststore:
+
+    ```bash
+    ./bin/elasticsearch-certutil cert --ca-cert /path/to/ca.crt --ca-key /path/to/ca.key --ip 127.0.0.1 --dns localhost --name localhost --out /path/to/Elasticsearch_Home/config/elastic-nodes.p12
+    ```
+
+   Now use the `keytool` command to generate a truststore from your existing Elasticsearch node certificate (`elastic-nodes.p12` if you reuse the certificate generated in the security example):
 
    ```bash
    keytool -importkeystore -deststorepass liferay -destkeystore /path/to/config/certs/truststore.jks -srckeystore /path/to/elastic-nodes.p12 -srcstoretype PKCS12 -srcstorepass liferay
@@ -162,12 +190,12 @@ For more information about monitoring and security best practices in a clustered
 
 ## Example Kibana Configuration
 
-Here are the `kibana.yml` properties demonstrated in this article, for convenient copy/pasting:
+Here's the complete `kibana.yml` demonstrated in this article, with commented out properties for Elasticsearch/Kibana 6.x:
 
 ```yaml
 # X-Pack Security enabled (Basic Auth)
 elasticsearch.username: "kibana_system"
-# if on Elasticsearch 6.x, use this username
+# If on Elasticsearch 6.x, the Kibana system user is named differently:
 # elasticsearch.username: "kibana"
 elasticsearch.password: "liferay"
 
@@ -198,6 +226,17 @@ server.ssl.keystore.password: "liferay"
 # To use Kibana inside the Elasticsearch Monitoring widget
 server.rewriteBasePath: false
 server.basePath: "/o/portal-search-elasticsearch-monitoring/monitoring-proxy"
+
+# If using PEM-encoded certificates and keys, comment out the trust/keystore
+# paths and passwords above and instead use:
+
+#elasticsearch.ssl.certificateAuthorities: [ "config/certs/ca.crt" ]
+#elasticsearch.ssl.certificate: config/certs/elastic-nodes.crt
+#elasticsearch.ssl.key: config/certs/elastic-nodes.key
+
+#server.ssl.certificateAuthorities: [ "config/certs/ca.crt" ]
+#server.ssl.certificate: config/certs/elastic-nodes.crt
+#server.ssl.key: config/certs/elastic-nodes.key
 ```
 
 ## Related Topics
