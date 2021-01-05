@@ -95,7 +95,7 @@ Enabling Transport Layer Security (TLS) involves generating node certificates an
    The `elasticsearch-certutil cert` command generates another file called `elastic-nodes.p12` (feel free to name it differently).
 
    ```note::
-      The ``certutil`` command defaults to using the *PKSC#12* format for certificate generation. Since Kibana does not work with PKSC#12 certificates, the ``--pem`` option (generates the certificate in *PEM* format) is important if you're using Kibana and *Liferay Enterprise Search Monitoring*. This generates two files in each case in a form of a ZIP file: ``ca.crt`` and ``ca.key``, ``elastic-nodes.crt`` and ``elastic-nodes.key``. Unzip the archives' contents in the *[Elasticsearch Home]/config/certs* folder.
+      The ``certutil`` command defaults to using the *PKCS#12* format for certificate generation, which works with your Elastic Stack 7.x. Kibana 6.x does not work with PKCS#12 certificates, so the ``--pem`` option (generates the certificate in *PEM* format) is important if you're using Liferay 7.2 and Kibana 6.x with *Liferay Enterprise Search Monitoring*. The PEM command  for each case generates two ZIP files: ``ca.crt`` and ``ca.key``, ``elastic-nodes.crt`` and ``elastic-nodes.key``. Unzip the archive' contents in the *[Elasticsearch Home]/config/certs* folder.
    ```
 
 1. Move `elastic-nodes.p12` to the `[Elasticsearch Home]/config/certs` folder.
@@ -116,7 +116,7 @@ Enabling Transport Layer Security (TLS) involves generating node certificates an
     elastic-nodes.key
     ```
 
-1. Copy the files to the same folder on each Elasticsearch and Liferay server node.
+1. Copy the files to the same folder on each Elasticsearch node, and to an appropriate location on each Liferay server node.
 
 The certificates and keys are ready to use in your Elasticsearch configuration.
 
@@ -331,3 +331,10 @@ Here's the complete list of settings for the X-Pack Security configuration on Li
 `sslTruststorePath` (_/path/to/elastic-certificates.p12_): Set the path to the truststore file.
 
 `sslTruststorePassword`: Set the password to the truststore.
+
+## Related Topics
+
+* [Monitoring Elasticsearch](../../liferay-enterprise-search/monitoring-elasticsearch.md)
+* [Cross-Cluster Replication](./cross_cluster_replication.rst)
+* [Search Tuning](../search_administration_and_tuning.rst)
+* [Liferay Installation and Upgrades](../../installation_and_upgrades.rst)
