@@ -25,9 +25,7 @@ Once you fully understand the steps, [see a basic, specific use case](./configur
 
 ## Liferay DXP: Install the LES Cross-Cluster Replication Module
 
-Any Liferay DXP node that will read from a local cluster's follower indexes and write through a separate connection to the remote cluster's leader indexes must have the CCR module installed. This module is available to download (as a LPKG file) with your LES subscription.
-
-If configuring Liferay DXP cluster nodes to read and write from the same Elasticsearch cluster, configure a normal REMOTE mode connection to the Leader Elasticsearch cluster. The CCR module is unnecessary for these nodes.
+Any Liferay DXP node that will read from a local cluster's follower indexes and write through a separate connection to the remote cluster's leader indexes must have the CCR module installed. For consistency and adaptability, it's best to install it on every node in the cluster. This module is available to download (as a LPKG file) with your LES subscription.
 
 ##  Liferay DXP: Decide Which Indexes to Replicate from the Remote Cluster
 
@@ -69,7 +67,7 @@ CCR requires an Elasticsearch Platinum level license, but [LES customers](./intr
 
 All Liferay DXP nodes must have two general Elasticsearch configurations: production mode enabled and the remote Elasticsearch connection declared. Supporting this, the remote Elasticsearch connection must be configured in Elasticsearch Connections. Nodes that read from the follower Elasticsearch cluster must also have that additional connection defined. Provide the proper configuration values (via a `.config` file or in System Settings), then start (or restart) the DXP nodes. Make sure the nodes that read and write to the leader indexes are functioning properly.
 
-Start the nodes and if you haven't yet, install the LES app only on the nodes that should read via the local connection.
+Start the nodes and if you haven't yet, install the LES app on all nodes in the cluster.
 
 ## Enable and Configure Cross-Cluster Replication
 

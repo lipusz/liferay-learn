@@ -114,7 +114,7 @@ Now the connection is configured. All that's left is to enable and configure CCR
 
 ## Configure the Cross-Cluster Replication Module
 
-The LES Cross-Cluster Replication module triggers the following of the leader cluster and the initial replication of all indexes from the leader cluster to the follower cluster. Triggering follow and replication relies on enabling the CCR functionality in the System Settings UI, and not via configuration file (`.config`). Configure CCR from one Liferay DXP node in the local/follower data center:
+The LES Cross-Cluster Replication module triggers the following of the leader cluster and the initial replication of all indexes from the leader cluster to the follower cluster. Triggering follow and replication relies on enabling the CCR functionality in the System Settings UI, and not via configuration file (`.config`). Configure CCR from any Liferay DXP node in either data center:
 
 1. Open the Global Menu and navigate to Control Panel &rarr; System Settings. Open the _Search_ category.  
 

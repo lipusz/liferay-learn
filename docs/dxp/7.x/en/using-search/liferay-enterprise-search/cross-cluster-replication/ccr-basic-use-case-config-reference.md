@@ -6,8 +6,6 @@ The configurations below assume you enable encrypted communications (TLS/SSL) an
 
 ```tip::
    `Configuration values provided by .config files <../../../system-administration/system-settings/using-configuration-files.md>`__ are propagated throughout a DXP cluster as soon as the file is deployed to a single node. However, it's a best practice to provide identical configurations for each cluster node. 
-
-   You might notice that the instructions in this guide appear to violate the above statement. The CCR specific configurations (made in the System Setting UI in this case) are not provided to the Liferay DXP nodes that read and write from the remote/leader Elasticsearch. Because the CCR module itself is not deployed to these nodes, the configurations are inert and can be disregarded.
 ```
 
 ## Remote DXP Cluster Node Configurations
@@ -72,7 +70,7 @@ Provide identical Elasticsearch 7 configurations (including the connection confi
 
 ### Local DXP Cluster Node CCR Module Configurations
 
-Configure the LES Cross-Cluster Configuration application from the System Settings UI. If the LPKG is deployed, the configuration entry is in System Settings &rarr; Search &rarr; Cross-Cluster Replication.
+Configure the LES Cross-Cluster Configuration application from the System Settings UI on any node (even one in the remote data center). If the LPKG is deployed, the configuration entry is in System Settings &rarr; Search &rarr; Cross-Cluster Replication.
 
 Set these values:
 
