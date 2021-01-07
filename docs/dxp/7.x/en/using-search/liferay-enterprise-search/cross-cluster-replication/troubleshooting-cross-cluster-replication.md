@@ -46,8 +46,6 @@ ElasticsearchSecurityException security_exception current license is non-complia
 
 [CCR requires](https://www.elastic.co/subscriptions#scalability-&-resiliency) a Platinum Elasticsearch license. As a LES subscriber you have access to CCR with the license provided to you by Liferay.
 
-<!-- verify that this the above is accurate -->
-
 ## Clustered DXP Nodes Won't Read from Multiple Local/Follower Elasticsearch Clusters
 
 In a DXP cluster using Cross-Cluster Replication, each node can be mapped to read from a dedicated local Elasticsearch cluster. To match each DXP node with an Elasticsearch cluster, the CCR Local Cluster Connection Configurations property is configured with values like this:
@@ -71,3 +69,7 @@ After you successfully set up a CCR connection and your leader indexes are repli
 1. Delete all the follower indexes. This is most conveniently carried out in Kibana's Index Management UI.
 
 2. To re-enable the CCR configuration, go to System Settings &rarr; Search &rarr; Cross-Cluster Replication. De-select _Enabled_ and click _Update_ to disable the module, then select _Enabled_ and click _Update_ again to re-enable it. 
+
+## Securing the HTTP Layer Requires Using PKCS#12 Certificates
+
+While it's supported to use [PEM or PKCS#12 certificate files](../../installing-and-upgrading-a-search-engine/elasticsearch/securing-elasticsearch.md#generate-node-certificates) to encrypt the HTTP and Transport layers in Elasticsearch, you must use PKCS#12 files on the HTTP layer when using CCR. See Elastic's [Encrypted communication](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/_encrypted_communication.html) documentation for more details.
