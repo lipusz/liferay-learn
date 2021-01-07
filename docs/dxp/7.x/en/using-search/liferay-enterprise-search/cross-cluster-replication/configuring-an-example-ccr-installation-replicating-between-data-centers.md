@@ -2,7 +2,7 @@
 
 > **Liferay Enterprise Search (LES) Subscribers**
 
-Configure Liferay DXP's Cross-Cluster Replication module and Elasticsearch to set up a read-write connection from one Elasticsearch server to one Liferay DXP cluster node, and a read connection from another Elasticsearch server to a second Liferay DXP cluster node:
+Configure Liferay DXP's Cross-Cluster Replication module and Elasticsearch to set up a read-write connection from one Elasticsearch cluster to one Liferay DXP cluster node, and a read connection from another Elasticsearch cluster to a second Liferay DXP cluster node:
 
 ![With Cross-Cluster Replication, disparate data centers can hold synchronized Elasticsearch clusters with Liferay DXP indexes.](./configuring-an-example-ccr-installation-replicating-between-data-centers/images/01.png)
 
@@ -18,7 +18,7 @@ Any Elasticsearch API calls provided here are in a format that allows you to cop
 
 ## Cluster Liferay DXP 
 
-For the example here, each Liferay DPX node requires a `Liferay Home/portal-ext.properties` file with the following contents:
+For the example here, each Liferay DXP node requires a `Liferay Home/portal-ext.properties` file with the following contents:
 
 ```properties
 cluster.link.enabled=true

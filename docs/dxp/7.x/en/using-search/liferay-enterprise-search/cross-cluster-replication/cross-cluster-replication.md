@@ -2,9 +2,9 @@
 
 > **Liferay Enterprise Search (LES) Subscribers**
 
-In a classic Liferay DXP/search engine installation, one Liferay DXP cluster talks to one Elasticsearch cluster, sending all of its read (e.g., execute a search query) and write (e.g., create a document) requests through one connection to the search engine cluster. In this setup, all search engine servers are located in the same data center (though they can be in a different data center than the Liferay DXP servers).
+In a classic Liferay DXP/search engine installation, one Liferay DXP cluster talks to one Elasticsearch cluster, sending all of its read (e.g., execute a search query) and write (e.g., create a document) requests through one connection to the search engine cluster. In this setup, all Elasticsearch cluster nodes are located in a single data center (though they can be in a different data center than the Liferay DXP servers).
 
-Addressing concerns about data locality and disaster recovery, Elasticsearch released a [Cross-Cluster Replication (CCR)](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/xpack-ccr.html) feature that [LES subscribers](https://www.liferay.com/products/dxp/enterprise-search) can use with Liferay DXP, for Elasticsearch 6.7+ and 7+ (refer to the [LES compatibility matrix](https://www.liferay.com/compatibility-matrix/liferay-enterprise-search) for version compatibility details). With the LES CCR module you can achieve a limited form of multi-data-center deployment, in that it does not allow distributing an Elasticsearch cluster's nodes over multiple data centers, but does allow configuring and connecting separate Elasticsearch clusters in each data center. In this setup, there is at least one cluster holding _leader_ indexes and one cluster holding _follower_ indexes that are replicated from the leader. Follower indexes are only ever used by Liferay DXP for reading data. Leader indexes are always used for writing, but are more flexible in that you can also use them for reading, as in the example below:
+Addressing concerns about data locality and disaster recovery, Elasticsearch released a [Cross-Cluster Replication (CCR)](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/xpack-ccr.html) feature that [LES subscribers](https://www.liferay.com/products/dxp/enterprise-search) can use with Liferay DXP, for Elasticsearch 7+ (refer to the [LES compatibility matrix](https://www.liferay.com/compatibility-matrix/liferay-enterprise-search) for version compatibility details). With the LES CCR module you can achieve an alternate form of multi-data-center deployment, in that it does not allow distributing an Elasticsearch cluster's nodes over multiple data centers, but does allow configuring and connecting separate Elasticsearch clusters in each data center. In this setup, there is one cluster holding _leader_ indexes and at least one cluster holding _follower_ indexes that are replicated from the leader. Follower indexes are only ever used by Liferay DXP for reading data. Leader indexes are always used for writing, but are more flexible in that you can also use them for reading, as in the example below:
 
 ![With Cross-Cluster Replication, disparate data centers can hold synchronized Elasticsearch clusters with Liferay DXP indexes.](./cross-cluster-replication/images/01.png)
 
@@ -21,7 +21,7 @@ To set up Cross-Cluster Replication you must
 - Configure the Liferay DXP Cluster's Elasticsearch connections
 - Enable and Configure Cross-Cluster Replication on the Liferay DXP nodes that read from the follower indexes
 
-Once youe fully understand the steps, [see a basic, specific use case](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) and get started setting up a local example.
+Once you fully understand the steps, [see a basic, specific use case](./configuring-an-example-ccr-installation-replicating-between-data-centers.md) and get started setting up a local example.
 
 ## Liferay DXP: Install the LES Cross-Cluster Replication Module
 
@@ -67,10 +67,9 @@ CCR requires an Elasticsearch Platinum level license, but [LES customers](./intr
    Configure the Liferay Clustering behavior first. In the example provided in the tutorial, some configuration will be provided for testing purposes. See the `clustering documentation <../../../installation-and-upgrades/setting-up-liferay-dxp/clustering-for-high-availability/clustering-for-high-availability.md>`__ for more information on setting up a production cluster.
 ```
 
-All Liferay DXP nodes must have production mode enabled and the remote Elasticsearch connection declared in their general Elasticsearch configuration. In addition, two connections must be added and configured: the remote connection to the leader Elasticsearch, and the local connection to the follower Elasticsearch. Provide the proper Elasticsearch Configuration values (via a `.config` file), then start the DXP nodes. Make sure the nodes that read and write to the leader indexes are functioning properly.
+All Liferay DXP nodes must have two general Elasticsearch configurations: production mode enabled and the remote Elasticsearch connection declared. Supporting this, the remote Elasticsearch connection must be configured in Elasticsearch Connections. Nodes that read from the follower Elasticsearch cluster must also have that additional connection defined. Provide the proper configuration values (via a `.config` file or in System Settings), then start (or restart) the DXP nodes. Make sure the nodes that read and write to the leader indexes are functioning properly.
 
 Start the nodes and if you haven't yet, install the LES app only on the nodes that should read via the local connection.
-
 
 ## Enable and Configure Cross-Cluster Replication
 

@@ -67,7 +67,7 @@ You'll see a `- valid` message in your log when it installs successfully:
 ```
 ### Configure the Remote Liferay DXP Cluster Node
 
-One of the Liferay DXP nodes in this setup is configure to read and write to/from the leader/remote Elasticsearch server.
+One of the Liferay DXP nodes in this setup reads and writes to/from the leader/remote Elasticsearch server.
 
 Configure the Liferay Connector to Elasticsearch 7 by providing a configuration file in the `Liferay Home/osgi/configs` folder. Name it
 
