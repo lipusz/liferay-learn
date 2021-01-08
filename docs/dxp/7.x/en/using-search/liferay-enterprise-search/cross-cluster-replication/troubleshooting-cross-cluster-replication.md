@@ -69,7 +69,3 @@ After you successfully set up a CCR connection and your leader indexes are repli
 1. Delete all the follower indexes. This is most conveniently carried out in Kibana's Index Management UI.
 
 2. To re-enable the CCR configuration, go to System Settings &rarr; Search &rarr; Cross-Cluster Replication. De-select _Enabled_ and click _Update_ to disable the module, then select _Enabled_ and click _Update_ again to re-enable it. 
-
-## Securing the HTTP Layer Requires Using PKCS#12 Certificates
-
-While it's supported to use [PEM or PKCS#12 certificate files](../../installing-and-upgrading-a-search-engine/elasticsearch/securing-elasticsearch.md#generate-node-certificates) to encrypt the HTTP and Transport layers in Elasticsearch, you must use PKCS#12 files on the HTTP layer when using CCR. See Elastic's [Encrypted communication](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.x/_encrypted_communication.html) documentation for more details.
