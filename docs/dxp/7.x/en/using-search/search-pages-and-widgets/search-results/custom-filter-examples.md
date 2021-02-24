@@ -1,6 +1,11 @@
 # Custom Filter Examples
 
-The Custom Filter widget is a powerful aid to your efforts to tune Liferay's search, without deploying custom code. Some common use cases are presented here to grease the wheels of ingenuity.
+The Custom Filter widget is a powerful aid to your search tuning efforts. Without deploying custom code you can exert control over the query sent to the search engine. Some common use cases are presented here to help you understand how to approach the Custom Filter widget:
+
+- Excluding Content from Search Results, based on a field's value
+- Boosting Content in Search Results, based on a field's value or presence
+
+See [Filtering Search Results](./filtering-search-results.md) for a detailed explanation of the Custom Filter widget.
 
 ## Excluding Certain Content
 
@@ -8,7 +13,7 @@ When used with a `must_not` Occur configuration, the Custom Filter can catch and
 
 ### Excluding Certain Documents and Media Content
 
-Sometimes, you may want to exclude certain types of content from appearing in the Search Results. To exclude Documents and Media file entries that are only present to be added to Web Content, you must first distinguish the particular files to exclude, in a way that they can be . You can tag them with something that declares their purpose (`wconly`, perhaps) or you can put them into a dedicated [Documents and Media Folder](./../../../content-authoring-and-management/documents-and-media/uploading-and-managing/creating-folders.md ). Once you  configure a Custom Filter like this:
+Sometimes, you may want to exclude certain types of content from appearing in the Search Results. To exclude Documents and Media file entries that are only present in the system to be added to Web Content, you must first distinguish the particular files to exclude, in a way that they can be . You can tag them with something that declares their purpose (`wconly`, perhaps) or you can put them into a dedicated [Documents and Media Folder](./../../../content-authoring-and-management/documents-and-media/uploading-and-managing/creating-folders.md ). To configure a Custom Filter to exclude a Documents and Media Folder, use these settings:
 
 **Filter Query Type:** `Match`
 
@@ -52,13 +57,13 @@ To boost a document with certain fields that match the searched keywords, config
 
 **Custom Parameter Name:** `q`
 
-This configuration lets you boost matching documents whose English (United States) titles and content contain the keywords entered by the user in the Search Bar widget. Entering the Custom Parameter Name with the same value as the Search Bar's Keywords Parameter Name configuration means that the value passed in to the Search Bar is the value that's boosted by the Custom Filter (if it matches with documents in the search index).
+This configuration lets you boost matching documents if the English (United States) title and content contains the keywords entered by the user in the Search Bar widget. Entering the Custom Parameter Name with the same value as the Search Bar's Keywords Parameter Name configuration means that the value passed in to the Search Bar is the value that's boosted by the Custom Filter (if it matches with documents in the search index).
 
 Using the Multi Match query allows you to match multiple fields at once. Otherwise you'd need to configure a Custom Filter for each separate field, even if the rest of the configuration values are identical.
 
 ### Boosting by a Field's Presence
 
-To boost any content that's tagged, regardless of what it's tagged with, configure a Custom Filter like this:
+To boost any content that's tagged, regardless of what the tag value is, configure a Custom Filter like this:
 
 **Filter Query Type:** `Exists`
 
@@ -70,3 +75,8 @@ To boost any content that's tagged, regardless of what it's tagged with, configu
 
 If a document matching the query is tagged, it will contain a `assetTagNames` field. The Exists query is used to match based on any value for the field. 
 
+## Related Content
+
+- [Filtering Search Results](./filtering-search-results.md)
+- [Result Rankings](../../search-administration-and-tuning/result-rankings.md)
+- [Synonym Sets](../../search-administration-and-tuning/synonym-sets.md)

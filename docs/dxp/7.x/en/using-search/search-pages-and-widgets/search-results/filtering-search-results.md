@@ -13,7 +13,7 @@ For now, consider these basic usages:
 | **User Title Filter:** End Users directly manipulate the filter key to refine results to the one they were looking for, using the Title |`Filter Field` _(title\_en\_US)_ <br /> `Filter Value` _(podcast)_ <br /> `Filter Query Type` _(Match)_ <br /> `Occur Type` _(must_not)_|
 | **Hard-Coded Filtering:** An administrative User configures the Search Page with filters that are invisible and unchangeable for end Users | ***Add to the above configuration*** <br /> `Invisible` _(True--checked)_ <br /> `Immutable` _(True--checked)_|
 
-Custom filters can do so many things, it's impossible to list them all. What follows is a widget configuration tour.
+Custom filters can do so many things, it's impossible to list them all. What follows is a widget configuration tour. You can see some example configurations in [Custom Filter Examples](./custom-filter-examples.md).  
 
 ## Adding a Custom Filter
 
@@ -76,3 +76,9 @@ Values in this field typically match the name of an application-defined index.
 To find the fields you can filter by in the Custom Filter widget, Users with the proper permissions can navigate to *Control Panel* &rarr; *Configuration* &rarr; *Search*.  From there, open the Field Mappings tab and browse the mappings for the `liferay-[companyId]` index. Scroll to the [`properties`](https://www.elastic.co/guide/en/elasticsearch/reference/current/properties.html) section of the mapping.
 
 ![Browse the field mappings to find Liferay DXP's indexed fields.](./filtering-search-results/images/04.png)
+
+## Related Content
+
+- [Custom Filter Examples](./custom-filter-examples.md)
+- [Result Rankings](../../search-administration-and-tuning/result-rankings.md)
+- [Synonym Sets](../../search-administration-and-tuning/synonym-sets.md)
