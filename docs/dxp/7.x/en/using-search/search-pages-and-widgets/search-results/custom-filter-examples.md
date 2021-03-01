@@ -2,10 +2,10 @@
 
 The Custom Filter widget is a powerful aid to your search tuning efforts. Without deploying custom code you can exert control over the query sent to the search engine. Some common use cases are presented here to help you understand how to approach the Custom Filter widget:
 
-- Excluding Content from Search Results, based on a field's value
-- Boosting Content in Search Results, based on a field's value or presence
-- Using Elasticsearch's Query String query in the Custom Filter widget 
-- Filtering by Site ID to display results from multiple sites
+- [Excluding Content from Search Results](#excluding-certain-content)
+- [Boosting Content in Search Results](#boosting-fields)
+- [Filtering by multiple Site IDs](#filtering-by-site-id)
+- [Using Elasticsearch's Query String query](#complex-filter-with-query-string) 
 
 See [Filtering Search Results](./filtering-search-results.md) for a detailed explanation of the Custom Filter widget.
 
@@ -27,7 +27,7 @@ Sometimes, you may want to exclude certain types of content from appearing in th
 
 This configuration ensures that search documents containing a `folderId` field with the value `41103` are not returned in the search results.
 
-### Excluding Documents and Media with Certain Extensions
+### Excluding Content with Certain Extensions
 
 Perhaps you need to exclude GIF files from appearing in the search results. Configure a Custom Filter like this:
 
