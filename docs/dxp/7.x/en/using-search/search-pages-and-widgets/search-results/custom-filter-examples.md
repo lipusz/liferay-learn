@@ -4,6 +4,8 @@ The Custom Filter widget is a powerful aid to your search tuning efforts. Withou
 
 - Excluding Content from Search Results, based on a field's value
 - Boosting Content in Search Results, based on a field's value or presence
+- Using Elasticsearch's Query String query in the Custom Filter widget 
+- Filtering by Site ID to display results from multiple sites
 
 See [Filtering Search Results](./filtering-search-results.md) for a detailed explanation of the Custom Filter widget.
 
@@ -77,53 +79,74 @@ If a document matching the query is tagged, it will contain a `assetTagNames` fi
 
 ## Filtering by Site ID
 
-UNTESTED
+There's no configuration that allows you to search multiple sites from one Search Page without searching all of them. To include results from the current site and all [child sites](../../../site-building/building-sites/site-hierarchies.md) you'll need to configure the Search Bar's Scope, setting it to _Everything_. After that, you'll use one parent Custom Filter to with a Bool query, to set up a filter that can collect child query clauses, each of which will be contributed by a Custom Filter widget with a term query for matching the `groupId` of a site to include in the search results. The Site's ID is the `groupId` field in the search document.
 
-By default, the Search Bar widget is scoped to search for content in the site where the widget is deployed. It can also be configured to search all sites. However, there's no configuration that allows you to search multiple sites from one Search Page without searching all of them. For example, you may want to include results from the current site and all [child sites](../../../site-building/building-sites/site-hierarchies.md). For this you'll need to configure the Search Bar's Scope, setting it to _Everything_. After that, you'll use one parent Custom Filter to with a Bool query, to set up a filter that can collect child query clauses, each of which will be contributed by a Custom Filter widget with a term query for matching the `groupId` of a site to include in the search results. The Site's ID is the `groupId` field in the search document.
+1. Create 3 sites:
+   - Create at least one parent site with a child site.
+   - Create at least one additional site that won't be included in the search.
 
-Configure the parent Custom Filter like this:
+   ```tip::
+      To find the Group ID of a site, in the site menu navigate to Configuration > Settings. The displayed `Site ID` is the ``groupId`` you can use to filter the site.
+   ```
 
-**Filter Query Type:** `Bool`
+1. Create at least one piece of content in each site (a Blogs Entry), and include the word _Liferay_ in each.
 
-**Occur:** `Filter`
+1. Set the Search Bar scope to _Everything_.
 
-**Query Name:** `SiteBoolQuery`
+   > **Checkpoint:** Search and see that content from all the sites is returned
 
-Configure a Custom Filter for each site to include:
+   ![These three Blogs Entries are each from a different Site.](./custom-filter-examples/images/01.png)
 
-**Filter Query Type:** `Term`
+1. Configure a parent Custom Filter:
 
-**Filter Field:** `groupId`
+   **Filter Query Type:** `Bool`
 
-**Occur:** `should`
+   **Occur:** `Filter`
 
-**Parent Query:** `SiteBoolQuery`
+   **Query Name:** `SiteBoolQuery`
 
-**Filter Value:** `20121`
+1. Configure a Custom Filter for each site to include in the search:
 
-Importantly, the filter by `groupId` declares the `SiteBoolQuery` as its parent query. The _should_ Occur clauses in the child Term queries (for each site) act as an OR clause, so that if any of the `groupId`s are matched, its content can be displayed in the Search Results widget.
+   **Filter Query Type:** `Term`
 
-## Complex Filter with String Query
+   **Filter Field:** `groupId`
 
-UNTESTED
+   **Occur:** `should`
 
-Sometimes you can avoid the need for multiple queries with nesting (as in the [Filtering by Site ID](#filtering-by-site-id) example), by using the [String Query](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/query-dsl-query-string-query.html). The below configuration demonstrates how you can limit the search to only 
+   **Parent Query:** `SiteBoolQuery`
 
-* Matching Documents and Media files with `pdf` OR `docx` extensions AND
-* Any matching Web Content Article
+   **Filter Value:** `38109`
+
+   For the example content form the above screenshot, one more Custom Filter is needed. Configure it identically to the above with one exception: the Filter Value is `38105`.
+
+   > **Checkpoint:** Search again and confirm that content from only the designated sites is returned. This can be further confirmed by looking at the details view if the search results are configured to _Display Results in Document Form_.
+
+   ![Only content from the included Sites is displayed.](./custom-filter-examples/images/02.png)
+
+Importantly, the filters by `groupId` declare the `SiteBoolQuery` as the parent query. The _should_ Occur clauses in the child Term queries (for each site) act as an OR operator, so that if any of the `groupId`s are matched, its content can be displayed in the Search Results widget.
+
+## Complex Filter with Query String
+
+Sometimes you can avoid the need for multiple queries (as in the [Filtering by Site ID](#filtering-by-site-id) example), by using the [Query String query](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/query-dsl-query-string-query.html). The below configuration demonstrates how you can use only one Custom Filter widget to limit the constrain the search to
+
+* Match Documents and Media files with `pdf` or `jpg` extensions OR
+* Match Web Content Articles
 
 Configure the Custom Filter widget like this:
 
-**Filter Query Type:** `String Query`
+**Filter Query Type:** `Query String`
 
 **Occur:** `Filter`
 
-**Filter Value:** `((extension:pdf OR extension:docx) AND entryClassName:com.liferay.document.library.kernel.model.DLFileEntry) OR entryClassName:com.liferay.journal.model.JournalArticle`
+**Filter Value:** `((extension:pdf OR extension:jpg) AND entryClassName:com.liferay.document.library.kernel.model.DLFileEntry) OR entryClassName:com.liferay.journal.model.JournalArticle`
 
-Using parentheses is recommended to ensure that your intended precedence is enforced. While it's great at simplifying the configuration of a search page (often a complex case is handled with just one Custom Filter widget), the String Query is not the answer to all complexity in the custom Filter widget.
+Using parentheses is recommended to ensure that your intended precedence is enforced.
 
-WORDSMITH
-Some queries cannot be set up with this type of query. For example, it doesn't allow the use of "nested", "term", "prefix", etc... (you won't able to search with nested documents and you won't be able to force to not analyze a query field)
+Simplifying the configuration of a search page (often a complex case is handled with just one Custom Filter widget) is nice, but the Query String query is not the answer to all complexity in the custom Filter widget. Some queries cannot be mimicked using the Query String type. For example, it cannot handle Nested queries to search nested documents, Term queries to avoid analysis, or Prefix queries to search based on prefixes.
+
+```warning::
+   The Query String query should not be used if the value it's being passed is coming from the search bar (as demonstrated in `Boosting Matches to Designated Fields`_. If the Search Bar's user enters a keyword containing invalid syntax, an error is returned.
+```
 
 ## Related Content
 
