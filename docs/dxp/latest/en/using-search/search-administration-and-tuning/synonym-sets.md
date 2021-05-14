@@ -48,7 +48,7 @@ In the example above, this blog article about a lunar rover does not contain the
 
 ## Creating New Synonym Language Filters
 
-> **Availability: Liferay DXP 7.3 FP2+ and Liferay DXP 7.2 FP12+**
+> **Availability: Liferay DXP 7.3 FP2+ and Liferay DXP 7.2 FP13+**
 
 Out of the box, Synonyms Sets supports synonyms in [English and Spanish only](#requirements-and-limitations). To add support for other languages use the configuration steps below:
 
