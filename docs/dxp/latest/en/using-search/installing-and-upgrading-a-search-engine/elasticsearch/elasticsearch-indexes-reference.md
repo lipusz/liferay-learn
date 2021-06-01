@@ -10,6 +10,10 @@
 * Custom Index
 TBW
 
+## List of Default Indexes
+
+The list below assumes that the default "Index Name Prefix" (`liferay-`) is used in the connector config. See the "Index Settings" section for further details.
+
 ### List of Default Indexes in 7.3
 
 TBA (based on https://learn.liferay.com/dxp/latest/en/using-search/liferay-enterprise-search/cross-cluster-replication/cross-cluster-replication.html#liferay-dxp-decide-which-indexes-to-replicate-from-the-remote-cluster)
