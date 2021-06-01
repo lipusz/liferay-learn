@@ -2,10 +2,10 @@
 
 > Applies to the latest available GA/SP releases of 7.2 and 7.3 unless indicated otherwise.
 
-## Index Types
+## Index Types & Lifecycles
 
-* Virtual Instance Index
-* System Instance Index
+* Virtual Instance (aka. Company) Index
+* System (Company) Index
 * Application-contributed Index
 * Custom Index
 TBW
