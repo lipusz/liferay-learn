@@ -8,6 +8,7 @@ Elasticsearch
    elasticsearch/installing-elasticsearch.md
    elasticsearch/connecting-to-elasticsearch.md
    elasticsearch/securing-elasticsearch.md
+   elasticsearch/elasticsearch-indexes-reference.md
    elasticsearch/exercise-run-liferay-and-elasticsearch-using-docker.md
    elasticsearch/troubleshooting-elasticsearch-installation.md
    elasticsearch/using-the-sidecar-or-embedded-elasticsearch.md
@@ -56,3 +57,8 @@ Configuring
 ~~~~~~~~~~~
 
 -  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/elasticsearch-connector-settings`
+
+Reference
+~~~~~~~~~
+
+-  :doc:`/using-search/installing-and-upgrading-a-search-engine/elasticsearch/elasticsearch-indexes-reference.md`
