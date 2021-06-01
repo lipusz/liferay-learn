@@ -22,10 +22,6 @@ TBA (based on https://learn.liferay.com/dxp/latest/en/using-search/liferay-enter
 
 TBA (based on https://help.liferay.com/hc/en-us/articles/360048464852#what-are-the-out-of-the-box-search-indexes-created-in-elasticsearch-on-dxp-72-sp3fp8-and-on-dxp-7.3)
 
-### List of Default Indexes in 7.2 prior to FP8/SP3
-
-TBA (based on https://help.liferay.com/hc/en-us/articles/360048464852)
-
 ## Index Settings
 
 TBW (related ES connector config properties; defaults; related `*.json` files in the source/bundle; ES defaults).
