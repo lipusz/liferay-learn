@@ -1,6 +1,6 @@
 # System Scoped Search Configuration
 
-System scoped search configurations are primarily found in [System Settings](https://help.liferay.com/hc/en-us/articles/360029131591-System-Settings).
+System scoped search configurations are primarily found in [System Settings](../../system-administration/configuring-liferay/system-settings.md).
 
 1. In the Global Menu, go to *Control Panel* &rarr; *Configuration* &rarr; *System Settings*.
 
@@ -70,7 +70,7 @@ This entry contains only one property:
 ## Engine Helper
 
 This entry has one repeatable property (use array syntax if you're defining via
-[OSGi configuration file](https://help.liferay.com/hc/en-us/articles/360029131671-Creating-Configuration-Files)):
+[OSGi configuration file](../../system-administration/configuring-liferay/configuration-files-and-factories/using-configuration-files.md)):
 
 **`excludedEntryClassNames`**: Exclude an asset type from being searched in the catchall query constructed for the Search application. For example, fields of the Organization asset must be indexed to be searchable from the Users and Organizations application, but should not be searched in the Search application. Thus, Organizations are added to `excludedEntryClassNames`.
 
