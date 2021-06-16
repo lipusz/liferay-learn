@@ -1,8 +1,10 @@
 # Widget Scoped Search Configuration
 
-Several search widgets are available to place on Pages. Each one has its own configuration options:
+Several search widgets are available to place on Pages. Each one has its own configuration options.
 
 ![Each widget's configuration will be unique.](./widget-scoped-search-configuration/images/01.png)
+
+## Search Widgets
 
 **Search Results**: Configure how search results are displayed. Read [Displaying Search Results](../search-pages-and-widgets/search-results/configuring-the-search-results-widget.md#displaying-search-results) for more information.
 
