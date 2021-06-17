@@ -1,9 +1,23 @@
 # Elasticsearch Connection Settings
 
-Elasticsearch is Liferay's default search engine. The connection is managed through the *Liferay Connector to Elasticsearch [Version]*, and is configurable through [System Settings](../../../system-administration/configuring-liferay/system-settings.md) or an [OSGi configuration file](../../../system-administration/configuring-liferay/configuration-files-and-factories/using-configuration-files.md) named
+Elasticsearch is Liferay's default search engine. The connection to Elasticsearch is managed through the Liferay Connector to Elasticsearch [Version].
+
+The connection is primarily defined in the Elasticsearch 6/7 configuration entry in System Settings (or via corresponding configuration file). Liferay 7.3 introduced the possibility to define multiple connections to Elasticsearch, through the [factory configuration](../../../system-administration/configuring-liferay/configuration-files-and-factories/using-factory-configuration.md) Elasticsearch Connections configuration. Both configuration entries are configurable through [System Settings](../../../system-administration/configuring-liferay/system-settings.md) or an [OSGi configuration file](../../../system-administration/configuring-liferay/configuration-files-and-factories/using-configuration-files.md). 
+
+## Elasticsearch Connection Configuration Files
+
+In Liferay 7.3 and beyond (or on earlier versions with [LES Cross-Cluster Replication](../../liferay-enterprise-search/cross-cluster-replication/cross-cluster-replication.md)), there's an additional connection configuration entry, Elasticsearch Connections. You can use this to define any connection to Elasticsearch, but if you are only configuring one connection you can still use the Elasticsearch 7 configuration entry.
+
+If managing only one connection for Elasticsearch 7 the configuration file is
 
 ```
 com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
+```
+
+If using multiple connections, define connections with files named accordingly:
+
+```
+com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration-[key].config
 ```
 
 If using Elasticsearch 6 on Liferay 7.2, the configuration file is named
@@ -12,24 +26,46 @@ If using Elasticsearch 6 on Liferay 7.2, the configuration file is named
 com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config
 ```
 
-Deploy the file to `[Liferay_Home]/osgi/configs` and a listener auto-detects it.
+If configuring security on Elasticsearch 6, a separate Liferay configuration (as well as a LES subscription) is required. See [Securing Elasticsearch](securing-elasticsearch.md) for more information.
 
-The list below is all the configuration settings for Liferay's default Elasticsearch connector, in the order they appear in the System Settings application (The _Elasticsearch [Version]_ entry under the _Search_ category):
+Deploy the files to `[Liferay_Home]/osgi/configs` and a listener auto-detects the configurations and writes them to the database.
 
+## Elasticsearch Connection Settings
+
+The configuration settings listed are for Liferay's Elasticsearch connector as of Liferay DXP 7.3.10 SP1. Most of these settings can be defined in either the Elasticsearch 7 entry or Elasticsearch Connections, under the System Settings &rarr; Search category.
+
+### Properties Unique to the Elasticsearch 7 Configuration
+
+**Production Mode Enabled, `productionModeEnabled="false"`**
+Enable production mode. In Liferay 7.3, `productionModeEnabled` replaces the deprecated setting `operationMode`. If this is checked, production mode is enabled and the Operation Mode configuration is ignored. Enabling production mode requires connecting to a remote standalone Elasticsearch cluster. If left disabled, the Operation Mode configuration is used.
+
+[Deprecated] **Operation Mode, `operationMode="EMBEDDED"`**
+There are two operation modes you can choose from: EMBEDDED or REMOTE. Set to REMOTE to connect to a remote standalone Elasticsearch cluster. Set to EMBEDDED to start Liferay with an internal Elasticsearch instance. EMBEDDED operation mode is unsupported for production environments.
+
+**Remote Cluster Connection ID, `remoteClusterConnectionID`**
+Choose the connection ID for a connection to the remote Elasticsearch cluster. The available connections are defined in the Elasticsearch Connections System Settings entry. If this value is not set then the connection configurations in the Elasticsearch 7 entry are used for the remote cluster connection.
+
+<!-- embedded only on 7.3 -->
 **Cluster Name, `clusterName=LiferayElasticsearchCluster`**
 A String value that sets the name of the cluster to integrate with. This name should match the remote cluster when Operation Mode is set to remote.  (See also: remote operation mode)
 
-**Operation Mode, `operationMode=EMBEDDED`**
-There are two operation modes you can choose from: EMBEDDED or REMOTE. Set to REMOTE to connect to a remote standalone Elasticsearch cluster. Set to EMBEDDED to start Liferay with an internal Elasticsearch instance. Embedded operation mode is unsupported for production environments.
+### Properties Unique to the Elasticsearch Connections Configuration
+
+**Active, `active="false"`**
+
+**Connection ID, `connectionId=`**
+Set a unique ID for the connection. This is referenced in the Elasticsearch 7 property Remote Cluster Connection ID.
+
+### Properties Shared Between the Elasticsearch 7 and Elasticsearch Connections Configurations
 
 **Index Name Prefix, `indexNamePrefix=liferay-`**
 Set a String value to use as the prefix for the search index name. The default value should not be changed under normal conditions. If you change it, you must also perform a *reindex all* operation for the portal and then manually delete the old index using the Elasticsearch administration console.
 
 **Index Number of Replicas, `indexNumberOfReplicas=`**
-t the number of replicas for each index. If left unset, no replicas are used.  A full reindex is required to make changes take effect.
+Set the number of replicas for each index. If left unset, no replicas are used.  A full reindex is required to make changes take effect.
 
 **Index Number of Shards, `indexNumberOfShards=`**
-t the number of index shards to use when a Liferay index is created. If left unset, a single shard is used. A full reindex is required to make changes take effect. 
+Set the number of index shards to use when a Liferay index is created. If left unset, a single shard is used. A full reindex is required to make changes take effect. 
 
 **Bootstrap Mlock All, `bootstrapMlockAll=false`**
 A boolean setting that, when set to `true`, tries to lock the process address space into RAM, preventing any Elasticsearch memory from being swapped out (see [here](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/setup-configuration-memory.html#bootstrap-memory_lock)) for more information)
