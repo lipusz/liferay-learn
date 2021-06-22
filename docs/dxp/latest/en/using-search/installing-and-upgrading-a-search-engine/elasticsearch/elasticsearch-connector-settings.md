@@ -5,77 +5,78 @@ Elasticsearch is Liferay's default search engine. The connection to Elasticsearc
 <!-- If we like these tables, they'll require reorganization -->
 **Configuration Files and System Settings Entries:**
 
-| Server Versions | Configuration File Name | System Settings Entry |
-| --------------- | ----------------------- | --------------------- |
-| Liferay 7.2.x<br />Elasticsearch 6.x           | `com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` | Elasticsearch 6 |
-| Liferay 7.2.x<br />Elasticsearch 7.x           | `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config` | Elasticsearch 7
-| Liferay 7.3.x<br />Elasticsearch 7.x           | `com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config`<br />`com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration-[key].config` | Elasticsearch 7<br /><br /><br /><br /><br />Elasticsearch Connections (factory) |
+| Connecting Servers | <div style="width:380px">System Settings Entry/Configuration File</div> |
+| --------------- | -------------------------------------- | 
+| Liferay 7.2.x<br />Elasticsearch 6.x           | Elasticsearch 6<br />`com.liferay.portal.search.elasticsearch6.configuration.ElasticsearchConfiguration.config` |
+| Liferay 7.2.x<br />Elasticsearch 7.x           | Elasticsearch 7<br />`com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config` |
+| Liferay 7.3.x<br />Elasticsearch 7.x           | Elasticsearch 7<br />`com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config`<br /><br />Elasticsearch Connections (factory)<br />`com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration-[key].config` |
 
 **Configuration Properties Overview:**
 
-| **System Settings Configuration Label** | **Configuration File Field Name**<br />(default value) | **Liferay/Elasticsearch Version Details** |
-| ----------------------------------- | -------------------------------------------------- | --------------- | 
+| System Settings Field | <div style="width:280px">Configuration File Field**<br />(default value) | Liferay/Elasticsearch Version Details |
+| ----------------------------------- | -------------------------------------------------- | ------------------------------------- | 
+| | GENERAL CONNECTION SETTINGS |
+| Node Name | `nodeName=` | Liferay 7.3+ |
+| Track Total Hits | `trackTotalHits="true"` | Liferay 7.2+ |
+| Production Mode Enabled | `productionModeEnabled="false"` | Liferay 7.3+ |
+| Index Name Prefix | `indexNamePrefix=liferay-` | Liferay 7.2+ |
+| 7.3.x&rarr;Number of Company and System Index Replicas<br />7.2.x&rarr;Index Number of Replicas | `indexNumberOfReplicas=""` | Liferay 7.2+ |
+| 7.3.x&rarr;Number of Company and System Index Shards<br />7.2.x&rarr;Index Number of Shards | `indexNumberOfShards=""` | Liferay 7.2+ |
+| Log Exceptions Only | `logExceptionsOnly="true"` | Liferay 7.2+ |
+| Retry On Conflict | `retryOnConflict="5"` | Liferay 7.2+ |
 | | *SECURITY SETTINGS* |
-| Authentication Enabled | `authenticationEnabled` | Liferay 7.3+ |
-| Username | `username` | Liferay 7.3+ |
-| Password | `password` | Liferay 7.3+ |
-| Http SSL Enabled | `httpSSLEnabled` | Liferay 7.3+ |
-| Truststore Type | `truststoreType` | Liferay 7.3+ |
-| Truststore Path | `truststorePath` | Liferay 7.3+ |
-| Truststore Password | `truststorePassword` | |
+| Authentication Enabled | `authenticationEnabled="false"` | Liferay 7.3+ |
+| Username | `username="elastic"` | Liferay 7.3+ |
+| Password | `password=` | Liferay 7.3+ |
+| Http SSL Enabled | `httpSSLEnabled="false"` | Liferay 7.3+ |
+| Truststore Type | `truststoreType="pkcs12"` | Liferay 7.3+ |
+| Truststore Path | `truststorePath="/path/to/localhost.p12"` | Liferay 7.3+ |
+| Truststore Password | `truststorePassword=` | Liferay 7.3+ |
 | | *ELASTICSEARCH CONNECTIONS SETTINGS* |
 | Active | `active="false"` | Liferay 7.3+ |
 | Connection ID | `connectionId=` | Liferay 7.3+ |
 | | *CONNECTION DECLARATION SETTINGS* |
-| Remote Cluster Connection ID | `remoteClusterConnectionId` | Liferay 7.3+ if using the `ElasticsearchConnectionConfiguration` |
+| Remote Cluster Connection ID | `remoteClusterConnectionId=` | Liferay 7.3+ if using the `ElasticsearchConnectionConfiguration` |
 | | *REST CLIENT SETTINGS* |
 | Network Host Addresses | `networkHostAddresses=http://localhost:9200` | Liferay 7.3+ |
+| REST Client Logger Level | `RESTClientLoggerLevel="ERROR"` | Liferay 7.3+ |
 | | *TRANSPORT CLIENT SETTINGS* |
 | Cluster Name | `clusterName=LiferayElasticsearchCluster` | Liferay 7.2-<br />On 7.3+, applies only to development mode |
 | Transport Addresses | `transportAddresses=localhost:9300` | Liferay 7.2- |
-| Client Transport Sniff | `clientTransportSniff=true` | |
-| Client Transport Ignore Cluster Name | `clientTransportIgnoreClusterName=false` | |
-| Client Transport Ping Timeout | `clientTransportPingTimeout=` | |
-| Client Transport Nodes Sampler Interval | `clientTransportNodesSamplerInterval=` | |
+| Client Transport Sniff | `clientTransportSniff=true` | Liferay 7.2- |
+| Client Transport Ignore Cluster Name | `clientTransportIgnoreClusterName=false` | Liferay 7.2- |
+| Client Transport Ping Timeout | `clientTransportPingTimeout=` | Liferay 7.2- |
+| Client Transport Nodes Sampler Interval | `clientTransportNodesSamplerInterval=` | Liferay 7.2- |
 | | *DEVELOPMENT MODE SETTINGS* | 
 | Additional Configurations | `additionalConfigurations=` | Liferay 7.2+ |
-| Bootstrap Mlock All | `bootstrapMlockAll=false` | Liferay 7.2+ |
-| Http CORS Allow Origin | `httpCORSAllowOrigin=/https?:\\/\\/localhost(:[0-9]+)?/` | |
-| Http CORS Configurations | `httpCORSConfigurations=` | |
-| Http CORS Enabled | `httpCORSEnabled=true` | |
-| Network Host | `networkHost=` | Liferay 7.2+  |
-| Network Bind Host | `networkBindHost=` | Liferay 7.2+ |
-| Network Publish Host | `networkPublishHost=` | Liferay 7.2+ |
-| Sidecar Debug | `sidecarDebug` | Liferay 7.3+ |
-| Sidecar Debug Settings | `sidecarDebugSettings` | Liferay 7.3+ |
-| Sidecar Heartbeat Interval | `sidecarHeartbeatInterval` | Liferay 7.3+ |
-| Sidecar Home | `sidecarHome` | Liferay 7.3+ |
-| Sidecar HTTP Port | `sidecarHttpPort=9200` | Liferay 7.3+ |
-| Sidecar JVM Options | `sidecarJVMOptions` | Liferay 7.3+ |
-| Sidecar Shutdown Timeout | `sidecarShutdownTimeout` | Liferay 7.3+ |
-| Transport Tcp Port | `transportTcpPort=` | Liferay 7.2+ |
-| Zen Discovery Unicast Hosts Port | `discoveryZenPingUnicastHostsPort=9300-9400` | Liferay 7.2+ |
-| | GENERAL CONNECTION SETTINGS |
-| Node Name | `nodeName` | Liferay 7.3+ |
-| Track Total Hits | `trackTotalHits` | Liferay 7.2+ |
-| Production Mode Enabled | `productionModeEnabled="false"` | Liferay 7.3+ |
-| Index Name Prefix | `indexNamePrefix=liferay-` | Liferay 7.2+ |
-| 7.3.x&rarr;Number of Company and System Index Replicas<br />7.2.x&rarr;Index Number of Replicas | `indexNumberOfReplicas=` | Liferay 7.2+ |
-| 7.3.x&rarr;Number of Company and System Index Shards<br />7.2.x&rarr;Index Number of Shards | `indexNumberOfShards=` | Liferay 7.2+ |
-| Log Exceptions Only | `logExceptionsOnly=true` | Liferay 7.2+ |
-| Retry On Conflict | `retryOnConflict=5` | Liferay 7.2+ |
+| Bootstrap Mlock All | `bootstrapMlockAll="false"` | Liferay 7.2+ |
+| Http CORS Allow Origin | `httpCORSAllowOrigin="/https?:\\/\\/localhost(:[0-9]+)?/"` | Liferay 7.2+ |
+| Http CORS Configurations | `httpCORSConfigurations=` | Liferay 7.2+ |
+| Http CORS Enabled | `httpCORSEnabled="true"` | Liferay 7.2+ |
+| Network Host | `networkHost=""` | Liferay 7.2+  |
+| Network Bind Host | `networkBindHost=""` | Liferay 7.2+ |
+| Network Publish Host | `networkPublishHost=""` | Liferay 7.2+ |
+| Sidecar Debug | `sidecarDebug="false"` | Liferay 7.3+ |
+| Sidecar Debug Settings | `sidecarDebugSettings="-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=y,quiet=y"` | Liferay 7.3+ |
+| Sidecar Heartbeat Interval | `sidecarHeartbeatInterval="10000"` | Liferay 7.3+ |
+| Sidecar Home | `sidecarHome="elasticsearch7"` | Liferay 7.3+ |
+| Sidecar HTTP Port | `sidecarHttpPort="9200"` | Liferay 7.3+ |
+| Sidecar JVM Options | `sidecarJVMOptions="-Xms1g|-Xmx1g|-XX:+AlwaysPreTouch"` | Liferay 7.3+ |
+| Sidecar Shutdown Timeout | `sidecarShutdownTimeout="10000"` | Liferay 7.3+ |
+| Transport Tcp Port | `transportTcpPort=""` | Liferay 7.2+ |
+| Zen Discovery Unicast Hosts Port | `discoveryZenPingUnicastHostsPort="9300-9400"` | Liferay 7.2+ |
 | | ADVANCED CONFIGURATION |
 | Additional Index Configurations | `additionalIndexConfigurations=` | Liferay 7.2+ |
 | Additional Type Mappings | `additionalTypeMappings=` | Liferay 7.2+ |
 | Override Type Mappings | `overrideTypeMappings=` | Liferay 7.2+ |
-| Proxy Host | `proxyHost` | Liferay 7.3+ |
-| Proxy Port | `proxyPort=0` | Liferay 7.3+ |
-| Proxy Username | `proxyUserName` | Liferay 7.3+ |
-| Proxy Password | `proxyPassword` | Liferay 7.3+ |
+| Proxy Host | `proxyHost=` | Liferay 7.3+ |
+| Proxy Port | `proxyPort="0"` | Liferay 7.3+ |
+| Proxy Username | `proxyUserName=` | Liferay 7.3+ |
+| Proxy Password | `proxyPassword=` | Liferay 7.3+ |
 | | *DEPRECATED* |
 | Operation Mode | `operationMode="EMBEDDED"` | Deprecated in Liferay 7.3.x |
-| Embedded HTTP Port | `embeddedHttpPort=9201` | Deprecated in Liferay 7.3.x |
-| Http Enabled | `httpEnabled=true` | Deprecated in Liferay 7.1.x<br />Deprecated Elasticsearch 6.3.x |
+| Embedded HTTP Port | `embeddedHttpPort="9201"` | Deprecated in Liferay 7.3.x |
+| Http Enabled | `httpEnabled="true"` | Deprecated in Liferay 7.1.x<br />Deprecated Elasticsearch 6.3.x |
 
 ## Elasticsearch Connection Configuration Files
 
