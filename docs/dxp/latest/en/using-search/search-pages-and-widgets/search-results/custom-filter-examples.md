@@ -153,3 +153,52 @@ Simplifying the configuration of a search page (often a complex case is handled 
 - [Filtering Search Results](./filtering-search-results.md)
 - [Result Rankings](../../search-administration-and-tuning/result-rankings.md)
 - [Synonym Sets](../../search-administration-and-tuning/synonym-sets.md)
+
+## Filtering by Nested Fields
+
+As described in [Accessing Nested DDM Fields](../search-facets/custom-facet.md#accessing-nested-ddm-fields) (in the Custom Facets article), DDM Fields have become [nested field](../../../liferay-internals/reference/7-3-breaking-changes.md#dynamic-data-mapping-fields-in-elasticsearch-have-changed-to-a-nested-document). On the latest Fix Pack and GA release of 7.3, this change is accounted for in Liferay's Search API and no configuration updates are necessary. Therefore, if you have Custom Filter configurations that relied on fields named `ddm__text__*` or `ddm__keyword__*` that were at the root of the Elasticsearch document, continue to use these fields as usual in your Custom Facet's _Aggregation Field_ configuration, even though they're no longer at the root of the document.
+
+To find DDM fields in existing documents in the index,
+
+```json
+GET liferay-20097/_search
+{
+  "query": {
+    "nested": {
+      "path": "ddmFieldArray",
+      "query": {
+        "wildcard":  { "ddmFieldArray.ddmFieldName": "ddm__*" }
+      }
+    }
+  }
+}
+```
+
+Replace the Company Id---`20097`---in the index name parameter to match your instance's value.
+
+The document returned has a `ddmFieldArray` object with nested content:
+
+```json
+ "ddmFieldArray" : [
+    {
+      "ddmFieldName" : "ddm__keyword__40806__Textb5mx_en_US",
+      "ddmValueFieldName" : "ddmFieldValueKeyword_en_US",
+      "ddmFieldValueKeyword_en_US_String_sortable" : "some text has been entered",
+      "ddmFieldValueKeyword_en_US" : "some text has been entered"
+    },
+    {
+      "ddmFieldName" : "ddm__keyword__40806__Selectjdw0_en_US",
+      "ddmValueFieldName" : "ddmFieldValueKeyword_en_US",
+      "ddmFieldValueKeyword_en_US_String_sortable" : "option 3",
+      "ddmFieldValueKeyword_en_US" : "value 3"
+    },
+    {
+      "ddmFieldName" : "ddm__keyword__40806__Boolean15cg_en_US",
+      "ddmValueFieldName" : "ddmFieldValueKeyword_en_US",
+      "ddmFieldValueKeyword_en_US" : "true",
+      "ddmFieldValueKeyword_en_US_String_sortable" : "true"
+    }
+  ],
+```
+
+To use one of these fields in a Custom Filter configuration, enter the `ddmFieldName` value (e.g., `ddm__keyword__40806__Testb5mx_en_US`) as the _Field_ setting.
