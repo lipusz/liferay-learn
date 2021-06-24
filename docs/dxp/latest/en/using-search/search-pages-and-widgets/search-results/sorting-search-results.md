@@ -43,6 +43,22 @@ Each Sort option has two settings: _Label_ and _Field_.
 
 ![From the Sort widget's configuration, add, edit, or remove Sort options.](./sorting-search-results/images/02.png)
 
+## Changing the Default Sort Behavior
+
+Out of the box, the Relevance option is first in the Sort widget's list, making it the default sort applied to the page. Therefore, results are sorted by relevance when a search is executed. Searching by relevance is the expected default behavior for most users, but you can exert a different sort strategy on default searches by changing the first option in the Sort widget configuration.
+
+To change the default sort option,
+
+1. Open the Sort widget's configuration screen by clicking the Widget Options ![Widget Options](../../../images/icon-widget-options.png) button.
+
+1. Click the Add ![Add](../../../images/icon-duplicate.png) button below the Relevance option.
+
+1. Duplicate the current Relevance option's values--this will ensure that Relevance is the second option in the list.
+
+1. Now change the top option. If you choose one of the existing options, make sure you remove the duplicate by clicking its Remove ![Minus](../../../images/icon-minus.png)
+
+1. Save the configuration. Enter a search and you'll see the new sort applied.
+
 ## Finding Sortable Fields
 
 To find the fields available for use in the Sort widget, Users with the proper permissions can navigate to *Control Panel* &rarr; *Configuration* &rarr; *Search*.  From there, open the Field Mappings tab and browse the mappings for each index.  Scroll to the `properties` section of the mapping and find any `keyword` field, `date` field, or a field with a numeric data type. The `type` field is instructive:
