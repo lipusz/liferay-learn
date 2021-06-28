@@ -27,6 +27,6 @@ Several search widgets are available to place on Pages. Each one has its own con
 
 **Low Level Search Options:** Configure the search widgets to participate in a search that's aimed at an index other than the _Company Index_. The company index is where the Liferay DXP assets index their data, so many installations will not need this widget. See [Understanding Low Level Search Options](../search-pages-and-widgets/search-results/understanding-low-level-search-options.md) for more information.
 
-**Similar Results:** Display similar search results to an asset being displayed on a page. Documentation will be available soon.
+**Similar Results:** Display similar search results to an asset being displayed on a page. See [Similar Results](../search-pages-and-widgets/similar-results.md) for more information.
 
-**X-Pack Monitoring:** Liferay Enterprise Search subscribers can access [Elastic's Kibana](https://www.elastic.co/kibana) monitoring tool inside a widget placed on a Liferay DXP Page.
+[Liferay Enterprise Search] **Elasticsearch Monitoring:** Liferay Enterprise Search subscribers can access [Elastic's Kibana](https://www.elastic.co/kibana) monitoring tool inside a widget placed on a Liferay DXP Page. See [Monitoring Elasticsearch](../liferay-enterprise-search/monitoring-elasticsearch.md) for more information.

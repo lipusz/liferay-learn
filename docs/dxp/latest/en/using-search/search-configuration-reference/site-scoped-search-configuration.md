@@ -6,14 +6,14 @@ By the strict definition of [Site Scoped Configuration](../../system-administrat
 
 There are some important configuration nuances to be aware of when using the Search widgets:
 
-If the Header Search (the search bar embedded in the default theme) uses the Search Bar widget, its configuration always requires a _destination page_ to be set, where Users are redirected to complete their search activity, interacting with the other Search widgets (Results, Facets, Suggestions etc.). [Search destination pages](../search-pages-and-widgets/working-with-search-pages/creating-a-search-page.md) are ordinary pages holding the Search widgets. You can have as many pages with Search widgets across the Site as you want.
+If the header Search Bar (the search bar embedded in the default theme) uses the Search Bar widget, its configuration always requires a _destination page_ to be set, where Users are redirected to complete their search activity, interacting with the other Search widgets (Results, Facets, Suggestions etc.). [Search destination pages](../search-pages-and-widgets/working-with-search-pages/creating-a-search-page.md) are ordinary pages holding the Search widgets. You can have as many pages with Search widgets across the Site as you want.
 
 The Search Bar widget is instanceable, so one page can contain multiple Search Bar widgets configured differently. All Search Bar instances must point to a Search Page within the Site to be effective.
 
 ```important::
-    If the destination Search Page has a Search Bar widget instance besides the embedded Header Search, the configurations of the Header Search take precedence over the page's widget instance.
+    If the destination Search Page has a Search Bar widget instance in addition to a theme-embedded header Search Bar (like Liferay's default theme), the configurations of the header Search Bar take precedence over the page's widget instance.
 
-    Conversely, searching from a Search Bar widget instance on other pages honors their configurations, even if they differ from the Header Search configuration.
+    Conversely, searching from a Search Bar widget instance on other pages honors their configurations, even if they differ from the header Search Bar configuration.
 ```
 
 See [Configuring the Search Bar](../getting-started/searching-for-content.md#configuring-the-search-bar) for more information.

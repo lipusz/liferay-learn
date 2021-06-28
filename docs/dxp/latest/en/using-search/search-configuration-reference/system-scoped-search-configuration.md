@@ -64,9 +64,10 @@ This entry contains only one property:
 
 <!-- Wordsmith and expand-->
 
-**`nonbulkIndexingOverride`**: A value of "true" causes modified entities to always be reindexed one by one. For performance reasons, this setting is generally turned off in production.
+**`nonbulkIndexingOverride`**: Set this to true to force modified entities to be re-indexed one by one. For performance reasons, this setting is not recommended for production systems.
 
-**`synchronousExecutionOverride`**: A value of "true" causes reindexing of modified entities to always block until completed. For performance reasons, this setting is generally turned off in production.
+**`synchronousExecutionOverride`**: Set this to true to block re-indexing of modified entities to always block until completed. For performance reasons, this setting is generally turned off in production.
+
 ## Engine Helper
 
 This entry has one repeatable property (use array syntax if you're defining via
@@ -112,36 +113,35 @@ You can use the monitoring configuration if you have deployed the Liferay Enterp
 
 This entry contains one property:
 
-**`classicSearchPortletInFrontPage`**: Revert the default search experience from using the new Search Widgets to the classic Search Portlet that was standard in past releases. -->
+**`classicSearchPortletInFrontPage`**: Revert the default search experience from using the new Search Widgets to the deprecated classic Search Portlet that was standard in past releases.
 
-<!-- Need coverage of some new 7.3 screens and the LES/DXP only screens: Similar Results Web Template Configuration Name (DXP only), Search Results Web Template (new in 7.3), X-Pack Monitoring (LES only), X-Pack Security (default now), Learning to Rank (LES only). There are also widget scoped sys settings for Similar Results Configuration and a lot of other widgets we could just briefly mention -->
-
-<!-- ### Search Administration
+## Search Administration
 
 In *Control Panel* &rarr; *Configuration* &rarr; *Search* there are three administrative UIs: Connections, Index Actions, and Field Mappings.
 
-#### Connections
+![The Search Administration panel contains three management screens.](./system-scoped-search-configuration/images/02.png)
+
+### Connections
 
 Information about the search engine connection(s) is displayed here. For example,
 
 ```bash
 Search Engine Vendor: Elasticsearch (Embedded), Client Version: 6.5.0, Nodes: A0D6GlN (6.5.0)
-``` -->
+```
 
-<!-- Left a screenshot out on purpose, since this is still changing -->
 
-<!-- #### Index Actions
+### Index Actions
 
 In Index Actions, re-index at one of these levels:
 
-    * All indexable assets
-    * An individual indexable asset
-    * All spell check indexes
+   * All indexable assets
+   * An individual indexable asset
+   * All spell check indexes
 
-#### Field Mappings
+### Field Mappings
 
 The Field Mappings tab shows you all field mappings that are effective in the system, by index. Currently, you can view the mappings, copy them, zoom in or out, and view them with a dark theme.
 
-### Portal Properties
+## Portal Properties
 
 Portal properties are system scoped as well. The [Lucene Search](https://docs.liferay.com/dxp/portal/7.3-latest/propertiesdoc/portal.properties.html#Lucene%20Search) portal properties configure low level search behavior. Review the properties and their descriptions and determine if they apply to your search requirements. -->
