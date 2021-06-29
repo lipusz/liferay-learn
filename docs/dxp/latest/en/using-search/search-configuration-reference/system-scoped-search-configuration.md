@@ -62,11 +62,11 @@ This entry contains only one property:
 
 ## Reindexer
 
-<!-- Wordsmith and expand-->
+These properties configure the Reindexer service in the Search framework. They are experimental and only useful when troubleshooting certain specific scenarios under the directoion of Liferay's support personnel. Never use these configurations in production systems. 
 
-**`nonbulkIndexingOverride`**: Set this to true to force modified entities to be re-indexed one by one. For performance reasons, this setting is not recommended for production systems.
+**`nonbulkIndexingOverride`**: Set this to true to force modified entities to be re-indexed one by one rather than in batches. For performance reasons, this setting must not be enabled in production systems.
 
-**`synchronousExecutionOverride`**: Set this to true to block re-indexing of modified entities to always block until completed. For performance reasons, this setting is generally turned off in production.
+**`synchronousExecutionOverride`**: Set this to true to force re-indexing of modified entities to block other portal processes until completed. For performance reasons, this setting must not be enabled in production systems.
 
 ## Engine Helper
 
@@ -95,7 +95,7 @@ You'll only see this entry if you have deployed the Cross-Cluster Replication mo
 
 ## Elasticsearch Monitoring
 
-You can use the monitoring configuration if you have deployed the Liferay Enterprise Search Monitoring module, available with a Liferay Enterprise Search subscription. These configuration properties are covered in the dedicated [Monitoring Elasticsearch](../liferay-enterprise-search/monitoring-elasticsearch.md) documentation.
+You can use the Elasticsearch Monitoring configuration if you have deployed the Liferay Enterprise Search Monitoring module, available with a Liferay Enterprise Search subscription. These configuration properties are covered in the dedicated [Monitoring Elasticsearch](../liferay-enterprise-search/monitoring-elasticsearch.md) documentation.
 
 ## Elasticsearch 7
 
@@ -107,7 +107,7 @@ Liferay 7.3 can connect to multiple Elasticsearch clusters. Connections are defi
 
 ## Learning to Rank
 
-You can use the monitoring configuration if you have deployed the Liferay Enterprise Search Learning to Rank module, available with a Liferay Enterprise Search subscription. These configuration properties are covered in the dedicated [Learning to Rank](../liferay-enterprise-search/learning-to-rank.md) documentation.
+You can use the Learning to Rank configuration if you have deployed the Liferay Enterprise Search Learning to Rank module, available with a Liferay Enterprise Search subscription. These configuration properties are covered in the dedicated [Learning to Rank](../liferay-enterprise-search/learning-to-rank.md) documentation.
 
 ## Search Web
 
