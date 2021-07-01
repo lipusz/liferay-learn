@@ -62,7 +62,7 @@ This entry contains only one property:
 
 ## Reindexer
 
-These properties configure the Reindexer service in the Search framework. They are experimental and only useful when troubleshooting certain specific scenarios under the directoion of Liferay's support personnel. Never use these configurations in production systems. 
+These properties configure the Reindexer service in the Search framework. They are experimental and only useful when troubleshooting certain specific scenarios under the direction of Liferay's support personnel. Never use these configurations in production systems. 
 
 **`nonbulkIndexingOverride`**: Set this to true to force modified entities to be re-indexed one by one rather than in batches. For performance reasons, this setting must not be enabled in production systems.
 

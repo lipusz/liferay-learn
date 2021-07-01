@@ -6,6 +6,8 @@ Several search widgets are available to place on Pages. Each one has its own con
 
 ## Search Widgets
 
+For dedicated coverage of the search widgets, see [Search Pages and Widgets](../getting-started/search-overview.md#search-pages-and-widgets).
+
 **Search Results**: Configure how search results are displayed. Read [Displaying Search Results](../search-pages-and-widgets/search-results/configuring-the-search-results-widget.md#displaying-search-results) for more information.
 
 **Search Bar**: Configure the behavior of how search keywords are processed. See [Configuring the Search Bar](../getting-started/searching-for-content.md#configuring-the-search-bar) for more information.
