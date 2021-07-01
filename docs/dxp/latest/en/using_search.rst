@@ -10,6 +10,7 @@ Using Search
    using-search/search_administration_and_tuning.rst
    using-search/liferay_enterprise_search.rst
    using-search/developer_guide.rst
+   using-search/search_configuration_reference.rst
 
 .. raw:: html
    :file: landingpage_template.html
