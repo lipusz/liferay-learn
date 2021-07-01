@@ -8,6 +8,7 @@ Search Configuration Reference
    search-configuration-reference/site-scoped-search-configuration.md
    search-configuration-reference/instance-scoped-search-configuration.md
    search-configuration-reference/system-scoped-search-configuration.md
+   search-configuration-reference/search-configuration-reference.md
 
 Search in Liferay DXP can be configured in lots of ways. Once you understand the concept of `configuration scope <../system-administration/configuring-liferay/understanding-configuration-scope.md>`__, you'll understand where to find a certain configuration screen.
 
@@ -25,3 +26,4 @@ So the term `Configuring Search` is very broad, as it affects all the available 
 -  :doc:`/using-search/search-configuration-reference/site-scoped-search-configuration`
 -  :doc:`/using-search/search-configuration-reference/instance-scoped-search-configuration`
 -  :doc:`/using-search/search-configuration-reference/system-scoped-search-configuration`
+-  :doc:`/using-search/search-configuration-reference/search-configuration-reference`
